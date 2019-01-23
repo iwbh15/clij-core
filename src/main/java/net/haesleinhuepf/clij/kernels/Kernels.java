@@ -496,8 +496,14 @@ public class Kernels {
         parameters.put("src", src);
         parameters.put("dst", dst);
         parameters.put("slice", planeIndex);
-        return clij.execute(Kernels.class, "duplication.cl", "copySlice", parameters);
-
+        //return clij.execute(Kernels.class, "duplication.cl", "copySlice", parameters);
+        if (src.getDimension() == 2 && dst.getDimension() == 3) {
+            return clij.execute(Kernels.class, "duplication.cl", "putSliceInStack", parameters);
+        } else if (src.getDimension() == 3 && dst.getDimension() == 2) {
+            return clij.execute(Kernels.class, "duplication.cl", "copySlice", parameters);
+        } else {
+            throw new IllegalArgumentException("Images have wrong dimension. Must be 3D->2D or 2D->3D.");
+        }
     }
 
     public static boolean crop(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer startX, Integer startY, Integer startZ) {

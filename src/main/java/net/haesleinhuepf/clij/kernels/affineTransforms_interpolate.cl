@@ -38,7 +38,7 @@
 #define SAMPLER_ADDRESS CLK_ADDRESS_CLAMP
 #endif
 
-__kernel void affine(DTYPE_IMAGE_IN_3D input,
+__kernel void affine_interpolate(DTYPE_IMAGE_IN_3D input,
 	      			 DTYPE_IMAGE_OUT_3D output,
 				 __constant float * mat)
 {
@@ -71,7 +71,7 @@ __kernel void affine(DTYPE_IMAGE_IN_3D input,
   float x2 = (mat[0]*x+mat[1]*y+mat[2]*z+mat[3]);
 
 
-  int4 coord_norm = (int4)(x2,y2,z2,0.f);
+  float4 coord_norm = (float4)(x2/Nx,y2/Ny,z2/Nz,0.f);
 
   float pix = (float)(READ_IMAGE_3D(input, sampler, coord_norm).x);
 

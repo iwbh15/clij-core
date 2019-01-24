@@ -167,7 +167,7 @@ public class Kernels {
         parameters.put("output", dst);
         parameters.put("mat", matrixCl);
 
-        boolean result = clij.execute(Kernels.class, "affineTransforms.cl", "affine_interpolate", parameters);
+        boolean result = clij.execute(Kernels.class, "affineTransforms_interpolate.cl", "affine_interpolate", parameters);
 
         matrixCl.close();
 

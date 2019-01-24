@@ -155,6 +155,30 @@ public class Kernels {
         return affineTransform(clij, src, dst, matrix);
     }
 
+    public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, float[] matrix) {
+
+        ClearCLBuffer matrixCl = clij.createCLBuffer(new long[]{matrix.length, 1, 1}, NativeTypeEnum.Float);
+
+        FloatBuffer buffer = FloatBuffer.wrap(matrix);
+        matrixCl.readFrom(buffer, true);
+
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("input", src);
+        parameters.put("output", dst);
+        parameters.put("mat", matrixCl);
+
+        boolean result = clij.execute(Kernels.class, "affineTransforms.cl", "affine_interpolate", parameters);
+
+        matrixCl.close();
+
+        return result;
+    }
+
+    public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, AffineTransform3D at) {
+        float[] matrix = AffineTransform.matrixToFloatArray(at);
+        return affineTransform(clij, src, dst, matrix);
+    }
+
     public static boolean argMaximumZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst_max, ClearCLImage dst_arg) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);

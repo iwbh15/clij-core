@@ -81,3 +81,47 @@ __kernel void affine(DTYPE_IMAGE_IN_3D input,
 
 
 }
+
+__kernel void affine_interpolate(DTYPE_IMAGE_IN_3D input,
+	      			 DTYPE_IMAGE_OUT_3D output,
+				 __constant float * mat)
+{
+
+  const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE|
+      SAMPLER_ADDRESS |	SAMPLER_FILTER;
+
+  uint i = get_global_id(0);
+  uint j = get_global_id(1);
+  uint k = get_global_id(2);
+
+  uint Nx = get_global_size(0);
+  uint Ny = get_global_size(1);
+  uint Nz = get_global_size(2);
+
+  //float x = (mat[0]*i+mat[1]*j+mat[2]*k+mat[3]);
+  //float y = (mat[4]*i+mat[5]*j+mat[6]*k+mat[7]);
+  //float z = (mat[8]*i+mat[9]*j+mat[10]*k+mat[11]);
+  ////ensure correct sampling, see opencl 1.2 specification pg. 329
+  //x += 0.5f;
+  //y += 0.5f;
+  //z += 0.5f;
+
+  float x = i+0.5f;
+  float y = j+0.5f;
+  float z = k+0.5f;
+
+  float z2 = (mat[8]*x+mat[9]*y+mat[10]*z+mat[11]);
+  float y2 = (mat[4]*x+mat[5]*y+mat[6]*z+mat[7]);
+  float x2 = (mat[0]*x+mat[1]*y+mat[2]*z+mat[3]);
+
+
+  float4 coord_norm = (float4)(x2/Nx,y2/Ny,z2/Nz,0.f);
+
+  float pix = (float)(READ_IMAGE_3D(input, sampler, coord_norm).x);
+
+  int4 pos = (int4){i, j, k,0};
+
+  WRITE_IMAGE_3D(output, pos, (DTYPE_OUT) pix);
+
+
+}

@@ -14,7 +14,7 @@
 
 	<groupId>net.haesleinhuepf</groupId>
 	<artifactId>clij-core</artifactId>
-	<version>0.1.4</version>
+	<version>0.1.5</version>
 
 	<name>clij-core</name>
 	<description>clij-core</description>

@@ -1773,13 +1773,32 @@ public class Kernels {
         return clij.execute(Kernels.class, "stacksplitting.cl", "split_" + clImagesOut.length + "_stacks", parameters);
     }
 
+    /**
+     *
+     * Deprecated: use subtractImages instead
+     */
+    @Deprecated
     public static boolean subtract(CLIJ clij, ClearCLImage source1, ClearCLImage source2, ClearCLImage destination) {
         return addImagesWeighted(clij, source1, source2, destination, 1f, -1f);
     }
 
+    /**
+     *
+     * Deprecated: use subtractImages instead
+     */
+    @Deprecated
     public static boolean subtract(CLIJ clij, ClearCLBuffer source1, ClearCLBuffer source2, ClearCLBuffer destination) {
         return addImagesWeighted(clij, source1, source2, destination, 1f, -1f);
     }
+
+    public static boolean subtractImages(CLIJ clij, ClearCLImage subtrahend, ClearCLImage minuend, ClearCLImage destination) {
+        return addImagesWeighted(clij, subtrahend, minuend, destination, 1f, -1f);
+    }
+
+    public static boolean subtractImages(CLIJ clij, ClearCLBuffer subtrahend, ClearCLBuffer minuend, ClearCLBuffer destination) {
+        return addImagesWeighted(clij, subtrahend, minuend, destination, 1f, -1f);
+    }
+
 
     public static double maximumOfAllPixels(CLIJ clij, ClearCLImage clImage) {
         ClearCLImage clReducedImage = clImage;

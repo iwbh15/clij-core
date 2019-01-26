@@ -1,13 +1,18 @@
 package net.haesleinhuepf.clij.utilities;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.kernels.Kernels;
+import ij.IJ;
+import ij.ImagePlus;
+import ij.process.AutoThresholder;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.CLIJ;
+import net.haesleinhuepf.clij.utilities.AffineTransform;
 import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.view.Views;
 import java.nio.FloatBuffer;
@@ -50,6 +55,30 @@ public class CLIJOps {
 
     public boolean addImagesWeighted( ClearCLBuffer src,  ClearCLBuffer src1,  ClearCLBuffer dst,  Float factor,  Float factor1 ) {
         return Kernels.addImagesWeighted(clij, src, src1, dst, factor, factor1);
+    }
+
+    public boolean affineTransform( ClearCLBuffer src,  ClearCLBuffer dst,  float[] matrix ) {
+        return Kernels.affineTransform(clij, src, dst, matrix);
+    }
+
+    public boolean affineTransform( ClearCLBuffer src,  ClearCLBuffer dst,  AffineTransform3D at ) {
+        return Kernels.affineTransform(clij, src, dst, at);
+    }
+
+    public boolean affineTransform( ClearCLImage src,  ClearCLImage dst,  float[] matrix ) {
+        return Kernels.affineTransform(clij, src, dst, matrix);
+    }
+
+    public boolean affineTransform( ClearCLImage src,  ClearCLImage dst,  AffineTransform3D at ) {
+        return Kernels.affineTransform(clij, src, dst, at);
+    }
+
+    public boolean automaticThreshold( ClearCLBuffer src,  ClearCLBuffer dst,  String userSelectedMethod ) {
+        return Kernels.automaticThreshold(clij, src, dst, userSelectedMethod);
+    }
+
+    public boolean automaticThreshold( ClearCLBuffer src,  ClearCLBuffer dst,  String userSelectedMethod,  Float minimumGreyValue,  Float maximumGreyValue,  Integer numberOfBins ) {
+        return Kernels.automaticThreshold(clij, src, dst, userSelectedMethod, minimumGreyValue, maximumGreyValue, numberOfBins);
     }
 
     public boolean argMaximumZProjection( ClearCLImage src,  ClearCLImage dst_max,  ClearCLImage dst_arg ) {
@@ -294,6 +323,14 @@ public class CLIJOps {
 
     public boolean erodeBox( ClearCLBuffer src,  ClearCLBuffer dst ) {
         return Kernels.erodeBox(clij, src, dst);
+    }
+
+    public boolean fillHistogram( ClearCLBuffer src,  ClearCLBuffer dstHistogram,  Float minimumGreyValue,  Float maximumGreyValue ) {
+        return Kernels.fillHistogram(clij, src, dstHistogram, minimumGreyValue, maximumGreyValue);
+    }
+
+    public float[] histogram( ClearCLBuffer image,  Float minGreyValue,  Float maxGreyValue,  int numberOfBins ) {
+        return Kernels.histogram(clij, image, minGreyValue, maxGreyValue, numberOfBins);
     }
 
     public boolean flip( ClearCLImage src,  ClearCLImage dst,  Boolean flipx,  Boolean flipy,  Boolean flipz ) {
@@ -670,6 +707,14 @@ public class CLIJOps {
 
     public boolean subtract( ClearCLBuffer source1,  ClearCLBuffer source2,  ClearCLBuffer destination ) {
         return Kernels.subtract(clij, source1, source2, destination);
+    }
+
+    public boolean subtractImages( ClearCLImage subtrahend,  ClearCLImage minuend,  ClearCLImage destination ) {
+        return Kernels.subtractImages(clij, subtrahend, minuend, destination);
+    }
+
+    public boolean subtractImages( ClearCLBuffer subtrahend,  ClearCLBuffer minuend,  ClearCLBuffer destination ) {
+        return Kernels.subtractImages(clij, subtrahend, minuend, destination);
     }
 
     public double maximumOfAllPixels( ClearCLImage clImage ) {

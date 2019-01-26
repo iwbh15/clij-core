@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>net.haesleinhuepf</groupId>
 		<artifactId>clij-parent-pom</artifactId>
-		<version>0.8.3</version>
+		<version>0.9.0</version>
 		<relativePath />
 	</parent>
 
 	<groupId>net.haesleinhuepf</groupId>
 	<artifactId>clij-core</artifactId>
-	<version>0.1.5</version>
+	<version>0.1.6</version>
 
 	<name>clij-core</name>
 	<description>clij-core</description>

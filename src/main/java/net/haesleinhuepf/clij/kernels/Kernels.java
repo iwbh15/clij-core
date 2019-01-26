@@ -1,5 +1,8 @@
 package net.haesleinhuepf.clij.kernels;
 
+import ij.IJ;
+import ij.ImagePlus;
+import ij.process.AutoThresholder;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
@@ -178,6 +181,79 @@ public class Kernels {
         float[] matrix = AffineTransform.matrixToFloatArray(at);
         return affineTransform(clij, src, dst, matrix);
     }
+
+    public static boolean automaticThreshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, String userSelectedMethod) {
+        Float minimumGreyValue = 0f;
+        Float maximumGreyValue = 0f;
+        Integer numberOfBins = 256;
+
+        if (src.getNativeType() == NativeTypeEnum.UnsignedByte) {
+            minimumGreyValue = 0f;
+            maximumGreyValue = 255f;
+        } else {
+            minimumGreyValue = null;
+            maximumGreyValue = null;
+        }
+
+        return automaticThreshold(clij, src, dst, userSelectedMethod, minimumGreyValue, maximumGreyValue, 256);
+    }
+
+    public static boolean automaticThreshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, String userSelectedMethod, Float minimumGreyValue, Float maximumGreyValue, Integer numberOfBins) {
+
+        if (minimumGreyValue == null)
+        {
+            minimumGreyValue = new Double(Kernels.minimumOfAllPixels(clij, src)).floatValue();
+        }
+
+        if (maximumGreyValue == null)
+        {
+            maximumGreyValue = new Double(Kernels.maximumOfAllPixels(clij, src)).floatValue();
+        }
+
+
+        ClearCLBuffer histogram = clij.createCLBuffer(new long[]{numberOfBins,1,1}, NativeTypeEnum.Float);
+        Kernels.fillHistogram(clij, src, histogram, minimumGreyValue, maximumGreyValue);
+        //releaseBuffers(args);
+
+        System.out.println("CL sum " + clij.op().sumPixels(histogram));
+
+        // the histogram is written in args[1] which is supposed to be a one-dimensional image
+        ImagePlus histogramImp = clij.convert(histogram, ImagePlus.class);
+        histogram.close();
+
+        // convert histogram
+        float[] determinedHistogram = (float[])(histogramImp.getProcessor().getPixels());
+        int[] convertedHistogram = new int[determinedHistogram.length];
+
+        long sum = 0;
+        for (int i = 0; i < determinedHistogram.length; i++) {
+            convertedHistogram[i] = (int)determinedHistogram[i];
+            sum += convertedHistogram[i];
+        }
+        //System.out.println("Sum: " + sum);
+
+
+        String method = "Default";
+
+        for (String choice : AutoThresholder.getMethods()) {
+            if (choice.toLowerCase().compareTo(userSelectedMethod.toLowerCase()) == 0) {
+                method = choice;
+            }
+        }
+        //System.out.println("Method: " + method);
+
+        float threshold = new AutoThresholder().getThreshold(method, convertedHistogram);
+
+        // math source https://github.com/imagej/ImageJA/blob/master/src/main/java/ij/process/ImageProcessor.java#L692
+        threshold = minimumGreyValue + ((threshold + 1.0f)/255.0f)*(maximumGreyValue-minimumGreyValue);
+
+        //System.out.println("Threshold: " + threshold);
+
+        clij.op().threshold(src, dst, threshold);
+
+        return true;
+    }
+
 
     public static boolean argMaximumZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst_max, ClearCLImage dst_arg) {
         HashMap<String, Object> parameters = new HashMap<>();
@@ -824,6 +900,66 @@ public class Kernels {
 
         return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
+
+    public static boolean fillHistogram(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dstHistogram, Float minimumGreyValue, Float maximumGreyValue) {
+
+        int stepSizeX = 1;
+        int stepSizeY = 1;
+        int stepSizeZ = 1;
+
+        long[] globalSizes = new long[]{src.getHeight() / stepSizeZ, 1, 1};
+
+        long numberOfPartialHistograms = globalSizes[0] * globalSizes[1] * globalSizes[2];
+        long[] histogramBufferSize = new long[]{dstHistogram.getWidth(), 1, numberOfPartialHistograms};
+
+        long timeStamp = System.currentTimeMillis();
+
+        // allocate memory for partial histograms
+        ClearCLBuffer  partialHistograms = clij.createCLBuffer(histogramBufferSize, dstHistogram.getNativeType());
+
+        //
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst_histogram", partialHistograms);
+        parameters.put("minimum", minimumGreyValue);
+        parameters.put("maximum", maximumGreyValue);
+        parameters.put("step_size_x", stepSizeX);
+        parameters.put("step_size_y", stepSizeY);
+        if (src.getDimension() > 2) {
+            parameters.put("step_size_z", stepSizeZ);
+        }
+        clij.execute(Kernels.class,
+                "histogram.cl",
+                "histogram_image_" + src.getDimension() + "d",
+                globalSizes,
+                parameters);
+
+        Kernels.sumZProjection(clij, partialHistograms, dstHistogram);
+        //IJ.log("Histogram generation took " + (System.currentTimeMillis() - timeStamp) + " msec");
+
+        partialHistograms.close();
+        return true;
+    }
+
+    public static float[] histogram(CLIJ clij, ClearCLBuffer image, Float minGreyValue, Float maxGreyValue, int numberOfBins) {
+        ClearCLBuffer histogram = clij.createCLBuffer(new long[]{numberOfBins, 1, 1}, NativeTypeEnum.Float);
+
+        if (minGreyValue == null) {
+            minGreyValue = new Double(Kernels.minimumOfAllPixels(clij, image)).floatValue();
+        }
+        if (maxGreyValue == null) {
+            maxGreyValue = new Double(Kernels.maximumOfAllPixels(clij, image)).floatValue();
+        }
+
+        Kernels.fillHistogram(clij, image, histogram, minGreyValue, maxGreyValue);
+
+        ImagePlus histogramImp = clij.convert(histogram, ImagePlus.class);
+        histogram.close();
+
+        float[] determinedHistogram = (float[])(histogramImp.getProcessor().getPixels());
+        return determinedHistogram;
+    }
+
 
     public static boolean flip(CLIJ clij, ClearCLImage src, ClearCLImage dst, Boolean flipx, Boolean flipy, Boolean flipz) {
         HashMap<String, Object> parameters = new HashMap<>();

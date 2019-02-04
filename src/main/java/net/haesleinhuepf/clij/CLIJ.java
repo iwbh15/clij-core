@@ -16,6 +16,10 @@ import net.haesleinhuepf.clij.utilities.CLIJOps;
 import net.haesleinhuepf.clij.utilities.CLInfo;
 import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
 import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.loops.LoopBuilder;
+import net.imglib2.type.logic.BitType;
+import net.imglib2.type.numeric.RealType;
 import org.scijava.Context;
 
 import java.io.ByteArrayOutputStream;
@@ -166,7 +170,7 @@ public class CLIJ {
                 sInstance = new CLIJ(pDeviceNameMustContain);
             }
         }
-        System.out.println(sInstance.getGPUName());
+        //System.out.println(sInstance.getGPUName());
         return sInstance;
     }
 
@@ -314,20 +318,11 @@ public class CLIJ {
         );
     }
 
-
-    public void show(RandomAccessibleInterval input, String title) {
-        show(convert(input, ImagePlus.class), title);
+    public void show(Object input, String title) {
+        show_internal(convert(input, ImagePlus.class), title);
     }
 
-    public void show(ClearCLImage input, String title) {
-        show(convert(input, ImagePlus.class), title);
-    }
-
-    public void show(ClearCLBuffer input, String title) {
-        show(convert(input, ImagePlus.class), title);
-    }
-
-    public void show(ImagePlus input, String title) {
+    private void show_internal(ImagePlus input, String title) {
         ImagePlus imp = input; //new Duplicator().run(input);
         imp.setTitle(title);
         imp.setZ(imp.getNSlices() / 2);
@@ -377,6 +372,20 @@ public class CLIJ {
 
     public ImagePlus pull(ClearCLBuffer buffer) {
         return convert(buffer, ImagePlus.class);
+    }
+
+    public RandomAccessibleInterval<BitType> pullBinaryRAI(ClearCLBuffer buffer) {
+        RandomAccessibleInterval<? extends RealType<?>> rai = convert(buffer, RandomAccessibleInterval.class);
+
+        long[] dimensions = new long[rai.numDimensions()];
+        rai.dimensions(dimensions);
+        RandomAccessibleInterval<BitType> result = ArrayImgs.bits(dimensions);
+
+        LoopBuilder.setImages(rai, result).forEachPixel((a, b) -> {
+            b.set(a.getRealFloat() > 0);
+        });
+
+        return result;
     }
 
     public <S, T> T convert(S source, Class<T> targetClass) {

@@ -215,7 +215,7 @@ public class Kernels {
         Kernels.fillHistogram(clij, src, histogram, minimumGreyValue, maximumGreyValue);
         //releaseBuffers(args);
 
-        System.out.println("CL sum " + clij.op().sumPixels(histogram));
+        //System.out.println("CL sum " + clij.op().sumPixels(histogram));
 
         // the histogram is written in args[1] which is supposed to be a one-dimensional image
         ImagePlus histogramImp = clij.convert(histogram, ImagePlus.class);

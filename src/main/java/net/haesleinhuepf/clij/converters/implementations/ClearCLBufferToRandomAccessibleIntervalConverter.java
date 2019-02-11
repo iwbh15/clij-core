@@ -31,13 +31,19 @@ public class ClearCLBufferToRandomAccessibleIntervalConverter extends AbstractCL
             throw new IllegalArgumentException("Wrong image size!");
         }
 
-        long[] dimensions = new long[]{
-                source.getWidth(),
-                source.getHeight(),
-                1,
-                source.getDepth(),
-                1
-        };
+        long[] dimensions;
+        if(source.getDepth() > 1) {
+            dimensions = new long[]{
+                    source.getWidth(),
+                    source.getHeight(),
+                    source.getDepth()
+            };
+        }else {
+            dimensions = new long[]{
+                    source.getWidth(),
+                    source.getHeight()
+            };
+        }
 
         // Todo: in case of large images, we might use PlanarImgs!
 

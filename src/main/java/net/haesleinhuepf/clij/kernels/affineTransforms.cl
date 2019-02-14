@@ -71,9 +71,17 @@ __kernel void affine(DTYPE_IMAGE_IN_3D input,
   float x2 = (mat[0]*x+mat[1]*y+mat[2]*z+mat[3]);
 
 
-  int4 coord_norm = (int4)(x2,y2,z2,0.f);
+  //int4 coord_norm = (int4)(x2 * GET_IMAGE_WIDTH(input) / GET_IMAGE_WIDTH(output),y2 * GET_IMAGE_HEIGHT(input) / GET_IMAGE_HEIGHT(output), z2  * GET_IMAGE_DEPTH(input) / GET_IMAGE_DEPTH(output),0.f);
+  int4 coord_norm = (int4)(x2,y2, z2,0.f);
 
-  float pix = (float)(READ_IMAGE_3D(input, sampler, coord_norm).x);
+
+
+  float pix = 0;
+  if (x2 >= 0 && y2 >= 0 && z2 >= 0 &&
+      x2 < GET_IMAGE_WIDTH(input) && y2 < GET_IMAGE_HEIGHT(input) && z2 < GET_IMAGE_DEPTH(input)
+  ) {
+    pix = (float)(READ_IMAGE_3D(input, sampler, coord_norm).x);
+  }
 
   int4 pos = (int4){i, j, k,0};
 

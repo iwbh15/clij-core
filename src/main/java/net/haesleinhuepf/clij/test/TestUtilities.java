@@ -7,8 +7,11 @@ import ij.gui.NewImage;
 import ij.process.ImageProcessor;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.kernels.Kernels;
+import net.imagej.ops.Ops;
 import net.imglib2.Cursor;
 import net.imglib2.IterableInterval;
+import net.imglib2.RandomAccess;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.RealType;
 
 /**
@@ -192,5 +195,26 @@ public class TestUtilities
 
 
         return true;
+    }
+
+    public static void printBuffer(CLIJ clij, ClearCLBuffer buffer){
+      RandomAccessibleInterval rai = clij.convert(buffer, RandomAccessibleInterval.class);
+      RandomAccess ra = rai.randomAccess();
+
+      long[] pos = new long[3];
+      for (int z = 0; z < rai.dimension(2); z++) {
+        pos[2] = z;
+        for (int y = 0; y < rai.dimension(1); y++) {
+          pos[1] = y;
+          for (int x = 0; x < rai.dimension(0); x++) {
+            pos[0] = x;
+            ra.setPosition(pos);
+
+            System.out.print(ra.get() + " ");
+          }
+          System.out.print("\n");
+        }
+        System.out.print("\n");
+      }
     }
 }

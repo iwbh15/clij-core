@@ -154,6 +154,7 @@ public class Kernels {
     }
 
     public static boolean affineTransform(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, AffineTransform3D at) {
+        at = at.inverse();
         float[] matrix = AffineTransform.matrixToFloatArray(at);
         return affineTransform(clij, src, dst, matrix);
     }
@@ -178,6 +179,7 @@ public class Kernels {
     }
 
     public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, AffineTransform3D at) {
+        at = at.inverse();
         float[] matrix = AffineTransform.matrixToFloatArray(at);
         return affineTransform(clij, src, dst, matrix);
     }

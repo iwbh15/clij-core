@@ -50,9 +50,9 @@ __kernel void affine_interpolate(DTYPE_IMAGE_IN_3D input,
   uint j = get_global_id(1);
   uint k = get_global_id(2);
 
-  uint Nx = get_global_size(0);
-  uint Ny = get_global_size(1);
-  uint Nz = get_global_size(2);
+  uint Nx = GET_IMAGE_WIDTH(input);
+  uint Ny = GET_IMAGE_HEIGHT(input);
+  uint Nz = GET_IMAGE_DEPTH(input);
 
   //float x = (mat[0]*i+mat[1]*j+mat[2]*k+mat[3]);
   //float y = (mat[4]*i+mat[5]*j+mat[6]*k+mat[7]);
@@ -70,11 +70,10 @@ __kernel void affine_interpolate(DTYPE_IMAGE_IN_3D input,
   float y2 = (mat[4]*x+mat[5]*y+mat[6]*z+mat[7]);
   float x2 = (mat[0]*x+mat[1]*y+mat[2]*z+mat[3]);
 
-
+  //float4 coord_norm = (float4)(x2 * GET_IMAGE_WIDTH(input) / GET_IMAGE_WIDTH(output) / Nx,y2 * GET_IMAGE_HEIGHT(input) / GET_IMAGE_HEIGHT(output) / Ny, z2  * GET_IMAGE_DEPTH(input) / GET_IMAGE_DEPTH(output) / Nz,0.f);
   float4 coord_norm = (float4)(x2/Nx,y2/Ny,z2/Nz,0.f);
 
   float pix = (float)(READ_IMAGE_3D(input, sampler, coord_norm).x);
-
   int4 pos = (int4){i, j, k,0};
 
   WRITE_IMAGE_3D(output, pos, (DTYPE_OUT) pix);

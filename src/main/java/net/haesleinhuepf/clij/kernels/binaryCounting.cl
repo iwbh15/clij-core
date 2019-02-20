@@ -22,7 +22,7 @@ __kernel void count_nonzero_slicewise_image3d
         for (int y = -e.y; y <= e.y; y++) {
             float ySquared = y * y;
             if (xSquared / aSquared + ySquared / bSquared <= 1.0) {
-                DTYPE_OUT value = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x;
+                DTYPE_OUT value = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord+((int4){x,y,k,0})).x;
                 if (value != 0) {
                     count++;
                 }

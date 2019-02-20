@@ -433,6 +433,61 @@ public class Kernels {
         return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(blurSigmaZ), blurSigmaX, blurSigmaY, blurSigmaZ, src.getDimension());
     }
 
+    public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image2d", parameters);
+    }
+
+    public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_slicewise_image3d", parameters);
+    }
+
+    public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int radiusX, int radiusY, int radiusZ) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("Nz", radiusToKernelSize(radiusZ));
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image3d", parameters);
+    }
+
+    public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image2d", parameters);
+    }
+
+    public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_slicewise_image3d", parameters);
+    }
+
+    public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, int radiusX, int radiusY, int radiusZ) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("Nz", radiusToKernelSize(radiusZ));
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image3d", parameters);
+    }
 
     private static boolean executeSeparableKernel(CLIJ clij, Object src, Object dst, String clFilename, String kernelname, int kernelSizeX, int kernelSizeY, int kernelSizeZ, float blurSigmaX, float blurSigmaY, float blurSigmaZ, long dimensions) {
         int[] n = new int[]{kernelSizeX, kernelSizeY, kernelSizeZ};

@@ -489,6 +489,49 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image3d", parameters);
     }
 
+    public static boolean spotDisplacement(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src1", src1);
+        parameters.put("src2", src2);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "neighbors.cl", "displacement_binary_image2d", parameters);
+    }
+
+    public static boolean spotDisplacement(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src1", src1);
+        parameters.put("src2", src2);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "neighbors.cl", "displacement_binary_image2d", parameters);
+    }
+
+    public static boolean displacement(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dstX, ClearCLBuffer dstY, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src1", src1);
+        parameters.put("src2", src2);
+        parameters.put("dstX", dstX);
+        parameters.put("dstY", dstY);
+        return clij.execute(Kernels.class, "neighbors.cl", "displacement_image2d", parameters);
+    }
+
+    public static boolean displacement(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dstX, ClearCLImage dstY, int radiusX, int radiusY) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("Nx", radiusToKernelSize(radiusX));
+        parameters.put("Ny", radiusToKernelSize(radiusY));
+        parameters.put("src1", src1);
+        parameters.put("src2", src2);
+        parameters.put("dstX", dstX);
+        parameters.put("dstY", dstY);
+        return clij.execute(Kernels.class, "neighbors.cl", "displacement_image2d", parameters);
+    }
+
+
     private static boolean executeSeparableKernel(CLIJ clij, Object src, Object dst, String clFilename, String kernelname, int kernelSizeX, int kernelSizeY, int kernelSizeZ, float blurSigmaX, float blurSigmaY, float blurSigmaZ, long dimensions) {
         int[] n = new int[]{kernelSizeX, kernelSizeY, kernelSizeZ};
         float[] blurSigma = new float[]{blurSigmaX, blurSigmaY, blurSigmaZ};
@@ -996,6 +1039,66 @@ public class Kernels {
 
         partialHistograms.close();
         return true;
+    }
+
+    public static boolean gradientX(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "neighbors.cl", "gradientX_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean gradientY(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "neighbors.cl", "gradientY_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean gradientZ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "neighbors.cl", "gradientZ_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean gradientX(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "neighbors.cl", "gradientX_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean gradientY(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "neighbors.cl", "gradientY_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean gradientZ(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "neighbors.cl", "gradientZ_" + src.getDimension() + "d", parameters);
     }
 
     public static float[] histogram(CLIJ clij, ClearCLBuffer image, Float minGreyValue, Float maxGreyValue, int numberOfBins) {

@@ -1,7 +1,7 @@
 __constant sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
 
 
-inline void copyNeighborhoodToArray(DTYPE_IMAGE_IN_2D src, DTYPE_OUT array[],
+inline int copyNeighborhoodToArray(DTYPE_IMAGE_IN_2D src, DTYPE_OUT array[],
                                     const int2 coord,
                                     const int Nx, const int Ny ) {
     // centers
@@ -22,10 +22,11 @@ inline void copyNeighborhoodToArray(DTYPE_IMAGE_IN_2D src, DTYPE_OUT array[],
             }
         }
     }
+    return count;
 }
 
 
-inline void copySliceNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[],
+inline int copySliceNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[],
                                     const int4 coord,
                                     const int Nx, const int Ny ) {
     // centers
@@ -46,6 +47,7 @@ inline void copySliceNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[
             }
         }
     }
+    return count;
 }
 
 
@@ -262,7 +264,7 @@ __kernel void median_image2d
   int array_size = Nx * Ny;
   DTYPE_OUT array[MAX_ARRAY_SIZE];
 
-  copyNeighborhoodToArray(src, array, coord, Nx, Ny);
+  array_size = copyNeighborhoodToArray(src, array, coord, Nx, Ny);
 
   DTYPE_OUT res = median(array, array_size);
   WRITE_IMAGE_2D(dst, coord, res);
@@ -299,7 +301,7 @@ __kernel void median_slicewise_image3d
   int array_size = Nx * Ny;
   DTYPE_OUT array[MAX_ARRAY_SIZE];
 
-  copySliceNeighborhoodToArray(src, array, coord, Nx, Ny);
+  array_size = copySliceNeighborhoodToArray(src, array, coord, Nx, Ny);
 
   DTYPE_OUT res = median(array, array_size);
   WRITE_IMAGE_3D(dst, coord, res);

@@ -176,3 +176,29 @@ __kernel void radialProjection3d(
   WRITE_IMAGE_3D(dst,(int4)(x,y,z,0),(DTYPE_OUT)value);
 }
 
+__kernel void radialArgMaximumBackProjection3d(
+    DTYPE_IMAGE_OUT_3D dst,
+    DTYPE_IMAGE_IN_2D srcIntensity,
+    DTYPE_IMAGE_IN_2D srcRadius,
+    float deltaAngle,
+    float deltaRadius
+) {
+  const sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+
+  const int x = get_global_id(0);
+  const int y = get_global_id(1);
+
+  const float imageHalfWidth = GET_IMAGE_OUT_WIDTH(dst) / 2;
+  const float imageHalfDepth = GET_IMAGE_OUT_DEPTH(dst) / 2;
+
+  float angleInRad = ((float)y) * deltaAngle / 180.0 * M_PI;
+
+  float radius = READ_IMAGE_2D(srcRadius,sampler,(int2)(x,y)).x * deltaRadius;
+
+  const int dx = (int)(imageHalfWidth + sin(angleInRad) * radius);
+  const int dy = x;
+  const int dz = (int)(imageHalfDepth + cos(angleInRad) * radius);
+
+  DTYPE_IN value = READ_IMAGE_2D(srcIntensity,sampler,(int2)(x,y)).x;
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)value);
+}

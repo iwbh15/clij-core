@@ -1921,6 +1921,34 @@ public class Kernels {
         return clij.execute(Kernels.class, "projections.cl", "radialProjection3d", parameters);
     }
 
+    public static boolean radialArgMaximumBackProjection(CLIJ clij, ClearCLBuffer srcRadius, ClearCLBuffer srcIntensity, ClearCLBuffer dst, Float deltaAngle, Float deltaRadius) {
+        HashMap<String, Object> parameters = new HashMap<>();
+
+        parameters.clear();
+        parameters.put("srcRadius", srcRadius);
+        parameters.put("srcIntensity", srcIntensity);
+        parameters.put("dst", dst);
+        parameters.put("deltaAngle", deltaAngle);
+        parameters.put("deltaRadius", deltaRadius);
+
+        long[] globalDimensions = srcRadius.getDimensions();
+        return clij.execute(Kernels.class, "projections.cl", "radialArgMaximumBackProjection3d", globalDimensions, parameters);
+    }
+
+    public static boolean radialArgMaximumBackProjection(CLIJ clij, ClearCLImage srcRadius, ClearCLImage srcIntensity, ClearCLImage dst, Float deltaAngle, Float deltaRadius) {
+        HashMap<String, Object> parameters = new HashMap<>();
+
+        parameters.clear();
+        parameters.put("srcRadius", srcRadius);
+        parameters.put("srcIntensity", srcIntensity);
+        parameters.put("dst", dst);
+        parameters.put("deltaAngle", deltaAngle);
+        parameters.put("deltaRadius", deltaRadius);
+
+        long[] globalDimensions = srcRadius.getDimensions();
+        return clij.execute(Kernels.class, "projections.cl", "radialArgMaximumBackProjection3d", globalDimensions, parameters);
+    }
+
     public static boolean resliceBottom(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
 

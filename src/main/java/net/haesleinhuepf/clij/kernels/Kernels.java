@@ -3,6 +3,7 @@ package net.haesleinhuepf.clij.kernels;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.AutoThresholder;
+import net.haesleinhuepf.clij.clearcl.ClearCL;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
@@ -182,6 +183,52 @@ public class Kernels {
         at = at.inverse();
         float[] matrix = AffineTransform.matrixToFloatArray(at);
         return affineTransform(clij, src, dst, matrix);
+    }
+
+    public static boolean applyVectorfield(CLIJ clij, ClearCLImage src, ClearCLImage vectorX, ClearCLImage vectorY, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("vectorX", vectorX);
+        parameters.put("vectorY", vectorY);
+
+        boolean result = clij.execute(Kernels.class, "deform_interpolate.cl", "deform_2d_interpolate", parameters);
+        return result;
+    }
+
+    public static boolean applyVectorfield(CLIJ clij, ClearCLImage src, ClearCLImage vectorX, ClearCLImage vectorY, ClearCLImage vectorZ, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("vectorX", vectorX);
+        parameters.put("vectorY", vectorY);
+        parameters.put("vectorZ", vectorZ);
+
+        boolean result = clij.execute(Kernels.class, "deform_interpolate.cl", "deform_3d_interpolate", parameters);
+        return result;
+    }
+
+    public static boolean applyVectorfield(CLIJ clij, ClearCLBuffer src, ClearCLBuffer vectorX, ClearCLBuffer vectorY, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("vectorX", vectorX);
+        parameters.put("vectorY", vectorY);
+
+        boolean result = clij.execute(Kernels.class, "deform.cl", "deform_2d", parameters);
+        return result;
+    }
+
+    public static boolean applyVectorfield(CLIJ clij, ClearCLBuffer src, ClearCLBuffer vectorX, ClearCLBuffer vectorY, ClearCLBuffer vectorZ, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("vectorX", vectorX);
+        parameters.put("vectorY", vectorY);
+        parameters.put("vectorZ", vectorZ);
+
+        boolean result = clij.execute(Kernels.class, "deform.cl", "deform_3d", parameters);
+        return result;
     }
 
     public static boolean automaticThreshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, String userSelectedMethod) {

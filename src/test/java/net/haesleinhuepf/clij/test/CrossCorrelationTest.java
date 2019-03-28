@@ -4,6 +4,7 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
 import ij.gui.NewImage;
+import ij.gui.WaitForUserDialog;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.kernels.Kernels;
@@ -27,7 +28,42 @@ public class CrossCorrelationTest {
         ImagePlus vfXImp = NewImage.createFloatImage("vf", imp.getWidth(), imp.getHeight(), 1, NewImage.FILL_BLACK);
         for (int x = 100; x < 120; x++) {
             for (int y = 100; y < 120; y++) {
-                vfXImp.getProcessor().setf(x, y, 10);
+                vfXImp.getProcessor().setf(x, y, 3);
+            }
+        }
+        CLIJ clij = CLIJ.getInstance();
+
+        ClearCLBuffer input = clij.push(imp);
+        ClearCLBuffer vfYBuffer = clij.push(vfXImp);
+        ClearCLBuffer vfYBlurred = clij.create(vfYBuffer);
+        ClearCLBuffer vfX = clij.create(input);
+        ClearCLBuffer vfY = clij.create(input);
+        ClearCLBuffer shifted = clij.create(input);
+
+        Kernels.blurFast(clij, vfYBuffer, vfYBlurred, 5,5,5 );
+
+        Kernels.applyVectorfield(clij, input, vfX, vfYBlurred, shifted);
+
+
+        Kernels.particleImageVelocimetry2D(clij, input, shifted, vfX, vfY, 5);
+
+        clij.show(vfX, "vfX");
+        clij.show(vfY, "vfY");
+
+
+
+    }
+
+    @Test
+    public void testLocalShift() {
+        new ImageJ();
+        ImagePlus imp = IJ.openImage("src/main/resources/blobs.tif");
+        IJ.run(imp, "32-bit", "");
+
+        ImagePlus vfXImp = NewImage.createFloatImage("vf", imp.getWidth(), imp.getHeight(), 1, NewImage.FILL_BLACK);
+        for (int x = 100; x < 120; x++) {
+            for (int y = 100; y < 120; y++) {
+                vfXImp.getProcessor().setf(x, y, 3);
             }
         }
         CLIJ clij = CLIJ.getInstance();
@@ -69,6 +105,7 @@ public class CrossCorrelationTest {
 
         clij.show(argMaxProj, "argMaxProj");
 
+        new WaitForUserDialog("wait").show();
     }
 
     @Test

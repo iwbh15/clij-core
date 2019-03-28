@@ -747,6 +747,19 @@ public class Kernels {
         return clij.execute(Kernels.class, "cross_correlation.cl", "cross_correlation_3d", parameters);
     }
 
+    public static boolean crossCorrelation(CLIJ clij, ClearCLImage src1, ClearCLImage meanSrc1, ClearCLImage src2, ClearCLImage meanSrc2, ClearCLImage dst, int radius, int deltaPos, int dimension) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src1", src1);
+        parameters.put("mean_src1", meanSrc1);
+        parameters.put("src2", src2);
+        parameters.put("mean_src2", meanSrc2);
+        parameters.put("dst", dst);
+        parameters.put("radius", radius);
+        parameters.put("i", deltaPos);
+        parameters.put("dimension", dimension);
+        return clij.execute(Kernels.class, "cross_correlation.cl", "cross_correlation_3d", parameters);
+    }
+
     public static boolean detectMaximaBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
         return detectOptima(clij, src, dst, radius, true);
     }
@@ -1897,6 +1910,91 @@ public class Kernels {
         parameters.put("dst", output3d);
         return clij.execute(Kernels.class, "math.cl", "multiplyStackWithPlanePixelwise", parameters);
     }
+
+    public static boolean particleImageVelocimetry2D(CLIJ clij, ClearCLBuffer input1, ClearCLBuffer input2, ClearCLBuffer vfX, ClearCLBuffer vfY, int maxDelta ) {
+        // prepare cross-correlation analysis
+        int meanRange = maxDelta + 1;
+        int scanRange = 1; // has influence on precision / correctness
+
+        ClearCLBuffer meanInput1 = clij.create(input1);
+        ClearCLBuffer meanInput2 = clij.create(input2);
+
+
+        ClearCLBuffer crossCorrCoeff = clij.create(input1);
+        ClearCLBuffer crossCorrCoeffStack = clij.create(new long[] {input1.getWidth(), input1.getHeight(), 2 * maxDelta + 1}, input1.getNativeType());
+
+        // analyse shift in X
+        Kernels.meanBox(clij, input1, meanInput1, meanRange, 0, 0);
+        Kernels.meanBox(clij, input2, meanInput2, meanRange, 0, 0);
+        analyseShift(clij, input1, input2, vfX, maxDelta, scanRange, meanInput1, meanInput2, crossCorrCoeff, crossCorrCoeffStack, 0);
+
+        Kernels.meanBox(clij, input1, meanInput1, 0, meanRange, 0);
+        Kernels.meanBox(clij, input2, meanInput2, 0, meanRange, 0);
+        analyseShift(clij, input1, input2, vfY, maxDelta, scanRange, meanInput1, meanInput2, crossCorrCoeff, crossCorrCoeffStack, 1);
+
+        meanInput1.close();
+        meanInput2.close();
+
+        crossCorrCoeff.close();
+        crossCorrCoeffStack.close();
+
+        return true;
+    }
+
+    public static boolean particleImageVelocimetry2D(CLIJ clij, ClearCLImage input1, ClearCLImage input2, ClearCLImage vfX, ClearCLImage vfY, int maxDelta ) {
+        // prepare cross-correlation analysis
+        int meanRange = maxDelta + 1;
+        int scanRange = 1; // has influence on precision / correctness
+
+        ClearCLImage meanInput1 = clij.create(input1);
+        ClearCLImage meanInput2 = clij.create(input2);
+
+
+        ClearCLImage crossCorrCoeff = clij.create(input1);
+        ClearCLImage crossCorrCoeffStack = clij.create(new long[] {input1.getWidth(), input1.getHeight(), 2 * maxDelta + 1}, input1.getChannelDataType());
+
+        // analyse shift in X
+        Kernels.meanBox(clij, input1, meanInput1, meanRange, 0, 0);
+        Kernels.meanBox(clij, input2, meanInput2, meanRange, 0, 0);
+        analyseShift(clij, input1, input2, vfX, maxDelta, scanRange, meanInput1, meanInput2, crossCorrCoeff, crossCorrCoeffStack, 0);
+
+        Kernels.meanBox(clij, input1, meanInput1, 0, meanRange, 0);
+        Kernels.meanBox(clij, input2, meanInput2, 0, meanRange, 0);
+        analyseShift(clij, input1, input2, vfY, maxDelta, scanRange, meanInput1, meanInput2, crossCorrCoeff, crossCorrCoeffStack, 1);
+
+        meanInput1.close();
+        meanInput2.close();
+
+        crossCorrCoeff.close();
+        crossCorrCoeffStack.close();
+
+        return true;
+    }
+
+    private static void analyseShift(CLIJ clij, ClearCLBuffer input1, ClearCLBuffer input2, ClearCLBuffer vf, int maxDelta, int scanRange, ClearCLBuffer meanInput1, ClearCLBuffer meanInput2, ClearCLBuffer crossCorrCoeff, ClearCLBuffer crossCorrCoeffStack, int dimension) {
+        for (int i = -maxDelta; i <=maxDelta; i++) {
+            Kernels.crossCorrelation(clij, input1, meanInput1, input2, meanInput2, crossCorrCoeff, scanRange, i, dimension);
+            Kernels.copySlice(clij, crossCorrCoeff, crossCorrCoeffStack, i + maxDelta);
+        }
+
+        ClearCLBuffer argMaxProj = clij.create(input1);
+
+        Kernels.argMaximumZProjection(clij, crossCorrCoeffStack, vf, argMaxProj);
+        Kernels.addImageAndScalar(clij, argMaxProj, vf, new Float(-maxDelta));
+    }
+
+    private static void analyseShift(CLIJ clij, ClearCLImage input1, ClearCLImage input2, ClearCLImage vf, int maxDelta, int scanRange, ClearCLImage meanInput1, ClearCLImage meanInput2, ClearCLImage crossCorrCoeff, ClearCLImage crossCorrCoeffStack, int dimension) {
+        for (int i = -maxDelta; i <=maxDelta; i++) {
+            Kernels.crossCorrelation(clij, input1, meanInput1, input2, meanInput2, crossCorrCoeff, scanRange, i, dimension);
+            Kernels.copySlice(clij, crossCorrCoeff, crossCorrCoeffStack, i + maxDelta);
+        }
+
+        ClearCLImage argMaxProj = clij.create(input1);
+
+        Kernels.argMaximumZProjection(clij, crossCorrCoeffStack, vf, argMaxProj);
+        Kernels.addImageAndScalar(clij, argMaxProj, vf, new Float(-maxDelta));
+    }
+
 
     public static boolean power(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float exponent) {
         HashMap<String, Object> parameters = new HashMap<>();

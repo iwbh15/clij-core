@@ -1825,6 +1825,28 @@ public class Kernels {
         return clij.execute(Kernels.class, "math.cl", "multiplyPixelwise_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer dimension) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dimension", dimension);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (multiplyImageAndCoordinate)");
+        }
+        return clij.execute(Kernels.class, "math.cl", "multiply_pixelwise_with_coordinate_3d", parameters);
+    }
+
+    public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer dimension) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dimension", dimension);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (multiplyImageAndCoordinate)");
+        }
+        return clij.execute(Kernels.class, "math.cl", "multiply_pixelwise_with_coordinate_3d", parameters);
+    }
+
     public static boolean multiplyImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float scalar) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);

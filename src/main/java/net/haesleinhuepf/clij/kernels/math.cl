@@ -455,5 +455,22 @@ __kernel void power_3d(DTYPE_IMAGE_IN_3D src,
   WRITE_IMAGE_3D (dst, pos, value);
 }
 
+__kernel void multiply_pixelwise_with_coordinate_3d(DTYPE_IMAGE_IN_3D  src,
+                          DTYPE_IMAGE_OUT_3D  dst,
+                          int dimension
+                     )
+{
+  const int x = get_global_id(0);
+  const int y = get_global_id(1);
+  const int z = get_global_id(2);
+
+  const int4 pos = (int4){x,y,z,0};
+
+  const DTYPE_OUT value = READ_IMAGE_3D(src, sampler, pos).x * get_global_id(dimension);
+
+  WRITE_IMAGE_3D (dst, pos, value);
+}
+
+
 
 

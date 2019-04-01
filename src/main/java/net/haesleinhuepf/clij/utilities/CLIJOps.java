@@ -670,6 +670,14 @@ public class CLIJOps {
         return Kernels.multiplyImages(clij, src, src1, dst);
     }
 
+    public boolean multiplyImageAndCoordinate( ClearCLImage src,  ClearCLImage dst,  Integer dimension ) {
+        return Kernels.multiplyImageAndCoordinate(clij, src, dst, dimension);
+    }
+
+    public boolean multiplyImageAndCoordinate( ClearCLBuffer src,  ClearCLBuffer dst,  Integer dimension ) {
+        return Kernels.multiplyImageAndCoordinate(clij, src, dst, dimension);
+    }
+
     public boolean multiplyImageAndScalar( ClearCLImage src,  ClearCLImage dst,  Float scalar ) {
         return Kernels.multiplyImageAndScalar(clij, src, dst, scalar);
     }

@@ -298,7 +298,7 @@ public class Kernels {
 
         //System.out.println("Threshold: " + threshold);
 
-        clij.op().threshold(src, dst, threshold);
+        Kernels.threshold(clij, src, dst, threshold);
 
         return true;
     }
@@ -395,92 +395,31 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_or_" + src1.getDimension() + "d", parameters);
     }
 
-
-    public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Float sigmaX, Float sigmaY) {
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("Nx", kernelSizeX);
-        parameters.put("Ny", kernelSizeY);
-        parameters.put("sx", sigmaX);
-        parameters.put("sy", sigmaY);
-        parameters.put("src", src);
-        parameters.put("dst", dst);
-        return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_image2d", parameters);
+    public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float blurSigmaX, Float blurSigmaY) {
+        return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(0), blurSigmaX, blurSigmaY, 0, src.getDimension());
     }
 
-    public static boolean blur(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Float sigmaX, Float sigmaY) {
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("Nx", kernelSizeX);
-        parameters.put("Ny", kernelSizeY);
-        parameters.put("sx", sigmaX);
-        parameters.put("sy", sigmaY);
-        parameters.put("src", src);
-        parameters.put("dst", dst);
-        return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_image2d", parameters);
+    public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLBuffer dst, Float blurSigmaX, Float blurSigmaY) {
+        return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(0), blurSigmaX, blurSigmaY, 0, src.getDimension());
     }
 
-    public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ, Float sigmaX, Float sigmaY, Float sigmaZ) {
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("Nx", kernelSizeX);
-        parameters.put("Ny", kernelSizeY);
-        parameters.put("Nz", kernelSizeZ);
-        parameters.put("sx", sigmaX);
-        parameters.put("sy", sigmaY);
-        parameters.put("sz", sigmaZ);
-        parameters.put("src", src);
-        parameters.put("dst", dst);
-        return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_image3d", parameters);
+    public static boolean blur(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float blurSigmaX, Float blurSigmaY) {
+        return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(0), blurSigmaX, blurSigmaY, 0, src.getDimension());
     }
 
-    public static boolean blur(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ, Float sigmaX, Float sigmaY, Float sigmaZ) {
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("Nx", kernelSizeX);
-        parameters.put("Ny", kernelSizeY);
-        parameters.put("Nz", kernelSizeZ);
-        parameters.put("sx", sigmaX);
-        parameters.put("sy", sigmaY);
-        parameters.put("sz", sigmaZ);
-        parameters.put("src", src);
-        parameters.put("dst", dst);
-        return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_image3d", parameters);
-    }
-
-    public static boolean blurIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float sigma) {
-        int kernelSize = sigmaToKernelSize(sigma);
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("Nx", kernelSize);
-        parameters.put("Ny", kernelSize);
-        parameters.put("sx", sigma);
-        parameters.put("sy", sigma);
-        parameters.put("src", src);
-        parameters.put("dst", dst);
-        return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_image2d_ij", parameters);
-    }
-
-    public static boolean blurIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float sigma) {
-        int kernelSize = sigmaToKernelSize(sigma);
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("Nx", kernelSize);
-        parameters.put("Ny", kernelSize);
-        parameters.put("sx", sigma);
-        parameters.put("sy", sigma);
-        parameters.put("src", src);
-        parameters.put("dst", dst);
-        return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_image2d_ij", parameters);
-    }
-
-    public static boolean blurFast(CLIJ clij, ClearCLImage src, ClearCLImage dst, float blurSigmaX, float blurSigmaY, float blurSigmaZ) {
+    public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float blurSigmaX, Float blurSigmaY, Float blurSigmaZ) {
         return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(blurSigmaZ), blurSigmaX, blurSigmaY, blurSigmaZ, src.getDimension());
     }
 
-    public static boolean blurFast(CLIJ clij, ClearCLImage src, ClearCLBuffer dst, float blurSigmaX, float blurSigmaY, float blurSigmaZ) {
+    public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLBuffer dst, Float blurSigmaX, Float blurSigmaY, Float blurSigmaZ) {
         return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(blurSigmaZ), blurSigmaX, blurSigmaY, blurSigmaZ, src.getDimension());
     }
 
-    public static boolean blurFast(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, float blurSigmaX, float blurSigmaY, float blurSigmaZ) {
+    public static boolean blur(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float blurSigmaX, Float blurSigmaY, Float blurSigmaZ) {
         return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(blurSigmaZ), blurSigmaX, blurSigmaY, blurSigmaZ, src.getDimension());
     }
 
-    public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int radiusX, int radiusY) {
+    public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -489,7 +428,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image2d", parameters);
     }
 
-    public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int radiusX, int radiusY) {
+    public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -498,7 +437,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_slicewise_image3d", parameters);
     }
 
-    public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int radiusX, int radiusY, int radiusZ) {
+    public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY, Integer radiusZ) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -508,7 +447,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image3d", parameters);
     }
 
-    public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, int radiusX, int radiusY) {
+    public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radiusX, Integer radiusY) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -517,7 +456,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_image2d", parameters);
     }
 
-    public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, int radiusX, int radiusY) {
+    public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radiusX, Integer radiusY) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -526,7 +465,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryCounting.cl", "count_nonzero_slicewise_image3d", parameters);
     }
 
-    public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, int radiusX, int radiusY, int radiusZ) {
+    public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radiusX, Integer radiusY, Integer radiusZ) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -1131,7 +1070,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "neighbors.cl", "gradientZ_" + src.getDimension() + "d", parameters);
     }
 
-    public static float[] histogram(CLIJ clij, ClearCLBuffer image, Float minGreyValue, Float maxGreyValue, int numberOfBins) {
+    public static float[] histogram(CLIJ clij, ClearCLBuffer image, Float minGreyValue, Float maxGreyValue, Integer numberOfBins) {
         ClearCLBuffer histogram = clij.createCLBuffer(new long[]{numberOfBins, 1, 1}, NativeTypeEnum.Float);
 
         if (minGreyValue == null) {
@@ -1312,6 +1251,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "maximum_image3d", parameters);
     }
 
+    @Deprecated
     public static boolean maximumIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -1321,6 +1261,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "maximum_image2d_ij", parameters);
     }
 
+    @Deprecated
     public static boolean maximumIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -1562,6 +1503,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "mean_image2d", parameters);
     }
 
+    @Deprecated
     public static boolean meanIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -1571,6 +1513,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "mean_image2d_ij", parameters);
     }
 
+    @Deprecated
     public static boolean meanIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -1753,6 +1696,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "minimum_image3d", parameters);
     }
 
+    @Deprecated
     public static boolean minimumIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -1762,6 +1706,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "minimum_image2d_ij", parameters);
     }
 
+    @Deprecated
     public static boolean minimumIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -1933,7 +1878,7 @@ public class Kernels {
         return clij.execute(Kernels.class, "math.cl", "multiplyStackWithPlanePixelwise", parameters);
     }
 
-    public static boolean particleImageVelocimetry2D(CLIJ clij, ClearCLBuffer input1, ClearCLBuffer input2, ClearCLBuffer vfX, ClearCLBuffer vfY, int maxDelta ) {
+    public static boolean particleImageVelocimetry2D(CLIJ clij, ClearCLBuffer input1, ClearCLBuffer input2, ClearCLBuffer vfX, ClearCLBuffer vfY, Integer maxDelta ) {
         // prepare cross-correlation analysis
         int meanRange = maxDelta + 1;
         int scanRange = 1; // has influence on precision / correctness
@@ -1963,7 +1908,7 @@ public class Kernels {
         return true;
     }
 
-    public static boolean particleImageVelocimetry2D(CLIJ clij, ClearCLImage input1, ClearCLImage input2, ClearCLImage vfX, ClearCLImage vfY, int maxDelta ) {
+    public static boolean particleImageVelocimetry2D(CLIJ clij, ClearCLImage input1, ClearCLImage input2, ClearCLImage vfX, ClearCLImage vfY, Integer maxDelta ) {
         // prepare cross-correlation analysis
         int meanRange = maxDelta + 1;
         int scanRange = 1; // has influence on precision / correctness
@@ -2490,9 +2435,9 @@ public class Kernels {
 
             if (temporaryImage2 != null) {
                 power(clij, temporaryImage, temporaryImage2, exponent);
-                blurFast(clij, temporaryImage2, temporaryImages[i], blurSigmas[0], blurSigmas[1], blurSigmas[2]);
+                blur(clij, temporaryImage2, temporaryImages[i], blurSigmas[0], blurSigmas[1], blurSigmas[2]);
             } else {
-                blurFast(clij, temporaryImage, temporaryImages[i], blurSigmas[0], blurSigmas[1], blurSigmas[2]);
+                blur(clij, temporaryImage, temporaryImages[i], blurSigmas[0], blurSigmas[1], blurSigmas[2]);
             }
 
             lFusionParameters.put("src" + i, clImagesIn[i]);

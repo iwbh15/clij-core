@@ -3,6 +3,7 @@ package net.haesleinhuepf.clij.test;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.kernels.Kernels;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.realtransform.AffineTransform3D;
@@ -51,7 +52,7 @@ public class AffineTransformTest {
         AffineTransform3D at = new AffineTransform3D();
         at.translate(4, 0, 0);
 
-        clij.op().affineTransform(input, output, at);
+        Kernels.affineTransform(clij, input, output, at);
 
         TestUtilities.printBuffer(clij, output);
 
@@ -87,7 +88,7 @@ public class AffineTransformTest {
         AffineTransform3D at = new AffineTransform3D();
         at.translate(4, 0, 0);
 
-        clij.op().affineTransform(input, output, at);
+        Kernels.affineTransform(clij, input, output, at);
 
         ClearCLBuffer bufferOutput = clij.convert(output, ClearCLBuffer.class);
         ClearCLBuffer referenceOutput = clij.convert(reference, ClearCLBuffer.class);

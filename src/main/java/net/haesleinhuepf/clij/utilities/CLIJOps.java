@@ -138,63 +138,51 @@ public class CLIJOps {
         return Kernels.binaryOr(clij, src1, src2, dst);
     }
 
-    public boolean blur( ClearCLImage src,  ClearCLImage dst,  Integer kernelSizeX,  Integer kernelSizeY,  Float sigmaX,  Float sigmaY ) {
-        return Kernels.blur(clij, src, dst, kernelSizeX, kernelSizeY, sigmaX, sigmaY);
+    public boolean blur( ClearCLImage src,  ClearCLImage dst,  Float blurSigmaX,  Float blurSigmaY ) {
+        return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY);
     }
 
-    public boolean blur( ClearCLBuffer src,  ClearCLBuffer dst,  Integer kernelSizeX,  Integer kernelSizeY,  Float sigmaX,  Float sigmaY ) {
-        return Kernels.blur(clij, src, dst, kernelSizeX, kernelSizeY, sigmaX, sigmaY);
+    public boolean blur( ClearCLImage src,  ClearCLBuffer dst,  Float blurSigmaX,  Float blurSigmaY ) {
+        return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY);
     }
 
-    public boolean blur( ClearCLImage src,  ClearCLImage dst,  Integer kernelSizeX,  Integer kernelSizeY,  Integer kernelSizeZ,  Float sigmaX,  Float sigmaY,  Float sigmaZ ) {
-        return Kernels.blur(clij, src, dst, kernelSizeX, kernelSizeY, kernelSizeZ, sigmaX, sigmaY, sigmaZ);
+    public boolean blur( ClearCLBuffer src,  ClearCLBuffer dst,  Float blurSigmaX,  Float blurSigmaY ) {
+        return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY);
     }
 
-    public boolean blur( ClearCLBuffer src,  ClearCLBuffer dst,  Integer kernelSizeX,  Integer kernelSizeY,  Integer kernelSizeZ,  Float sigmaX,  Float sigmaY,  Float sigmaZ ) {
-        return Kernels.blur(clij, src, dst, kernelSizeX, kernelSizeY, kernelSizeZ, sigmaX, sigmaY, sigmaZ);
+    public boolean blur( ClearCLImage src,  ClearCLImage dst,  Float blurSigmaX,  Float blurSigmaY,  Float blurSigmaZ ) {
+        return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
     }
 
-    public boolean blurIJ( ClearCLImage src,  ClearCLImage dst,  Float sigma ) {
-        return Kernels.blurIJ(clij, src, dst, sigma);
+    public boolean blur( ClearCLImage src,  ClearCLBuffer dst,  Float blurSigmaX,  Float blurSigmaY,  Float blurSigmaZ ) {
+        return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
     }
 
-    public boolean blurIJ( ClearCLBuffer src,  ClearCLBuffer dst,  Float sigma ) {
-        return Kernels.blurIJ(clij, src, dst, sigma);
+    public boolean blur( ClearCLBuffer src,  ClearCLBuffer dst,  Float blurSigmaX,  Float blurSigmaY,  Float blurSigmaZ ) {
+        return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
     }
 
-    public boolean blurFast( ClearCLImage src,  ClearCLImage dst,  float blurSigmaX,  float blurSigmaY,  float blurSigmaZ ) {
-        return Kernels.blurFast(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
-    }
-
-    public boolean blurFast( ClearCLImage src,  ClearCLBuffer dst,  float blurSigmaX,  float blurSigmaY,  float blurSigmaZ ) {
-        return Kernels.blurFast(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
-    }
-
-    public boolean blurFast( ClearCLBuffer src,  ClearCLBuffer dst,  float blurSigmaX,  float blurSigmaY,  float blurSigmaZ ) {
-        return Kernels.blurFast(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
-    }
-
-    public boolean countNonZeroPixelsLocally( ClearCLBuffer src,  ClearCLBuffer dst,  int radiusX,  int radiusY ) {
+    public boolean countNonZeroPixelsLocally( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radiusX,  Integer radiusY ) {
         return Kernels.countNonZeroPixelsLocally(clij, src, dst, radiusX, radiusY);
     }
 
-    public boolean countNonZeroPixelsLocallySliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst,  int radiusX,  int radiusY ) {
+    public boolean countNonZeroPixelsLocallySliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radiusX,  Integer radiusY ) {
         return Kernels.countNonZeroPixelsLocallySliceBySlice(clij, src, dst, radiusX, radiusY);
     }
 
-    public boolean countNonZeroVoxelsLocally( ClearCLBuffer src,  ClearCLBuffer dst,  int radiusX,  int radiusY,  int radiusZ ) {
+    public boolean countNonZeroVoxelsLocally( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radiusX,  Integer radiusY,  Integer radiusZ ) {
         return Kernels.countNonZeroVoxelsLocally(clij, src, dst, radiusX, radiusY, radiusZ);
     }
 
-    public boolean countNonZeroPixelsLocally( ClearCLImage src,  ClearCLImage dst,  int radiusX,  int radiusY ) {
+    public boolean countNonZeroPixelsLocally( ClearCLImage src,  ClearCLImage dst,  Integer radiusX,  Integer radiusY ) {
         return Kernels.countNonZeroPixelsLocally(clij, src, dst, radiusX, radiusY);
     }
 
-    public boolean countNonZeroPixelsLocallySliceBySlice( ClearCLImage src,  ClearCLImage dst,  int radiusX,  int radiusY ) {
+    public boolean countNonZeroPixelsLocallySliceBySlice( ClearCLImage src,  ClearCLImage dst,  Integer radiusX,  Integer radiusY ) {
         return Kernels.countNonZeroPixelsLocallySliceBySlice(clij, src, dst, radiusX, radiusY);
     }
 
-    public boolean countNonZeroVoxelsLocally( ClearCLImage src,  ClearCLImage dst,  int radiusX,  int radiusY,  int radiusZ ) {
+    public boolean countNonZeroVoxelsLocally( ClearCLImage src,  ClearCLImage dst,  Integer radiusX,  Integer radiusY,  Integer radiusZ ) {
         return Kernels.countNonZeroVoxelsLocally(clij, src, dst, radiusX, radiusY, radiusZ);
     }
 
@@ -402,7 +390,7 @@ public class CLIJOps {
         return Kernels.gradientZ(clij, src, dst);
     }
 
-    public float[] histogram( ClearCLBuffer image,  Float minGreyValue,  Float maxGreyValue,  int numberOfBins ) {
+    public float[] histogram( ClearCLBuffer image,  Float minGreyValue,  Float maxGreyValue,  Integer numberOfBins ) {
         return Kernels.histogram(clij, image, minGreyValue, maxGreyValue, numberOfBins);
     }
 
@@ -702,11 +690,11 @@ public class CLIJOps {
         return Kernels.multiplyStackWithPlane(clij, input3d, input2d, output3d);
     }
 
-    public boolean particleImageVelocimetry2D( ClearCLBuffer input1,  ClearCLBuffer input2,  ClearCLBuffer vfX,  ClearCLBuffer vfY,  int maxDelta  ) {
+    public boolean particleImageVelocimetry2D( ClearCLBuffer input1,  ClearCLBuffer input2,  ClearCLBuffer vfX,  ClearCLBuffer vfY,  Integer maxDelta  ) {
         return Kernels.particleImageVelocimetry2D(clij, input1, input2, vfX, vfY, maxDelta);
     }
 
-    public boolean particleImageVelocimetry2D( ClearCLImage input1,  ClearCLImage input2,  ClearCLImage vfX,  ClearCLImage vfY,  int maxDelta  ) {
+    public boolean particleImageVelocimetry2D( ClearCLImage input1,  ClearCLImage input2,  ClearCLImage vfX,  ClearCLImage vfY,  Integer maxDelta  ) {
         return Kernels.particleImageVelocimetry2D(clij, input1, input2, vfX, vfY, maxDelta);
     }
 

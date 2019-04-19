@@ -40,7 +40,7 @@ public class CrossCorrelationTest {
         ClearCLBuffer vfY = clij.create(input);
         ClearCLBuffer shifted = clij.create(input);
 
-        Kernels.blurFast(clij, vfYBuffer, vfYBlurred, 5,5,5 );
+        Kernels.blur(clij, vfYBuffer, vfYBlurred, 5f, 5f, 5f );
 
         Kernels.applyVectorfield(clij, input, vfX, vfYBlurred, shifted);
 
@@ -74,7 +74,7 @@ public class CrossCorrelationTest {
         ClearCLBuffer vfX = clij.create(input);
         ClearCLBuffer shifted = clij.create(input);
 
-        Kernels.blurFast(clij, vfYBuffer, vfYBlurred, 5,5,5 );
+        Kernels.blur(clij, vfYBuffer, vfYBlurred, 5f, 5f, 5f );
 
         Kernels.applyVectorfield(clij, input, vfX, vfYBlurred, shifted);
 

@@ -9,7 +9,6 @@ import net.haesleinhuepf.clij.clearcl.util.ElapsedTime;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import ij.IJ;
 import ij.ImagePlus;
-import ij.plugin.Duplicator;
 import net.haesleinhuepf.clij.converters.CLIJConverterPlugin;
 import net.haesleinhuepf.clij.converters.CLIJConverterService;
 import net.haesleinhuepf.clij.utilities.CLIJOps;

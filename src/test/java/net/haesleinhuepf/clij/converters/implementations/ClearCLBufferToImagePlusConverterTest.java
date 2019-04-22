@@ -7,6 +7,7 @@ import ij.gui.NewImage;
 import ij.plugin.Duplicator;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.test.TestUtilities;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,6 +17,8 @@ public class ClearCLBufferToImagePlusConverterTest {
     ImagePlus result1;
     ImagePlus result2;
 
+
+    @Ignore
     @Test
     public void testByteImageConversion() {
         CLIJ clij = CLIJ.getInstance();
@@ -52,6 +55,7 @@ public class ClearCLBufferToImagePlusConverterTest {
         buffer2.close();
     }
 
+    @Ignore
     @Test
     public void testShortImageConversion() {
         CLIJ clij = CLIJ.getInstance();
@@ -88,6 +92,7 @@ public class ClearCLBufferToImagePlusConverterTest {
         buffer2.close();
     }
 
+    @Ignore
     @Test
     public void testFloatImageConversion() {
         CLIJ clij = CLIJ.getInstance();

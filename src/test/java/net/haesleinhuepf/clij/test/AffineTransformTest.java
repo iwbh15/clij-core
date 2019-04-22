@@ -57,6 +57,12 @@ public class AffineTransformTest {
         TestUtilities.printBuffer(clij, output);
 
         assertTrue(TestUtilities.clBuffersEqual(clij, output, reference, 0));
+
+        input.close();
+        reference.close();
+        output.close();
+
+        clij.dispose();
     }
 
     @Test
@@ -96,5 +102,10 @@ public class AffineTransformTest {
         TestUtilities.printBuffer(clij, bufferOutput);
 
         assertTrue(TestUtilities.clBuffersEqual(clij, bufferOutput, referenceOutput, 0));
+
+        input.close();
+        reference.close();
+        output.close();
+        clij.dispose();
     }
 }

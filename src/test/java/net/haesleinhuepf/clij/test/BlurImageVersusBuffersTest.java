@@ -26,17 +26,11 @@ public class BlurImageVersusBuffersTest {
         float sigma = 5;
 
         for (int i = 0; i < 3; i++) {
-            ElapsedTime.measureForceOutput("blur buffer", () -> {
-                Kernels.blur(clij, inputBuffer, outputBuffer, sigmaToKernelSize(sigma), sigmaToKernelSize(sigma), sigmaToKernelSize(sigma), sigma, sigma, sigma);
-            });
-            ElapsedTime.measureForceOutput("blur image", () -> {
-                Kernels.blur(clij, inputImage, outputImage, sigmaToKernelSize(sigma), sigmaToKernelSize(sigma), sigmaToKernelSize(sigma), sigma, sigma, sigma);
-            });
             ElapsedTime.measureForceOutput("blurSep buffer", () -> {
-                Kernels.blurFast(clij, inputBuffer, outputBuffer, sigma, sigma, sigma);
+                Kernels.blur(clij, inputBuffer, outputBuffer, sigma, sigma, sigma);
             });
             ElapsedTime.measureForceOutput("blurSep image", () -> {
-                Kernels.blurFast(clij, inputImage, outputImage, sigma, sigma, sigma);
+                Kernels.blur(clij, inputImage, outputImage, sigma, sigma, sigma);
             });
         }
 

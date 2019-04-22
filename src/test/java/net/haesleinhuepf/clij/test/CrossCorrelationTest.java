@@ -40,7 +40,7 @@ public class CrossCorrelationTest {
         ClearCLBuffer vfY = clij.create(input);
         ClearCLBuffer shifted = clij.create(input);
 
-        Kernels.blurFast(clij, vfYBuffer, vfYBlurred, 5,5,5 );
+        Kernels.blur(clij, vfYBuffer, vfYBlurred, 5f, 5f, 5f );
 
         Kernels.applyVectorfield(clij, input, vfX, vfYBlurred, shifted);
 
@@ -50,8 +50,15 @@ public class CrossCorrelationTest {
         clij.show(vfX, "vfX");
         clij.show(vfY, "vfY");
 
+        input.close();
+        vfYBuffer.close();
+        vfYBlurred.close();
+        vfX.close();
+        vfY.close();
+        shifted.close();
 
-
+        IJ.exit();
+        clij.dispose();
     }
 
     @Test
@@ -74,7 +81,7 @@ public class CrossCorrelationTest {
         ClearCLBuffer vfX = clij.create(input);
         ClearCLBuffer shifted = clij.create(input);
 
-        Kernels.blurFast(clij, vfYBuffer, vfYBlurred, 5,5,5 );
+        Kernels.blur(clij, vfYBuffer, vfYBlurred, 5f, 5f, 5f );
 
         Kernels.applyVectorfield(clij, input, vfX, vfYBlurred, shifted);
 
@@ -106,6 +113,18 @@ public class CrossCorrelationTest {
         clij.show(argMaxProj, "argMaxProj");
 
         new WaitForUserDialog("wait").show();
+
+
+        input.close();
+        vfYBuffer.close();
+        vfYBlurred.close();
+        vfX.close();
+        shifted.close();
+        maxProj.close();
+        argMaxProj.close();
+
+        IJ.exit();
+        clij.dispose();
     }
 
     @Test
@@ -154,9 +173,13 @@ public class CrossCorrelationTest {
         clij.show(argMaxProj, "argMaxProj");
 
 
+        input.close();
+        maxProj.close();
+        argMaxProj.close();
+        shifted.close();
 
-
-
+        IJ.exit();
+        clij.dispose();
 
     }
 }

@@ -373,6 +373,10 @@ public class CLIJ {
         return convert(buffer, ImagePlus.class);
     }
 
+    public RandomAccessibleInterval<? extends RealType<?>> pullRAI(ClearCLBuffer buffer) {
+        return convert(buffer, RandomAccessibleInterval.class);
+    }
+
     public RandomAccessibleInterval<BitType> pullBinaryRAI(ClearCLBuffer buffer) {
         RandomAccessibleInterval<? extends RealType<?>> rai = convert(buffer, RandomAccessibleInterval.class);
 

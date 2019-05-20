@@ -73,7 +73,7 @@ public class CLIJ {
 
             mClearCL = new ClearCL(lClearCLBackend);
 
-            ArrayList<ClearCLDevice> allDevices = mClearCL.getAllDevices();
+            allDevices = mClearCL.getAllDevices();
         }
         if (debug) {
             for (int i = 0; i < allDevices.size(); i++) {
@@ -118,7 +118,6 @@ public class CLIJ {
                     break;
                 }
             }
-            //mClearCLDevice = mClearCL.getDeviceByName(pDeviceNameMustContain);
         }
 
         if (mClearCLDevice == null) {
@@ -169,7 +168,6 @@ public class CLIJ {
                 sInstance = new CLIJ(pDeviceNameMustContain);
             }
         }
-        //System.out.println(sInstance.getGPUName());
         return sInstance;
     }
 
@@ -338,17 +336,9 @@ public class CLIJ {
             mCLKernelExecutor.close();
         }
         mCLKernelExecutor = null;
-        //mClearCLContext.getDevice().close();
         mClearCLContext.close();
         mClearCLContext = null;
-        //mClearCLDevice.close();
         mClearCLDevice = null;
-        //mClearCL.close();
-        //mClearCL = null;
-
-        /*if (CLIJHandler.getInstance().getCLIJ() == this) {
-            CLIJHandler.getInstance().setCLIJ(null);
-        }*/
 
         if (sInstance == this) {
             sInstance = null;

@@ -112,7 +112,7 @@ public class CrossCorrelationTest {
 
         clij.show(argMaxProj, "argMaxProj");
 
-        new WaitForUserDialog("wait").show();
+        //new WaitForUserDialog("wait").show();
 
 
         input.close();

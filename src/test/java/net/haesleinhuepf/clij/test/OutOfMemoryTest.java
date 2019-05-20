@@ -30,14 +30,10 @@ public class OutOfMemoryTest {
                 System.out.println(">" + j);
                 Kernels.tenengradFusion(clij, image1, new float[]{15, 15, 5}, image2, image3);
             }
-            //Kernels.blurFast(clij, image1,image2, new float[]{15,15,5});
 
-            //Kernels.sumPixels(clij, image);
             image1.close();
             image2.close();
             image3.close();
-            //image4.close();
-            //image5.close();
         }
 
 

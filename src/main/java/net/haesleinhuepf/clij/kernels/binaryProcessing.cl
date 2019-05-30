@@ -193,6 +193,34 @@ __kernel void erode_box_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
   WRITE_IMAGE_3D (dst, pos, value);
 }
 
+__kernel void erode_box_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
+                          DTYPE_IMAGE_OUT_3D  dst
+                     )
+{
+  const int x = get_global_id(0);
+  const int y = get_global_id(1);
+  const int z = get_global_id(2);
+
+  const int4 pos = (int4){x,y,z,0};
+
+  DTYPE_OUT value = READ_IMAGE_3D(src, sampler, pos).x;
+  if (value > 0) {
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        value = READ_IMAGE_3D(src, sampler, (pos + (int4){x, y, z, 0})).x;
+        if (value == 0) {
+          break;
+        }
+      }
+      if (value == 0) {
+        break;
+      }
+    }
+  }
+
+  WRITE_IMAGE_3D (dst, pos, value);
+}
+
 
 __kernel void erode_box_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
                           DTYPE_IMAGE_OUT_2D  dst
@@ -254,6 +282,34 @@ __kernel void erode_diamond_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
   WRITE_IMAGE_3D (dst, pos, value);
 }
 
+__kernel void erode_diamond_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
+                          DTYPE_IMAGE_OUT_3D  dst
+                     )
+{
+  const int x = get_global_id(0);
+  const int y = get_global_id(1);
+  const int z = get_global_id(2);
+
+  const int4 pos = (int4){x,y,z,0};
+
+  DTYPE_OUT value = READ_IMAGE_3D(src, sampler, pos).x;
+  if (value > 0) {
+    value = READ_IMAGE_3D(src, sampler, (pos + (int4){1, 0, 0, 0})).x;
+    if (value > 0) {
+      value = READ_IMAGE_3D(src, sampler, (pos + (int4){-1, 0, 0, 0})).x;
+      if (value > 0) {
+        value = READ_IMAGE_3D(src, sampler, (pos + (int4){0, 1, 0, 0})).x;
+        if (value > 0) {
+          value = READ_IMAGE_3D(src, sampler, (pos + (int4){0, -1, 0, 0})).x;
+        }
+      }
+    }
+  }
+
+  WRITE_IMAGE_3D (dst, pos, value);
+}
+
+
 
 __kernel void erode_diamond_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
                           DTYPE_IMAGE_OUT_2D  dst
@@ -314,6 +370,33 @@ __kernel void dilate_box_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
   WRITE_IMAGE_3D (dst, pos, value);
 }
 
+__kernel void dilate_box_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
+                          DTYPE_IMAGE_OUT_3D  dst
+                     )
+{
+  const int x = get_global_id(0);
+  const int y = get_global_id(1);
+  const int z = get_global_id(2);
+
+  const int4 pos = (int4){x,y,z,0};
+
+  DTYPE_OUT value = READ_IMAGE_3D(src, sampler, pos).x;
+  if (value < 1) {
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        value = READ_IMAGE_3D(src, sampler, (pos + (int4){x, y, z, 0})).x;
+        if (value > 0) {
+          break;
+        }
+      }
+      if (value > 0) {
+        break;
+      }
+    }
+  }
+
+  WRITE_IMAGE_3D (dst, pos, value);
+}
 
 __kernel void dilate_box_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
                           DTYPE_IMAGE_OUT_2D  dst
@@ -343,6 +426,40 @@ __kernel void dilate_box_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
 }
 
 __kernel void dilate_diamond_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
+                          DTYPE_IMAGE_OUT_3D dst
+                     )
+{
+  const int x = get_global_id(0);
+  const int y = get_global_id(1);
+  const int z = get_global_id(2);
+
+  const int4 pos = (int4){x,y,z,0};
+
+  DTYPE_OUT value = READ_IMAGE_3D(src, sampler, pos).x;
+  if (value < 1) {
+
+    value = READ_IMAGE_3D(src, sampler, (pos + (int4){1, 0, 0, 0})).x;
+    if (value < 1) {
+      value = READ_IMAGE_3D(src, sampler, (pos + (int4){-1, 0, 0, 0})).x;
+      if (value < 1) {
+        value = READ_IMAGE_3D(src, sampler, (pos + (int4){0, 1, 0, 0})).x;
+        if (value < 1) {
+          value = READ_IMAGE_3D(src, sampler, (pos + (int4){0, -1, 0, 0})).x;
+          if (value < 1) {
+            value = READ_IMAGE_3D(src, sampler, (pos + (int4){0, 0, 1, 0})).x;
+            if (value < 1) {
+              value = READ_IMAGE_3D(src, sampler, (pos + (int4){0, 0, -1, 0})).x;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  WRITE_IMAGE_3D (dst, pos, value);
+}
+
+__kernel void dilate_diamond_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
                           DTYPE_IMAGE_OUT_3D dst
                      )
 {

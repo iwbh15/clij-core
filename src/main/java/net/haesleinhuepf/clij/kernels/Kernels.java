@@ -825,6 +825,25 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
+    }
+
+    public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
+    }
 
     public static boolean dilateSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
@@ -846,7 +865,25 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
+    }
 
+    public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
+    }
 
     public static boolean divideImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
@@ -948,6 +985,28 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
+    }
+
+    public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
+    }
+
     public static boolean erodeBox(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -968,6 +1027,28 @@ public class Kernels {
         }
 
         return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_slice_by_slice", parameters);
+    }
+
+    public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean fillHistogram(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dstHistogram, Float minimumGreyValue, Float maximumGreyValue) {

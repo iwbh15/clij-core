@@ -25,6 +25,25 @@ inline int copyNeighborhoodToArray(DTYPE_IMAGE_IN_2D src, DTYPE_OUT array[],
     return count;
 }
 
+inline int copyBoxNeighborhoodToArray(DTYPE_IMAGE_IN_2D src, DTYPE_OUT array[],
+                                    const int2 coord,
+                                    const int Nx, const int Ny ) {
+    // centers
+    const int4   e = (int4)  { (Nx-1)/2, (Ny-1)/2, 0, 0 };
+
+    float aSquared = e.x * e.x;
+    float bSquared = e.y * e.y;
+
+    int count = 0;
+
+    for (int x = -e.x; x <= e.x; x++) {
+        for (int y = -e.y; y <= e.y; y++) {
+            array[count] = (DTYPE_OUT)READ_IMAGE_2D(src,sampler,coord+((int2){x,y})).x;
+            count++;
+        }
+    }
+    return count;
+}
 
 inline int copySliceNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[],
                                     const int4 coord,
@@ -45,6 +64,27 @@ inline int copySliceNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[]
                 array[count] = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x;
                 count++;
             }
+        }
+    }
+    return count;
+}
+
+inline int copyBoxSliceNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[],
+                                    const int4 coord,
+                                    const int Nx, const int Ny ) {
+    // centers
+    const int4   e = (int4)  { (Nx-1)/2, (Ny-1)/2, 0, 0 };
+
+    float aSquared = e.x * e.x;
+    float bSquared = e.y * e.y;
+
+    int count = 0;
+
+    for (int x = -e.x; x <= e.x; x++) {
+        float xSquared = x * x;
+        for (int y = -e.y; y <= e.y; y++) {
+            array[count] = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x;
+            count++;
         }
     }
     return count;
@@ -84,6 +124,36 @@ inline int copyVolumeNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[
     }
     return count;
 }
+
+inline int copyBoxVolumeNeighborhoodToArray(DTYPE_IMAGE_IN_3D src, DTYPE_OUT array[],
+                                    const int4 coord,
+                                    const int Nx, const int Ny, const int Nz ) {
+    // centers
+    const int4   e = (int4)  {(Nx-1)/2, (Ny-1)/2, (Nz-1)/2, 0 };
+
+    int count = 0;
+
+    float aSquared = e.x * e.x;
+    float bSquared = e.y * e.y;
+    float cSquared = e.z * e.z;
+
+    for (int x = -e.x; x <= e.x; x++) {
+        for (int y = -e.y; y <= e.y; y++) {
+            for (int z = -e.z; z <= e.z; z++) {
+                int x1 = coord.x + x;
+                int x2 = coord.y + y;
+                int x3 = coord.z + z;
+                const int4 pos = (int4){x1,x2,x3,0};
+                float value_res = (float)READ_IMAGE_3D(src,sampler,pos).x;
+                array[count] = value_res;
+                count++;
+
+            }
+        }
+    }
+    return count;
+}
+
 
 inline void sort(DTYPE_OUT array[], int array_size)
 {
@@ -270,6 +340,23 @@ __kernel void median_image2d
   WRITE_IMAGE_2D(dst, coord, res);
 }
 
+__kernel void median_box_image2d
+(
+  DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src,
+  const int Nx, const int Ny
+)
+{
+  const int i = get_global_id(0), j = get_global_id(1);
+  const int2 coord = (int2){i,j};
+
+  int array_size = Nx * Ny;
+  DTYPE_OUT array[MAX_ARRAY_SIZE];
+
+  array_size = copyBoxNeighborhoodToArray(src, array, coord, Nx, Ny);
+
+  DTYPE_OUT res = median(array, array_size);
+  WRITE_IMAGE_2D(dst, coord, res);
+}
 
 __kernel void median_image3d
 (
@@ -289,6 +376,24 @@ __kernel void median_image3d
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
+__kernel void median_box_image3d
+(
+  DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src,
+  const int Nx, const int Ny, const int Nz
+)
+{
+  const int i = get_global_id(0), j = get_global_id(1), k = get_global_id(2);
+  const int4 coord = (int4){i,j,k,0};
+
+  int array_size = Nx * Ny * Nz;
+  DTYPE_OUT array[MAX_ARRAY_SIZE];
+
+  array_size = copyBoxVolumeNeighborhoodToArray(src, array, coord, Nx, Ny, Nz);
+
+  DTYPE_OUT res = median(array, array_size);
+  WRITE_IMAGE_3D(dst, coord, res);
+}
+
 __kernel void median_slicewise_image3d
 (
   DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src,
@@ -302,6 +407,24 @@ __kernel void median_slicewise_image3d
   DTYPE_OUT array[MAX_ARRAY_SIZE];
 
   array_size = copySliceNeighborhoodToArray(src, array, coord, Nx, Ny);
+
+  DTYPE_OUT res = median(array, array_size);
+  WRITE_IMAGE_3D(dst, coord, res);
+}
+
+__kernel void median_box_slicewise_image3d
+(
+  DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src,
+  const int Nx, const int Ny
+)
+{
+  const int i = get_global_id(0), j = get_global_id(1), k = get_global_id(2);
+  const int4 coord = (int4){i,j,k,0};
+
+  int array_size = Nx * Ny;
+  DTYPE_OUT array[MAX_ARRAY_SIZE];
+
+  array_size = copyBoxSliceNeighborhoodToArray(src, array, coord, Nx, Ny);
 
   DTYPE_OUT res = median(array, array_size);
   WRITE_IMAGE_3D(dst, coord, res);

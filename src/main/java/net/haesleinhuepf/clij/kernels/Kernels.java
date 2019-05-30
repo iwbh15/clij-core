@@ -1735,6 +1735,87 @@ public class Kernels {
         return clij.execute(Kernels.class, "filtering.cl", "median_slicewise_image3d", parameters);
     }
 
+    public static boolean medianBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image2d", parameters);
+    }
+
+    public static boolean medianBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image2d", parameters);
+    }
+
+    public static boolean medianBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+        parameters.put("Nz", kernelSizeZ);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image3d", parameters);
+    }
+
+    public static boolean medianBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+        parameters.put("Nz", kernelSizeZ);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image3d", parameters);
+    }
+
+    public static boolean medianSliceBySliceBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_slicewise_image3d", parameters);
+    }
+
+    public static boolean medianSliceBySliceBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_slicewise_image3d", parameters);
+    }
+
+
     public static boolean minimumSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);

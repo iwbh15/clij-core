@@ -306,12 +306,28 @@ public class CLIJOps {
         return Kernels.dilateBox(clij, src, dst);
     }
 
+    public boolean dilateBoxSliceBySlice( ClearCLImage src,  ClearCLImage dst ) {
+        return Kernels.dilateBoxSliceBySlice(clij, src, dst);
+    }
+
+    public boolean dilateBoxSliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst ) {
+        return Kernels.dilateBoxSliceBySlice(clij, src, dst);
+    }
+
     public boolean dilateSphere( ClearCLImage src,  ClearCLImage dst ) {
         return Kernels.dilateSphere(clij, src, dst);
     }
 
     public boolean dilateSphere( ClearCLBuffer src,  ClearCLBuffer dst ) {
         return Kernels.dilateSphere(clij, src, dst);
+    }
+
+    public boolean dilateSphereSliceBySlice( ClearCLImage src,  ClearCLImage dst ) {
+        return Kernels.dilateSphereSliceBySlice(clij, src, dst);
+    }
+
+    public boolean dilateSphereSliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst ) {
+        return Kernels.dilateSphereSliceBySlice(clij, src, dst);
     }
 
     public boolean divideImages( ClearCLImage src,  ClearCLImage src1,  ClearCLImage dst ) {
@@ -354,12 +370,28 @@ public class CLIJOps {
         return Kernels.erodeSphere(clij, src, dst);
     }
 
+    public boolean erodeSphereSliceBySlice( ClearCLImage src,  ClearCLImage dst ) {
+        return Kernels.erodeSphereSliceBySlice(clij, src, dst);
+    }
+
+    public boolean erodeSphereSliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst ) {
+        return Kernels.erodeSphereSliceBySlice(clij, src, dst);
+    }
+
     public boolean erodeBox( ClearCLImage src,  ClearCLImage dst ) {
         return Kernels.erodeBox(clij, src, dst);
     }
 
     public boolean erodeBox( ClearCLBuffer src,  ClearCLBuffer dst ) {
         return Kernels.erodeBox(clij, src, dst);
+    }
+
+    public boolean erodeBoxSliceBySlice( ClearCLImage src,  ClearCLImage dst ) {
+        return Kernels.erodeBoxSliceBySlice(clij, src, dst);
+    }
+
+    public boolean erodeBoxSliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst ) {
+        return Kernels.erodeBoxSliceBySlice(clij, src, dst);
     }
 
     public boolean fillHistogram( ClearCLBuffer src,  ClearCLBuffer dstHistogram,  Float minimumGreyValue,  Float maximumGreyValue ) {
@@ -608,6 +640,30 @@ public class CLIJOps {
 
     public boolean medianSliceBySliceSphere( ClearCLBuffer src,  ClearCLBuffer dst,  Integer kernelSizeX,  Integer kernelSizeY ) {
         return Kernels.medianSliceBySliceSphere(clij, src, dst, kernelSizeX, kernelSizeY);
+    }
+
+    public boolean medianBox( ClearCLImage src,  ClearCLImage dst,  Integer kernelSizeX,  Integer kernelSizeY ) {
+        return Kernels.medianBox(clij, src, dst, kernelSizeX, kernelSizeY);
+    }
+
+    public boolean medianBox( ClearCLBuffer src,  ClearCLBuffer dst,  Integer kernelSizeX,  Integer kernelSizeY ) {
+        return Kernels.medianBox(clij, src, dst, kernelSizeX, kernelSizeY);
+    }
+
+    public boolean medianBox( ClearCLImage src,  ClearCLImage dst,  Integer kernelSizeX,  Integer kernelSizeY,  Integer kernelSizeZ ) {
+        return Kernels.medianBox(clij, src, dst, kernelSizeX, kernelSizeY, kernelSizeZ);
+    }
+
+    public boolean medianBox( ClearCLBuffer src,  ClearCLBuffer dst,  Integer kernelSizeX,  Integer kernelSizeY,  Integer kernelSizeZ ) {
+        return Kernels.medianBox(clij, src, dst, kernelSizeX, kernelSizeY, kernelSizeZ);
+    }
+
+    public boolean medianSliceBySliceBox( ClearCLImage src,  ClearCLImage dst,  Integer kernelSizeX,  Integer kernelSizeY ) {
+        return Kernels.medianSliceBySliceBox(clij, src, dst, kernelSizeX, kernelSizeY);
+    }
+
+    public boolean medianSliceBySliceBox( ClearCLBuffer src,  ClearCLBuffer dst,  Integer kernelSizeX,  Integer kernelSizeY ) {
+        return Kernels.medianSliceBySliceBox(clij, src, dst, kernelSizeX, kernelSizeY);
     }
 
     public boolean minimumSphere( ClearCLImage src,  ClearCLImage dst,  Integer kernelSizeX,  Integer kernelSizeY ) {

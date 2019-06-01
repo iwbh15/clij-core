@@ -41,6 +41,17 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
         }
     }
 
+    private int getThirdDimension(ImagePlus imp, int thirdDimension) {
+        if (thirdDimension == THIRD_DIMENSION_Z) {
+            return imp.getZ();
+        } else if (thirdDimension == THIRD_DIMENSION_C) {
+            return imp.getC();
+        } else if (thirdDimension == THIRD_DIMENSION_T) {
+            return imp.getT();
+        }
+        return imp.getZ();
+    }
+
     @Override
     public ClearCLBuffer convert(ImagePlus source) {
         //long time = System.currentTimeMillis();
@@ -71,6 +82,8 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
             numberOfPixels = numberOfPixels * dimensions[2];
         }
 
+        int thirdDimensionBefore = getThirdDimension(source, thirdDimension);
+
             //NativeTypeEnum type;
         if (source.getBitDepth() == 8) {
             ClearCLBuffer target = clij.createCLBuffer(dimensions, NativeTypeEnum.UnsignedByte);
@@ -84,6 +97,7 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
             }
             ByteBuffer byteBuffer = ByteBuffer.wrap(inputArray);
             target.readFrom(byteBuffer, true);
+            setThirdDimension(source, thirdDimension, thirdDimensionBefore);
             return target;
 
         } else if (source.getBitDepth() == 16) {
@@ -107,6 +121,7 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
             target.readFrom(byteBuffer, true);
             //IJ.log("Copy2 took " + (System.currentTimeMillis() - time));
             //IJ.log("conv took " + (System.currentTimeMillis() - time2));
+            setThirdDimension(source, thirdDimension, thirdDimensionBefore);
             return target;
         } else  if (source.getBitDepth() == 32) {
             ClearCLBuffer target = clij.createCLBuffer(dimensions, NativeTypeEnum.Float);
@@ -120,6 +135,7 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
             }
             FloatBuffer byteBuffer = FloatBuffer.wrap(inputArray);
             target.readFrom(byteBuffer, true);
+            setThirdDimension(source, thirdDimension, thirdDimensionBefore);
             return target;
         } else {
             return convertLegacy(source);

@@ -825,6 +825,25 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
+    }
+
+    public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
+    }
 
     public static boolean dilateSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
@@ -846,7 +865,25 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
+    }
 
+    public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
+    }
 
     public static boolean divideImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
@@ -948,6 +985,28 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
+    public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
+    }
+
+    public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
+    }
+
     public static boolean erodeBox(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -968,6 +1027,28 @@ public class Kernels {
         }
 
         return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_slice_by_slice", parameters);
+    }
+
+    public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        if (!checkDimensions(src.getDimension(), dst.getDimension())) {
+            throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
+        }
+
+        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean fillHistogram(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dstHistogram, Float minimumGreyValue, Float maximumGreyValue) {
@@ -1653,6 +1734,87 @@ public class Kernels {
 
         return clij.execute(Kernels.class, "filtering.cl", "median_slicewise_image3d", parameters);
     }
+
+    public static boolean medianBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image2d", parameters);
+    }
+
+    public static boolean medianBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image2d", parameters);
+    }
+
+    public static boolean medianBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+        parameters.put("Nz", kernelSizeZ);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image3d", parameters);
+    }
+
+    public static boolean medianBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+        parameters.put("Nz", kernelSizeZ);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_image3d", parameters);
+    }
+
+    public static boolean medianSliceBySliceBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_slicewise_image3d", parameters);
+    }
+
+    public static boolean medianSliceBySliceBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
+            throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
+        }
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        parameters.put("Nx", kernelSizeX);
+        parameters.put("Ny", kernelSizeY);
+
+        return clij.execute(Kernels.class, "filtering.cl", "median_box_slicewise_image3d", parameters);
+    }
+
 
     public static boolean minimumSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
         HashMap<String, Object> parameters = new HashMap<>();

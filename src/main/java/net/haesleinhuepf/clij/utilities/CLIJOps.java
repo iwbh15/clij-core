@@ -7,6 +7,7 @@ import ij.process.AutoThresholder;
 import net.haesleinhuepf.clij.clearcl.ClearCL;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.utilities.AffineTransform;
@@ -192,6 +193,14 @@ public class CLIJOps {
 
     public boolean blurSliceBySlice( ClearCLBuffer src,  ClearCLBuffer dst,  int kernelSizeX,  int kernelSizeY,  float sigmaX,  float sigmaY ) {
         return Kernels.blurSliceBySlice(clij, src, dst, kernelSizeX, kernelSizeY, sigmaX, sigmaY);
+    }
+
+    public double[] centerOfMass( ClearCLBuffer input ) {
+        return Kernels.centerOfMass(clij, input);
+    }
+
+    public double[] centerOfMass( ClearCLImage input ) {
+        return Kernels.centerOfMass(clij, input);
     }
 
     public boolean copy( ClearCLImage src,  ClearCLBuffer dst ) {

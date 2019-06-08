@@ -6,6 +6,7 @@ import ij.process.AutoThresholder;
 import net.haesleinhuepf.clij.clearcl.ClearCL;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.utilities.AffineTransform;
@@ -578,6 +579,60 @@ public class Kernels {
         parameters.put("dst", dst);
         return clij.execute(Kernels.class, "blur.cl", "gaussian_blur_slicewise_image3d", parameters);
     }
+
+    public static double[] centerOfMass(CLIJ clij, ClearCLBuffer input) {
+        ClearCLBuffer multipliedWithCoordinate = clij.create(input.getDimensions(), NativeTypeEnum.Float);
+        double sum = clij.op().sumPixels(input);
+        double[] resultCenterOfMass;
+        if (input.getDimension() > 2L && input.getDepth() > 1L) {
+            resultCenterOfMass = new double[3];
+        } else {
+            resultCenterOfMass = new double[2];
+        }
+
+        clij.op().multiplyImageAndCoordinate(input, multipliedWithCoordinate, 0);
+        double sumX = clij.op().sumPixels(multipliedWithCoordinate);
+        resultCenterOfMass[0] = sumX / sum;
+        clij.op().multiplyImageAndCoordinate(input, multipliedWithCoordinate, 1);
+        double sumY = clij.op().sumPixels(multipliedWithCoordinate);
+        resultCenterOfMass[1] = sumY / sum;
+        if (input.getDimension() > 2L && input.getDepth() > 1L) {
+            clij.op().multiplyImageAndCoordinate(input, multipliedWithCoordinate, 2);
+            double sumZ = clij.op().sumPixels(multipliedWithCoordinate);
+            resultCenterOfMass[2] = sumZ / sum;
+        }
+
+        multipliedWithCoordinate.close();
+        return resultCenterOfMass;
+    }
+
+
+    public static double[] centerOfMass(CLIJ clij, ClearCLImage input) {
+        ClearCLImage multipliedWithCoordinate = clij.create(input.getDimensions(), ImageChannelDataType.Float);
+        double sum = clij.op().sumPixels(input);
+        double[] resultCenterOfMass;
+        if (input.getDimension() > 2L && input.getDepth() > 1L) {
+            resultCenterOfMass = new double[3];
+        } else {
+            resultCenterOfMass = new double[2];
+        }
+
+        clij.op().multiplyImageAndCoordinate(input, multipliedWithCoordinate, 0);
+        double sumX = clij.op().sumPixels(multipliedWithCoordinate);
+        resultCenterOfMass[0] = sumX / sum;
+        clij.op().multiplyImageAndCoordinate(input, multipliedWithCoordinate, 1);
+        double sumY = clij.op().sumPixels(multipliedWithCoordinate);
+        resultCenterOfMass[1] = sumY / sum;
+        if (input.getDimension() > 2L && input.getDepth() > 1L) {
+            clij.op().multiplyImageAndCoordinate(input, multipliedWithCoordinate, 2);
+            double sumZ = clij.op().sumPixels(multipliedWithCoordinate);
+            resultCenterOfMass[2] = sumZ / sum;
+        }
+
+        multipliedWithCoordinate.close();
+        return resultCenterOfMass;
+    }
+
 
     public static boolean copy(CLIJ clij, ClearCLImage src, ClearCLBuffer dst) {
         return copyInternal(clij, src, dst, src.getDimension(), dst.getDimension());

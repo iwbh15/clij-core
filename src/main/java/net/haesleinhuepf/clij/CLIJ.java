@@ -1,5 +1,6 @@
 package net.haesleinhuepf.clij;
 
+import ij.plugin.Duplicator;
 import net.haesleinhuepf.clij.clearcl.*;
 import net.haesleinhuepf.clij.clearcl.backend.ClearCLBackendInterface;
 import net.haesleinhuepf.clij.clearcl.backend.ClearCLBackends;
@@ -353,6 +354,11 @@ public class CLIJ {
 
     public ClearCLBuffer push(ImagePlus imp) {
         return convert(imp, ClearCLBuffer.class);
+    }
+
+    public ClearCLBuffer pushCurrentSlice(ImagePlus imp) {
+        ImagePlus copy = new Duplicator().run(imp, imp.getC(), imp.getC(), imp.getZ(), imp.getZ(), imp.getT(), imp.getT());
+        return push(copy);
     }
 
     public ClearCLBuffer push(RandomAccessibleInterval rai) {

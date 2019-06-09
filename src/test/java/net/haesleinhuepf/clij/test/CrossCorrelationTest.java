@@ -45,7 +45,7 @@ public class CrossCorrelationTest {
         Kernels.applyVectorfield(clij, input, vfX, vfYBlurred, shifted);
 
 
-        Kernels.particleImageVelocimetry2D(clij, input, shifted, vfX, vfY, 5);
+        //Kernels.particleImageVelocimetry2D(clij, input, shifted, vfX, vfY, 5);
 
         clij.show(vfX, "vfX");
         clij.show(vfY, "vfY");

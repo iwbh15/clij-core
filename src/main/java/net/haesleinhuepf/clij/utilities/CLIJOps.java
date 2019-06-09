@@ -755,14 +755,6 @@ public class CLIJOps {
         return Kernels.multiplyStackWithPlane(clij, input3d, input2d, output3d);
     }
 
-    public boolean particleImageVelocimetry2D( ClearCLBuffer input1,  ClearCLBuffer input2,  ClearCLBuffer vfX,  ClearCLBuffer vfY,  Integer maxDelta  ) {
-        return Kernels.particleImageVelocimetry2D(clij, input1, input2, vfX, vfY, maxDelta);
-    }
-
-    public boolean particleImageVelocimetry2D( ClearCLImage input1,  ClearCLImage input2,  ClearCLImage vfX,  ClearCLImage vfY,  Integer maxDelta  ) {
-        return Kernels.particleImageVelocimetry2D(clij, input1, input2, vfX, vfY, maxDelta);
-    }
-
     public boolean power( ClearCLImage src,  ClearCLImage dst,  Float exponent ) {
         return Kernels.power(clij, src, dst, exponent);
     }

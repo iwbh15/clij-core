@@ -395,9 +395,12 @@ public class CLIJ {
             converterService = new Context(CLIJConverterService.class).service(CLIJConverterService.class);
                     //new ImageJ().getContext().service(CLIJConverterService.class);
         }
-        converterService.setCLIJ(this);
-        CLIJConverterPlugin<S, T> converter = (CLIJConverterPlugin<S, T>) converterService.getConverter(source.getClass(), targetClass);
-        return converter.convert(source);
+        synchronized (this) {
+            converterService.setCLIJ(this);
+            CLIJConverterPlugin<S, T> converter = (CLIJConverterPlugin<S, T>) converterService.getConverter(source.getClass(), targetClass);
+            converter.setCLIJ(this);
+            return converter.convert(source);
+        }
     }
 
     public CLIJOps op() {

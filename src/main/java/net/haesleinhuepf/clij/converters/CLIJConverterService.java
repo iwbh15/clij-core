@@ -23,7 +23,7 @@ public class CLIJConverterService extends AbstractPTService<CLIJConverterPlugin>
 
     private HashMap<ClassPair, PluginInfo<CLIJConverterPlugin>> converterPlugins = new HashMap<>();
 
-    private class ClassPair {
+    protected class ClassPair {
         Class a;
         Class b;
 

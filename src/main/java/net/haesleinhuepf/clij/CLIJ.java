@@ -7,6 +7,7 @@ import net.haesleinhuepf.clij.clearcl.backend.ClearCLBackends;
 import net.haesleinhuepf.clij.clearcl.backend.jocl.ClearCLBackendJOCL;
 import net.haesleinhuepf.clij.clearcl.enums.*;
 import net.haesleinhuepf.clij.clearcl.util.ElapsedTime;
+import net.haesleinhuepf.clij.converters.FallBackCLIJConverterService;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import ij.IJ;
 import ij.ImagePlus;
@@ -21,6 +22,7 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import org.scijava.Context;
+import org.scijava.NoSuchServiceException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -391,11 +393,14 @@ public class CLIJ {
         if (targetClass.isAssignableFrom(source.getClass())) {
             return (T) source;
         }
-        if (converterService == null) {
-            converterService = new Context(CLIJConverterService.class).service(CLIJConverterService.class);
-                    //new ImageJ().getContext().service(CLIJConverterService.class);
-        }
         synchronized (this) {
+            try {
+                if (converterService == null) {
+                    converterService = new Context(CLIJConverterService.class).service(CLIJConverterService.class);
+                }
+            } catch (RuntimeException e) {
+                converterService = new FallBackCLIJConverterService();
+            }
             converterService.setCLIJ(this);
             CLIJConverterPlugin<S, T> converter = (CLIJConverterPlugin<S, T>) converterService.getConverter(source.getClass(), targetClass);
             converter.setCLIJ(this);

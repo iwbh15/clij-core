@@ -1,12 +1,10 @@
 package net.haesleinhuepf.clij.converters;
 
 import ij.ImagePlus;
-import javafx.util.Pair;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.converters.implementations.*;
 import net.imglib2.RandomAccessibleInterval;
-import org.scijava.plugin.PluginInfo;
 
 import java.util.HashMap;
 

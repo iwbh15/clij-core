@@ -22,7 +22,6 @@ import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import org.scijava.Context;
-import org.scijava.NoSuchServiceException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,7 +64,7 @@ public class CLIJ {
 
     public static boolean debug = false;
 
-    private CLIJOps clijOps;
+    private final CLIJOps clijOps;
 
 
     @Deprecated

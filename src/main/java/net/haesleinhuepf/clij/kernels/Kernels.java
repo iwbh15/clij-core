@@ -1,9 +1,7 @@
 package net.haesleinhuepf.clij.kernels;
 
-import ij.IJ;
 import ij.ImagePlus;
 import ij.process.AutoThresholder;
-import net.haesleinhuepf.clij.clearcl.ClearCL;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;

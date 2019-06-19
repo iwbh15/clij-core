@@ -1,5 +1,7 @@
 package net.haesleinhuepf.clij.utilities;
 
+import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+
 /**
  * CLIJUtilities
  * <p>
@@ -24,4 +26,11 @@ public class CLIJUtilities {
         String name = aClass.getSimpleName();
         return "CLIJ_" + name.substring(0, 1).toLowerCase() + name.substring(1, name.length());
     }
+
+    public static void assertDifferent(Object src, Object dst) {
+        if (src == dst) {
+            throw new IllegalArgumentException("Input image and output image must be different. Inplace operations are not supported.");
+        }
+    }
+
 }

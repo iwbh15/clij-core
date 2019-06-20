@@ -31,6 +31,8 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
     final int THIRD_DIMENSION_C = 2;
     final int THIRD_DIMENSION_NONE = -1;
 
+    final long SMALL_IMAGE_SIZE = Integer.MAX_VALUE;
+
     private void setThirdDimension(ImagePlus imp, int thirdDimension, int value) {
         if (thirdDimension == THIRD_DIMENSION_Z) {
             imp.setZ(value);
@@ -84,7 +86,12 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
 
         int thirdDimensionBefore = getThirdDimension(source, thirdDimension);
 
-            //NativeTypeEnum type;
+        if (numberOfPixels > SMALL_IMAGE_SIZE) {
+            return convertBigImage(source, dimensions, numberOfPixels, numberOfPixelsPerSlice, thirdDimension, thirdDimensionBefore);
+        }
+
+
+        //NativeTypeEnum type;
         if (source.getBitDepth() == 8) {
             ClearCLBuffer target = clij.createCLBuffer(dimensions, NativeTypeEnum.UnsignedByte);
 
@@ -140,6 +147,56 @@ public class ImagePlusToClearCLBufferConverter extends AbstractCLIJConverter<Ima
         } else {
             return convertLegacy(source);
         }
+    }
+
+    private ClearCLBuffer convertBigImage(ImagePlus source, long[] dimensions, long numberOfPixels, int numberOfPixelsPerSlice, int thirdDimension, int thirdDimensionBefore) {
+        if (source.getBitDepth() == 8) {
+            ClearCLBuffer target = clij.createCLBuffer(dimensions, NativeTypeEnum.UnsignedByte);
+
+            byte[] inputArray = new byte[(int) numberOfPixelsPerSlice];
+            for (int z = 0; z < target.getDepth(); z++) {
+                setThirdDimension(source, thirdDimension, z + 1);
+
+                byte[] sourceArray = (byte[]) (source.getProcessor().getPixels());
+                System.arraycopy(sourceArray, 0, inputArray, 0, sourceArray.length);
+
+                ByteBuffer byteBuffer = ByteBuffer.wrap(inputArray);
+                target.readFrom(byteBuffer, new long[]{0,0,0}, new long[]{0,0, z}, new long[]{dimensions[0], dimensions[1]}, true);
+            }
+            setThirdDimension(source, thirdDimension, thirdDimensionBefore);
+            return target;
+        } else if (source.getBitDepth() == 16) {
+            ClearCLBuffer target = clij.createCLBuffer(dimensions, NativeTypeEnum.UnsignedShort);
+
+            short[] inputArray = new short[(int) numberOfPixelsPerSlice];
+            for (int z = 0; z < target.getDepth(); z++) {
+                setThirdDimension(source, thirdDimension, z + 1);
+
+                short[] sourceArray = (short[]) (source.getProcessor().getPixels());
+                System.arraycopy(sourceArray, 0, inputArray, 0, sourceArray.length);
+
+                ShortBuffer byteBuffer = ShortBuffer.wrap(inputArray);
+                target.readFrom(byteBuffer, new long[]{0,0,0}, new long[]{0,0, z}, new long[]{dimensions[0], dimensions[1]}, true);
+            }
+            setThirdDimension(source, thirdDimension, thirdDimensionBefore);
+            return target;
+        } else if (source.getBitDepth() == 32) {
+            ClearCLBuffer target = clij.createCLBuffer(dimensions, NativeTypeEnum.Float);
+
+            float[] inputArray = new float[(int) numberOfPixelsPerSlice];
+            for (int z = 0; z < target.getDepth(); z++) {
+                setThirdDimension(source, thirdDimension, z + 1);
+
+                float[] sourceArray = (float[]) (source.getProcessor().getPixels());
+                System.arraycopy(sourceArray, 0, inputArray, 0, sourceArray.length);
+
+                FloatBuffer byteBuffer = FloatBuffer.wrap(inputArray);
+                target.readFrom(byteBuffer, new long[]{0,0,0}, new long[]{0,0, z}, new long[]{dimensions[0], dimensions[1]}, true);
+            }
+            setThirdDimension(source, thirdDimension, thirdDimensionBefore);
+            return target;
+        }
+        return null;
     }
 
     public ClearCLBuffer convertLegacy(ImagePlus source) {

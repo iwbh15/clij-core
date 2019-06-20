@@ -18,6 +18,7 @@ public class BigImageConversionTest {
         clij.op().maximumZProjection(buffer, plane);
 
         ImagePlus maxProjImp = clij.pull(plane);
+        imp = clij.pull(buffer);
 
         buffer.close();
         plane.close();

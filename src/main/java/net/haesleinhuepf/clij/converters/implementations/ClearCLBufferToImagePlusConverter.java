@@ -30,6 +30,8 @@ import java.nio.ShortBuffer;
 @Plugin(type = CLIJConverterPlugin.class)
 public class ClearCLBufferToImagePlusConverter extends AbstractCLIJConverter<ClearCLBuffer, ImagePlus> {
 
+    final long SMALL_IMAGE_SIZE = Integer.MAX_VALUE;
+
     @Override
     public ImagePlus convert(ClearCLBuffer source) {
         //long time = System.currentTimeMillis();
@@ -39,32 +41,37 @@ public class ClearCLBufferToImagePlusConverter extends AbstractCLIJConverter<Cle
         int depth = (int) source.getDepth();
 
         int numberOfPixelsPerPlane = width * height;
-        int numberOfPixels = width * height * depth;
+        long numberOfPixels = (long)numberOfPixelsPerPlane * (long)depth;
 
         ImagePlus result = null;
-        //ImagePlus[] slices = new ImagePlus[depth];
-        //ImageStack stack = new ImageStack(width, height, depth);
-        //long timeBufferCreationStarts = System.currentTimeMillis();
-        ClearCLBuffer plane = clij.createCLBuffer(new long[]{width, height}, source.getNativeType());
-        //long timeBufferCreationEnds = System.currentTimeMillis();
 
-        //long timeImageCreationStarts = 0;
-        //long timeImageCreationEnds = 0;
+        if (numberOfPixels > SMALL_IMAGE_SIZE) {
+            result = convertBigImage(source, numberOfPixelsPerPlane, width, height, depth);
+        } else {
 
-        //long timeLoopStarts = 0;
-        //long timeLoopEnds = 0;
+            //ImagePlus[] slices = new ImagePlus[depth];
+            //ImageStack stack = new ImageStack(width, height, depth);
+            //long timeBufferCreationStarts = System.currentTimeMillis();
+            //ClearCLBuffer plane = clij.createCLBuffer(new long[]{width, height}, source.getNativeType());
+            //long timeBufferCreationEnds = System.currentTimeMillis();
 
-        if (source.getNativeType() == NativeTypeEnum.UnsignedByte) {
-            result = NewImage.createByteImage("slice", width, height, depth, NewImage.FILL_BLACK);
-            byte[] array = new byte[numberOfPixels];
-            ByteBuffer buffer = ByteBuffer.wrap(array);
-            source.writeTo(buffer, true);
+            //long timeImageCreationStarts = 0;
+            //long timeImageCreationEnds = 0;
 
-            for (int z = 0; z < depth; z++) {
-                result.setSlice(z + 1);
-                byte[] sliceArray = (byte[]) result.getProcessor().getPixels();
-                System.arraycopy(array, z * numberOfPixelsPerPlane, sliceArray, 0, sliceArray.length);
-            }
+            //long timeLoopStarts = 0;
+            //long timeLoopEnds = 0;
+
+            if (source.getNativeType() == NativeTypeEnum.UnsignedByte) {
+                result = NewImage.createByteImage("slice", width, height, depth, NewImage.FILL_BLACK);
+                byte[] array = new byte[(int) numberOfPixels];
+                ByteBuffer buffer = ByteBuffer.wrap(array);
+                source.writeTo(buffer, true);
+
+                for (int z = 0; z < depth; z++) {
+                    result.setSlice(z + 1);
+                    byte[] sliceArray = (byte[]) result.getProcessor().getPixels();
+                    System.arraycopy(array, z * numberOfPixelsPerPlane, sliceArray, 0, sliceArray.length);
+                }
             /*
             for (int z = 0; z < depth; z++) {
                 Kernels.copySlice(clij, source, plane, z);
@@ -73,22 +80,22 @@ public class ClearCLBufferToImagePlusConverter extends AbstractCLIJConverter<Cle
                 ByteBuffer buffer = ByteBuffer.wrap(array);
                 plane.writeTo(buffer, 0, numberOfPixelsPerPlane, true);
             }*/
-        } else if (source.getNativeType() == NativeTypeEnum.UnsignedShort) {
+            } else if (source.getNativeType() == NativeTypeEnum.UnsignedShort) {
 
-            //timeImageCreationStarts = System.currentTimeMillis();
-            result = NewImage.createShortImage("slice", width, height, depth, NewImage.FILL_BLACK);
-            //timeImageCreationEnds = System.currentTimeMillis();
+                //timeImageCreationStarts = System.currentTimeMillis();
+                result = NewImage.createShortImage("slice", width, height, depth, NewImage.FILL_BLACK);
+                //timeImageCreationEnds = System.currentTimeMillis();
 
-            //timeLoopStarts = System.currentTimeMillis();
-            short[] array = new short[numberOfPixels];
-            ShortBuffer buffer = ShortBuffer.wrap(array);
-            source.writeTo(buffer, true);
+                //timeLoopStarts = System.currentTimeMillis();
+                short[] array = new short[(int) numberOfPixels];
+                ShortBuffer buffer = ShortBuffer.wrap(array);
+                source.writeTo(buffer, true);
 
-            for (int z = 0; z < depth; z++) {
-                result.setSlice(z + 1);
-                short[] sliceArray = (short[]) result.getProcessor().getPixels();
-                System.arraycopy(array, z * numberOfPixelsPerPlane, sliceArray, 0, sliceArray.length);
-            }
+                for (int z = 0; z < depth; z++) {
+                    result.setSlice(z + 1);
+                    short[] sliceArray = (short[]) result.getProcessor().getPixels();
+                    System.arraycopy(array, z * numberOfPixelsPerPlane, sliceArray, 0, sliceArray.length);
+                }
             /*
             for (int z = 0; z < depth; z++) {
                 Kernels.copySlice(clij, source, plane, z);
@@ -98,22 +105,21 @@ public class ClearCLBufferToImagePlusConverter extends AbstractCLIJConverter<Cle
                 plane.writeTo(buffer, 0, numberOfPixelsPerPlane, true);
             }
             */
-            //timeLoopEnds = System.currentTimeMillis();
+                //timeLoopEnds = System.currentTimeMillis();
 
 
+            } else if (source.getNativeType() == NativeTypeEnum.Float) {
+                result = NewImage.createFloatImage("slice", width, height, depth, NewImage.FILL_BLACK);
 
-        } else if (source.getNativeType() == NativeTypeEnum.Float) {
-            result = NewImage.createFloatImage("slice", width, height, depth, NewImage.FILL_BLACK);
+                float[] array = new float[(int) numberOfPixels];
+                FloatBuffer buffer = FloatBuffer.wrap(array);
+                source.writeTo(buffer, true);
 
-            float[] array = new float[numberOfPixels];
-            FloatBuffer buffer = FloatBuffer.wrap(array);
-            source.writeTo(buffer, true);
-
-            for (int z = 0; z < depth; z++) {
-                result.setSlice(z + 1);
-                float[] sliceArray = (float[]) result.getProcessor().getPixels();
-                System.arraycopy(array, z * numberOfPixelsPerPlane, sliceArray, 0, sliceArray.length);
-            }
+                for (int z = 0; z < depth; z++) {
+                    result.setSlice(z + 1);
+                    float[] sliceArray = (float[]) result.getProcessor().getPixels();
+                    System.arraycopy(array, z * numberOfPixelsPerPlane, sliceArray, 0, sliceArray.length);
+                }
             /*
             for (int z = 0; z < depth; z++) {
                 Kernels.copySlice(clij, source, plane, z);
@@ -123,8 +129,9 @@ public class ClearCLBufferToImagePlusConverter extends AbstractCLIJConverter<Cle
                 plane.writeTo(buffer, 0, numberOfPixelsPerPlane, true);
             }
             */
+            }
         }
-        plane.close();
+        //plane.close();
 
         if (result == null) {
             result = convertLegacy(source);
@@ -139,6 +146,53 @@ public class ClearCLBufferToImagePlusConverter extends AbstractCLIJConverter<Cle
         //System.out.println("Loop took " + (timeLoopEnds - timeLoopStarts));
         return result;
 
+    }
+
+    private ImagePlus convertBigImage(ClearCLBuffer source, int numberOfPixelsPerPlane, int width, int height, int depth) {
+        ImagePlus result = null;
+
+        if (source.getNativeType() == NativeTypeEnum.UnsignedByte) {
+            result = NewImage.createByteImage("slice", width, height, depth, NewImage.FILL_BLACK);
+
+            byte[] array = new byte[numberOfPixelsPerPlane];
+            for (int z = 0; z < depth; z++) {
+                System.out.println("z" + z);
+                ByteBuffer buffer = ByteBuffer.wrap(array);
+                source.writeTo(buffer, new long[]{0, 0, z}, new long[]{0,0,0}, new long[]{width, height}, true);
+
+                result.setSlice(z + 1);
+                byte[] sliceArray = (byte[]) result.getProcessor().getPixels();
+                System.arraycopy(array, 0, sliceArray, 0, sliceArray.length);
+            }
+        } else if (source.getNativeType() == NativeTypeEnum.UnsignedShort) {
+            result = NewImage.createShortImage("slice", width, height, depth, NewImage.FILL_BLACK);
+            //timeImageCreationEnds = System.currentTimeMillis();
+
+            //timeLoopStarts = System.currentTimeMillis();
+            short[] array = new short[numberOfPixelsPerPlane];
+
+            for (int z = 0; z < depth; z++) {
+                ShortBuffer buffer = ShortBuffer.wrap(array);
+                source.writeTo(buffer, new long[]{0, 0, z}, new long[]{0,0,0}, new long[]{width, height}, true);
+                result.setSlice(z + 1);
+                short[] sliceArray = (short[]) result.getProcessor().getPixels();
+                System.arraycopy(array, 0, sliceArray, 0, sliceArray.length);
+            }
+        } else if (source.getNativeType() == NativeTypeEnum.Float) {
+            result = NewImage.createFloatImage("slice", width, height, depth, NewImage.FILL_BLACK);
+
+            float[] array = new float[numberOfPixelsPerPlane];
+
+            for (int z = 0; z < depth; z++) {
+                FloatBuffer buffer = FloatBuffer.wrap(array);
+                source.writeTo(buffer, new long[]{0, 0, z}, new long[]{0,0,0}, new long[]{width, height}, true);
+
+                result.setSlice(z + 1);
+                float[] sliceArray = (float[]) result.getProcessor().getPixels();
+                System.arraycopy(array, 0, sliceArray, 0, sliceArray.length);
+            }
+        }
+        return result;
     }
 
     public ImagePlus convertLegacy(ClearCLBuffer source) {

@@ -20,8 +20,7 @@ import net.imglib2.view.Views;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 
-import static net.haesleinhuepf.clij.utilities.CLIJUtilities.radiusToKernelSize;
-import static net.haesleinhuepf.clij.utilities.CLIJUtilities.sigmaToKernelSize;
+import static net.haesleinhuepf.clij.utilities.CLIJUtilities.*;
 
 
 /**
@@ -33,6 +32,8 @@ import static net.haesleinhuepf.clij.utilities.CLIJUtilities.sigmaToKernelSize;
  */
 public class Kernels {
     public static boolean absolute(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -45,6 +46,8 @@ public class Kernels {
     }
 
     public static boolean absolute(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -58,6 +61,9 @@ public class Kernels {
 
 
     public static boolean addImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -70,6 +76,9 @@ public class Kernels {
     }
 
     public static boolean addImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -82,6 +91,8 @@ public class Kernels {
     }
 
     public static boolean addImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float scalar) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("scalar", scalar);
@@ -96,6 +107,8 @@ public class Kernels {
 
 
     public static boolean addImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float scalar) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("scalar", scalar);
@@ -109,6 +122,9 @@ public class Kernels {
     }
 
     public static boolean addImagesWeighted(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst, Float factor, Float factor1) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -123,6 +139,9 @@ public class Kernels {
     }
 
     public static boolean addImagesWeighted(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst, Float factor, Float factor1) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -137,6 +156,7 @@ public class Kernels {
     }
 
     public static boolean affineTransform(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, float[] matrix) {
+        assertDifferent(src, dst);
 
         ClearCLBuffer matrixCl = clij.createCLBuffer(new long[]{matrix.length, 1, 1}, NativeTypeEnum.Float);
 
@@ -156,12 +176,15 @@ public class Kernels {
     }
 
     public static boolean affineTransform(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, AffineTransform3D at) {
+        assertDifferent(src, dst);
+
         at = at.inverse();
         float[] matrix = AffineTransform.matrixToFloatArray(at);
         return affineTransform(clij, src, dst, matrix);
     }
 
     public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, float[] matrix) {
+        assertDifferent(src, dst);
 
         ClearCLBuffer matrixCl = clij.createCLBuffer(new long[]{matrix.length, 1, 1}, NativeTypeEnum.Float);
 
@@ -181,12 +204,18 @@ public class Kernels {
     }
 
     public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, AffineTransform3D at) {
+        assertDifferent(src, dst);
+
         at = at.inverse();
         float[] matrix = AffineTransform.matrixToFloatArray(at);
         return affineTransform(clij, src, dst, matrix);
     }
 
     public static boolean applyVectorfield(CLIJ clij, ClearCLImage src, ClearCLImage vectorX, ClearCLImage vectorY, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(vectorX, dst);
+        assertDifferent(vectorY, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -198,6 +227,11 @@ public class Kernels {
     }
 
     public static boolean applyVectorfield(CLIJ clij, ClearCLImage src, ClearCLImage vectorX, ClearCLImage vectorY, ClearCLImage vectorZ, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(vectorX, dst);
+        assertDifferent(vectorY, dst);
+        assertDifferent(vectorZ, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -210,6 +244,10 @@ public class Kernels {
     }
 
     public static boolean applyVectorfield(CLIJ clij, ClearCLBuffer src, ClearCLBuffer vectorX, ClearCLBuffer vectorY, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(vectorX, dst);
+        assertDifferent(vectorY, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -221,6 +259,11 @@ public class Kernels {
     }
 
     public static boolean applyVectorfield(CLIJ clij, ClearCLBuffer src, ClearCLBuffer vectorX, ClearCLBuffer vectorY, ClearCLBuffer vectorZ, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(vectorX, dst);
+        assertDifferent(vectorY, dst);
+        assertDifferent(vectorZ, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -233,6 +276,8 @@ public class Kernels {
     }
 
     public static boolean automaticThreshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, String userSelectedMethod) {
+        assertDifferent(src, dst);
+
         Float minimumGreyValue = 0f;
         Float maximumGreyValue = 0f;
         Integer numberOfBins = 256;
@@ -249,6 +294,7 @@ public class Kernels {
     }
 
     public static boolean automaticThreshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, String userSelectedMethod, Float minimumGreyValue, Float maximumGreyValue, Integer numberOfBins) {
+        assertDifferent(src, dst);
 
         if (minimumGreyValue == null)
         {
@@ -306,6 +352,9 @@ public class Kernels {
 
 
     public static boolean argMaximumZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst_max, ClearCLImage dst_arg) {
+        assertDifferent(src, dst_max);
+        assertDifferent(src, dst_arg);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
@@ -315,6 +364,9 @@ public class Kernels {
     }
 
     public static boolean argMaximumZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst_max, ClearCLBuffer dst_arg) {
+        assertDifferent(src, dst_max);
+        assertDifferent(src, dst_arg);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
@@ -324,6 +376,9 @@ public class Kernels {
     }
 
     public static boolean binaryAnd(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("src2", src2);
@@ -333,6 +388,9 @@ public class Kernels {
     }
 
     public static boolean binaryAnd(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("src2", src2);
@@ -341,8 +399,10 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_and_" + src1.getDimension() + "d", parameters);
     }
 
-
     public static boolean binaryXOr(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("src2", src2);
@@ -352,6 +412,9 @@ public class Kernels {
     }
 
     public static boolean binaryXOr(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("src2", src2);
@@ -360,9 +423,9 @@ public class Kernels {
         return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_xor_" + src1.getDimension() + "d", parameters);
     }
 
-
-
     public static boolean binaryNot(CLIJ clij, ClearCLImage src1, ClearCLImage dst) {
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("dst", dst);
@@ -371,6 +434,8 @@ public class Kernels {
     }
 
     public static boolean binaryNot(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer dst) {
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("dst", dst);
@@ -379,6 +444,9 @@ public class Kernels {
     }
 
     public static boolean binaryOr(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("src2", src2);
@@ -388,6 +456,9 @@ public class Kernels {
     }
 
     public static boolean binaryOr(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("src2", src2);
@@ -421,6 +492,8 @@ public class Kernels {
     }
 
     public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -430,6 +503,8 @@ public class Kernels {
     }
 
     public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -439,6 +514,8 @@ public class Kernels {
     }
 
     public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY, Integer radiusZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -449,6 +526,8 @@ public class Kernels {
     }
 
     public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radiusX, Integer radiusY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -458,6 +537,8 @@ public class Kernels {
     }
 
     public static boolean countNonZeroPixelsLocallySliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radiusX, Integer radiusY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -467,6 +548,8 @@ public class Kernels {
     }
 
     public static boolean countNonZeroVoxelsLocally(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radiusX, Integer radiusY, Integer radiusZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", radiusToKernelSize(radiusX));
         parameters.put("Ny", radiusToKernelSize(radiusY));
@@ -477,6 +560,8 @@ public class Kernels {
     }
 
     private static boolean executeSeparableKernel(CLIJ clij, Object src, Object dst, String clFilename, String kernelname, int kernelSizeX, int kernelSizeY, int kernelSizeZ, float blurSigmaX, float blurSigmaY, float blurSigmaZ, long dimensions) {
+        assertDifferent(src, dst);
+
         int[] n = new int[]{kernelSizeX, kernelSizeY, kernelSizeZ};
         float[] blurSigma = new float[]{blurSigmaX, blurSigmaY, blurSigmaZ};
 
@@ -559,6 +644,8 @@ public class Kernels {
     }
 
     public static boolean blurSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Float sigmaX, Float sigmaY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", kernelSizeX);
         parameters.put("Ny", kernelSizeY);
@@ -570,6 +657,8 @@ public class Kernels {
     }
 
     public static boolean blurSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, int kernelSizeX, int kernelSizeY, float sigmaX, float sigmaY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("Nx", kernelSizeX);
         parameters.put("Ny", kernelSizeY);
@@ -639,6 +728,8 @@ public class Kernels {
     }
 
     private static boolean copyInternal(CLIJ clij, Object src, Object dst, long srcNumberOfDimensions, long dstNumberOfDimensions) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -661,6 +752,8 @@ public class Kernels {
     }
 
     public static boolean copySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer planeIndex) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -675,6 +768,8 @@ public class Kernels {
     }
 
     public static boolean copySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer planeIndex) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -690,6 +785,8 @@ public class Kernels {
     }
 
     public static boolean crop(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer startX, Integer startY, Integer startZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -701,6 +798,8 @@ public class Kernels {
 
 
     public static boolean crop(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer startX, Integer startY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -710,6 +809,8 @@ public class Kernels {
     }
 
     public static boolean crop(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer startX, Integer startY, Integer startZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -720,6 +821,8 @@ public class Kernels {
     }
 
     public static boolean crop(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer startX, Integer startY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -729,6 +832,11 @@ public class Kernels {
     }
 
     public static boolean crossCorrelation(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer meanSrc1, ClearCLBuffer src2, ClearCLBuffer meanSrc2, ClearCLBuffer dst, int radius, int deltaPos, int dimension) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+        assertDifferent(meanSrc1, dst);
+        assertDifferent(meanSrc2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("mean_src1", meanSrc1);
@@ -742,6 +850,11 @@ public class Kernels {
     }
 
     public static boolean crossCorrelation(CLIJ clij, ClearCLImage src1, ClearCLImage meanSrc1, ClearCLImage src2, ClearCLImage meanSrc2, ClearCLImage dst, int radius, int deltaPos, int dimension) {
+        assertDifferent(src1, dst);
+        assertDifferent(src2, dst);
+        assertDifferent(meanSrc1, dst);
+        assertDifferent(meanSrc2, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src1", src1);
         parameters.put("mean_src1", meanSrc1);
@@ -787,6 +900,8 @@ public class Kernels {
     }
 
     public static boolean detectOptima(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius, Boolean detectMaxima) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -799,6 +914,8 @@ public class Kernels {
     }
 
     public static boolean detectOptima(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius, Boolean detectMaxima) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -811,6 +928,8 @@ public class Kernels {
     }
 
     public static boolean detectOptimaSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius, Boolean detectMaxima) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -823,6 +942,8 @@ public class Kernels {
     }
 
     public static boolean detectOptimaSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius, Boolean detectMaxima) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -835,6 +956,8 @@ public class Kernels {
     }
 
     public static boolean differenceOfGaussian(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius, Float sigmaMinuend, Float sigmaSubtrahend) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -848,6 +971,8 @@ public class Kernels {
     }
 
     public static boolean differenceOfGaussianSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius, Float sigmaMinuend, Float sigmaSubtrahend) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -861,6 +986,8 @@ public class Kernels {
     }
 
     public static boolean dilateBox(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -871,6 +998,8 @@ public class Kernels {
     }
 
     public static boolean dilateBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -881,6 +1010,8 @@ public class Kernels {
     }
 
     public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -891,6 +1022,8 @@ public class Kernels {
     }
 
     public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -901,6 +1034,8 @@ public class Kernels {
     }
 
     public static boolean dilateSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -911,6 +1046,8 @@ public class Kernels {
     }
 
     public static boolean dilateSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -921,6 +1058,8 @@ public class Kernels {
     }
 
     public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -931,6 +1070,8 @@ public class Kernels {
     }
 
     public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -941,6 +1082,9 @@ public class Kernels {
     }
 
     public static boolean divideImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -954,6 +1098,9 @@ public class Kernels {
     }
 
     public static boolean divideImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -967,6 +1114,8 @@ public class Kernels {
     }
 
     public static boolean downsample(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float factorX, Float factorY, Float factorZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -977,6 +1126,8 @@ public class Kernels {
     }
 
     public static boolean downsample(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float factorX, Float factorY, Float factorZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -987,6 +1138,8 @@ public class Kernels {
     }
 
     public static boolean downsample(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float factorX, Float factorY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -996,6 +1149,8 @@ public class Kernels {
     }
 
     public static boolean downsample(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float factorX, Float factorY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1005,6 +1160,8 @@ public class Kernels {
     }
 
     public static boolean downsampleSliceBySliceHalfMedian(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1012,6 +1169,8 @@ public class Kernels {
     }
 
     public static boolean downsampleSliceBySliceHalfMedian(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1019,6 +1178,8 @@ public class Kernels {
     }
 
     public static boolean erodeSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1030,6 +1191,8 @@ public class Kernels {
     }
 
     public static boolean erodeSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1041,6 +1204,8 @@ public class Kernels {
     }
 
     public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1052,6 +1217,8 @@ public class Kernels {
     }
 
     public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1063,6 +1230,8 @@ public class Kernels {
     }
 
     public static boolean erodeBox(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1074,6 +1243,8 @@ public class Kernels {
     }
 
     public static boolean erodeBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1085,6 +1256,8 @@ public class Kernels {
     }
 
     public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1096,6 +1269,8 @@ public class Kernels {
     }
 
     public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1107,6 +1282,7 @@ public class Kernels {
     }
 
     public static boolean fillHistogram(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dstHistogram, Float minimumGreyValue, Float maximumGreyValue) {
+        assertDifferent(src, dstHistogram);
 
         int stepSizeX = 1;
         int stepSizeY = 1;
@@ -1147,6 +1323,8 @@ public class Kernels {
     }
 
     public static boolean gradientX(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1157,6 +1335,8 @@ public class Kernels {
     }
 
     public static boolean gradientY(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1167,6 +1347,8 @@ public class Kernels {
     }
 
     public static boolean gradientZ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1187,6 +1369,8 @@ public class Kernels {
     }
 
     public static boolean gradientY(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1197,6 +1381,8 @@ public class Kernels {
     }
 
     public static boolean gradientZ(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1227,6 +1413,8 @@ public class Kernels {
 
 
     public static boolean flip(CLIJ clij, ClearCLImage src, ClearCLImage dst, Boolean flipx, Boolean flipy, Boolean flipz) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1237,6 +1425,8 @@ public class Kernels {
     }
 
     public static boolean flip(CLIJ clij, ClearCLImage src, ClearCLImage dst, Boolean flipx, Boolean flipy) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1246,6 +1436,8 @@ public class Kernels {
     }
 
     public static boolean flip(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Boolean flipx, Boolean flipy, Boolean flipz) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1256,6 +1448,8 @@ public class Kernels {
     }
 
     public static boolean flip(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Boolean flipx, Boolean flipy) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1265,14 +1459,21 @@ public class Kernels {
     }
 
     public static boolean invert(CLIJ clij, ClearCLImage input3d, ClearCLImage output3d) {
+        assertDifferent(input3d, output3d);
+
         return multiplyImageAndScalar(clij, input3d, output3d, -1f);
     }
 
     public static boolean invert(CLIJ clij, ClearCLBuffer input3d, ClearCLBuffer output3d) {
+        assertDifferent(input3d, output3d);
+
         return multiplyImageAndScalar(clij, input3d, output3d, -1f);
     }
 
     public static boolean localThreshold(CLIJ clij, ClearCLImage src, ClearCLImage dst, ClearCLImage threshold) {
+        assertDifferent(src, dst);
+        assertDifferent(threshold, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -1289,6 +1490,9 @@ public class Kernels {
 
 
     public static boolean localThreshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, ClearCLBuffer threshold) {
+        assertDifferent(src, dst);
+        assertDifferent(threshold, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -1304,6 +1508,9 @@ public class Kernels {
     }
 
     public static boolean mask(CLIJ clij, ClearCLImage src, ClearCLImage mask, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(mask, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("mask", mask);
@@ -1316,6 +1523,9 @@ public class Kernels {
     }
 
     public static boolean mask(CLIJ clij, ClearCLBuffer src, ClearCLBuffer mask, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(mask, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("mask", mask);
@@ -1328,6 +1538,9 @@ public class Kernels {
     }
 
     public static boolean maskStackWithPlane(CLIJ clij, ClearCLImage src, ClearCLImage mask, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(mask, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("mask", mask);
@@ -1337,6 +1550,9 @@ public class Kernels {
     }
 
     public static boolean maskStackWithPlane(CLIJ clij, ClearCLBuffer src, ClearCLBuffer mask, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(mask, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("mask", mask);
@@ -1346,6 +1562,8 @@ public class Kernels {
     }
 
     public static boolean maximumSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1356,6 +1574,8 @@ public class Kernels {
     }
 
     public static boolean maximumSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1366,6 +1586,8 @@ public class Kernels {
     }
 
     public static boolean maximumSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1377,6 +1599,8 @@ public class Kernels {
     }
 
     public static boolean maximumSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1389,6 +1613,8 @@ public class Kernels {
 
     @Deprecated
     public static boolean maximumIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1399,6 +1625,8 @@ public class Kernels {
 
     @Deprecated
     public static boolean maximumIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1408,6 +1636,8 @@ public class Kernels {
     }
 
     public static boolean maximumSliceBySliceSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1426,6 +1656,8 @@ public class Kernels {
     }
 
     public static boolean maximumSliceBySliceSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1436,6 +1668,9 @@ public class Kernels {
     }
 
     public static boolean maximumImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -1448,6 +1683,9 @@ public class Kernels {
     }
 
     public static boolean maximumImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -1460,6 +1698,8 @@ public class Kernels {
     }
 
     public static boolean maximumImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float valueB) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("valueB", valueB);
@@ -1472,6 +1712,8 @@ public class Kernels {
     }
 
     public static boolean maximumImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float valueB) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("valueB", valueB);
@@ -1484,6 +1726,9 @@ public class Kernels {
     }
 
     public static boolean minimumImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -1496,6 +1741,9 @@ public class Kernels {
     }
 
     public static boolean minimumImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -1508,6 +1756,8 @@ public class Kernels {
     }
 
     public static boolean minimumImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float valueB) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("valueB", valueB);
@@ -1520,6 +1770,8 @@ public class Kernels {
     }
 
     public static boolean minimumImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float valueB) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("valueB", valueB);
@@ -1533,6 +1785,8 @@ public class Kernels {
 
 
     public static boolean maximumZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst_max) {
+        assertDifferent(src, dst_max);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
@@ -1543,6 +1797,8 @@ public class Kernels {
     }
 
     public static boolean maximumZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst_max) {
+        assertDifferent(src, dst_max);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
@@ -1553,6 +1809,8 @@ public class Kernels {
     }
 
     public static boolean minimumZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst_min) {
+        assertDifferent(src, dst_min);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_min", dst_min);
@@ -1563,6 +1821,8 @@ public class Kernels {
     }
 
     public static boolean minimumZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst_min) {
+        assertDifferent(src, dst_min);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_min", dst_min);
@@ -1573,6 +1833,8 @@ public class Kernels {
     }
 
     public static boolean meanZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1583,6 +1845,8 @@ public class Kernels {
     }
 
     public static boolean meanZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1594,6 +1858,8 @@ public class Kernels {
 
 
     public static boolean maximumXYZProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst_max, Integer projectedDimensionX, Integer projectedDimensionY, Integer projectedDimension) {
+        assertDifferent(src, dst_max);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
@@ -1607,6 +1873,8 @@ public class Kernels {
     }
 
     public static boolean maximumXYZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst_max, Integer projectedDimensionX, Integer projectedDimensionY, Integer projectedDimension) {
+        assertDifferent(src, dst_max);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
@@ -1620,6 +1888,8 @@ public class Kernels {
     }
 
     public static boolean meanSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1630,6 +1900,8 @@ public class Kernels {
     }
 
     public static boolean meanSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1641,6 +1913,8 @@ public class Kernels {
 
     @Deprecated
     public static boolean meanIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1651,6 +1925,8 @@ public class Kernels {
 
     @Deprecated
     public static boolean meanIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1660,6 +1936,8 @@ public class Kernels {
     }
 
     public static boolean meanSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1671,6 +1949,8 @@ public class Kernels {
     }
 
     public static boolean meanSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1691,6 +1971,8 @@ public class Kernels {
 
 
     public static boolean meanSliceBySliceSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1701,6 +1983,8 @@ public class Kernels {
     }
 
     public static boolean meanSliceBySliceSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1711,6 +1995,8 @@ public class Kernels {
     }
 
     public static boolean medianSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1724,6 +2010,8 @@ public class Kernels {
     }
 
     public static boolean medianSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1737,6 +2025,8 @@ public class Kernels {
     }
 
     public static boolean medianSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1751,6 +2041,8 @@ public class Kernels {
     }
 
     public static boolean medianSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1765,6 +2057,8 @@ public class Kernels {
     }
 
     public static boolean medianSliceBySliceSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1778,6 +2072,8 @@ public class Kernels {
     }
 
     public static boolean medianSliceBySliceSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1791,6 +2087,8 @@ public class Kernels {
     }
 
     public static boolean medianBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1804,6 +2102,8 @@ public class Kernels {
     }
 
     public static boolean medianBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1817,6 +2117,8 @@ public class Kernels {
     }
 
     public static boolean medianBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1831,6 +2133,8 @@ public class Kernels {
     }
 
     public static boolean medianBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY * kernelSizeZ > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1845,6 +2149,8 @@ public class Kernels {
     }
 
     public static boolean medianSliceBySliceBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1858,6 +2164,8 @@ public class Kernels {
     }
 
     public static boolean medianSliceBySliceBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         if (kernelSizeX * kernelSizeY > CLKernelExecutor.MAX_ARRAY_SIZE) {
             throw new IllegalArgumentException("Error: kernels of the medianSphere filter is too big. Consider increasing MAX_ARRAY_SIZE.");
         }
@@ -1872,6 +2180,8 @@ public class Kernels {
 
 
     public static boolean minimumSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1882,6 +2192,8 @@ public class Kernels {
     }
 
     public static boolean minimumSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1892,6 +2204,8 @@ public class Kernels {
     }
 
     public static boolean minimumSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1903,6 +2217,8 @@ public class Kernels {
     }
 
     public static boolean minimumSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY, Integer kernelSizeZ) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1915,6 +2231,8 @@ public class Kernels {
 
     @Deprecated
     public static boolean minimumIJ(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1925,6 +2243,8 @@ public class Kernels {
 
     @Deprecated
     public static boolean minimumIJ(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radius) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1943,6 +2263,8 @@ public class Kernels {
     }
 
     public static boolean minimumSliceBySliceSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1953,6 +2275,8 @@ public class Kernels {
     }
 
     public static boolean minimumSliceBySliceSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer kernelSizeX, Integer kernelSizeY) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -1963,6 +2287,9 @@ public class Kernels {
     }
 
     public static boolean multiplyImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -1976,6 +2303,9 @@ public class Kernels {
     }
 
     public static boolean multiplyImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        assertDifferent(src1, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("src1", src1);
@@ -1988,6 +2318,8 @@ public class Kernels {
     }
 
     public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer dimension) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dimension", dimension);
@@ -1999,6 +2331,8 @@ public class Kernels {
     }
 
     public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer dimension) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dimension", dimension);
@@ -2010,6 +2344,8 @@ public class Kernels {
     }
 
     public static boolean multiplyImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float scalar) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("scalar", scalar);
@@ -2022,6 +2358,8 @@ public class Kernels {
     }
 
     public static boolean multiplyImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float scalar) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("scalar", scalar);
@@ -2034,6 +2372,8 @@ public class Kernels {
     }
 
     public static boolean multiplySliceBySliceWithScalars(CLIJ clij, ClearCLImage src, ClearCLImage dst, float[] scalars) {
+        assertDifferent(src, dst);
+
         if (dst.getDimensions()[2] != scalars.length) {
             throw new IllegalArgumentException("Error: Wrong number of scalars in array.");
         }
@@ -2057,6 +2397,8 @@ public class Kernels {
     }
 
     public static boolean multiplySliceBySliceWithScalars(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, float[] scalars) {
+        assertDifferent(src, dst);
+
         if (dst.getDimensions()[2] != scalars.length) {
             throw new IllegalArgumentException("Error: Wrong number of scalars in array.");
         }
@@ -2080,6 +2422,9 @@ public class Kernels {
     }
 
     public static boolean multiplyStackWithPlane(CLIJ clij, ClearCLImage input3d, ClearCLImage input2d, ClearCLImage output3d) {
+        assertDifferent(input2d, output3d);
+        assertDifferent(input3d, output3d);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", input3d);
         parameters.put("src1", input2d);
@@ -2088,6 +2433,9 @@ public class Kernels {
     }
 
     public static boolean multiplyStackWithPlane(CLIJ clij, ClearCLBuffer input3d, ClearCLBuffer input2d, ClearCLBuffer output3d) {
+        assertDifferent(input2d, output3d);
+        assertDifferent(input3d, output3d);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", input3d);
         parameters.put("src1", input2d);
@@ -2104,6 +2452,7 @@ public class Kernels {
     }
 
     public static boolean power(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float exponent) {
+        assertDifferent(src, dst);
 
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
@@ -2114,6 +2463,8 @@ public class Kernels {
     }
 
     public static boolean radialProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float deltaAngle) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -2125,6 +2476,8 @@ public class Kernels {
     }
 
     public static boolean radialProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float deltaAngle) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -2136,6 +2489,8 @@ public class Kernels {
     }
 
     public static boolean resliceBottom(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -2146,6 +2501,8 @@ public class Kernels {
     }
 
     public static boolean resliceBottom(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -2156,6 +2513,8 @@ public class Kernels {
     }
 
     public static boolean resliceLeft(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2164,6 +2523,8 @@ public class Kernels {
     }
 
     public static boolean resliceLeft(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2172,6 +2533,8 @@ public class Kernels {
     }
 
     public static boolean resliceRight(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2180,6 +2543,8 @@ public class Kernels {
     }
 
     public static boolean resliceRight(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2188,6 +2553,8 @@ public class Kernels {
     }
 
     public static boolean resliceTop(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2197,6 +2564,8 @@ public class Kernels {
 
 
     public static boolean resliceTop(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2205,6 +2574,8 @@ public class Kernels {
     }
 
     public static boolean rotateLeft(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2213,6 +2584,8 @@ public class Kernels {
     }
 
     public static boolean rotateLeft(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2221,6 +2594,8 @@ public class Kernels {
     }
 
     public static boolean rotateRight(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2229,6 +2604,8 @@ public class Kernels {
     }
 
     public static boolean rotateRight(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", src);
         parameters.put("dst", dst);
@@ -2253,6 +2630,9 @@ public class Kernels {
     }
 
     public static boolean splitStack(CLIJ clij, ClearCLImage clImageIn, ClearCLImage... clImagesOut) {
+        for (int i = 0; i < clImagesOut.length; i++) {
+            assertDifferent(clImageIn, clImagesOut[i]);
+        }
         if (clImagesOut.length > 12) {
             throw new IllegalArgumentException("Error: splitStack does not support more than 12 stacks.");
         }
@@ -2273,6 +2653,10 @@ public class Kernels {
     }
 
     public static boolean splitStack(CLIJ clij, ClearCLBuffer clImageIn, ClearCLBuffer... clImagesOut) {
+        for (int i = 0; i < clImagesOut.length; i++) {
+            assertDifferent(clImageIn, clImagesOut[i]);
+        }
+
         if (clImagesOut.length > 12) {
             throw new IllegalArgumentException("Error: splitStack does not support more than 12 stacks.");
         }
@@ -2510,6 +2894,8 @@ public class Kernels {
     }
 
     public static boolean sumZProjection(CLIJ clij, ClearCLImage clImage, ClearCLImage clReducedImage) {
+        assertDifferent(clImage, clReducedImage);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImage);
         parameters.put("dst", clReducedImage);
@@ -2517,6 +2903,8 @@ public class Kernels {
     }
 
     public static boolean sumZProjection(CLIJ clij, ClearCLBuffer clImage, ClearCLBuffer clReducedImage) {
+        assertDifferent(clImage, clReducedImage);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImage);
         parameters.put("dst", clReducedImage);
@@ -2524,6 +2912,8 @@ public class Kernels {
     }
 
     public static boolean tenengradWeightsSliceBySlice(CLIJ clij, ClearCLImage clImageOut, ClearCLImage clImageIn) {
+        assertDifferent(clImageIn, clImageOut);
+
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImageIn);
         parameters.put("dst", clImageOut);
@@ -2535,6 +2925,9 @@ public class Kernels {
     }
 
     public static boolean tenengradFusion(CLIJ clij, ClearCLImage clImageOut, float[] blurSigmas, float exponent, ClearCLImage... clImagesIn) {
+        for (int i = 0; i < clImagesIn.length; i++) {
+            assertDifferent(clImagesIn[i], clImageOut);
+        }
         if (clImagesIn.length > 12) {
             throw new IllegalArgumentException("Error: tenengradFusion does not support more than 12 stacks.");
         }
@@ -2594,6 +2987,7 @@ public class Kernels {
     }
 
     public static boolean threshold(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float threshold) {
+        assertDifferent(src, dst);
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();
@@ -2609,6 +3003,8 @@ public class Kernels {
     }
 
     public static boolean threshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float threshold) {
+        assertDifferent(src, dst);
+
         HashMap<String, Object> parameters = new HashMap<>();
 
         parameters.clear();

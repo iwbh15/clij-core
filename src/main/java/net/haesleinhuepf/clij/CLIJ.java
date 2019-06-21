@@ -177,6 +177,10 @@ public class CLIJ {
     public String getGPUName() {
         return getClearCLContext().getDevice().getName();
     }
+    public double getOpenCLVersion() {
+        return getClearCLContext().getDevice().getVersion();
+    }
+    public long getGPUMemoryInBytes() { return getClearCLContext().getDevice().getGlobalMemorySizeInBytes(); }
 
     public static String clinfo() {
         return CLInfo.clinfo();

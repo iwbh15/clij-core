@@ -32,7 +32,7 @@ public class CLKernelExecutor {
     Map<String, Object> parameterMap;
     long[] globalSizes;
 
-    private HashMap<String, ClearCLProgram> programCacheMap = new HashMap();
+    private final HashMap<String, ClearCLProgram> programCacheMap = new HashMap();
     ClearCLProgram currentProgram = null;
 
     public CLKernelExecutor(ClearCLContext context,
@@ -349,7 +349,7 @@ public class CLKernelExecutor {
         return variableList;
     }
 
-    private HashMap<String, String> sourceCodeCache = new HashMap<String, String>();
+    private final HashMap<String, String> sourceCodeCache = new HashMap<String, String>();
     protected String getProgramSource() {
         String key = anchorClass.getName() + "_" + programFilename;
 

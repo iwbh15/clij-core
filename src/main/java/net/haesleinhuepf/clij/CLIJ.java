@@ -16,6 +16,7 @@ import net.haesleinhuepf.clij.converters.CLIJConverterService;
 import net.haesleinhuepf.clij.utilities.CLIJOps;
 import net.haesleinhuepf.clij.utilities.CLInfo;
 import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
+import net.haesleinhuepf.clij.utilities.TypeFixer;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.loops.LoopBuilder;
@@ -223,6 +224,10 @@ public class CLIJ {
                            String pKernelname,
                            long[] pGlobalsizes,
                            Map<String, Object> pParameterMap) {
+
+        TypeFixer inputTypeFixer = new TypeFixer(this, pParameterMap);
+        inputTypeFixer.fix();
+
         final boolean[] result = new boolean[1];
 
         if (debug) {
@@ -251,9 +256,14 @@ public class CLIJ {
                 mCLKernelExecutor.setParameterMap(pParameterMap);
                 mCLKernelExecutor.setGlobalSizes(pGlobalsizes);
             }
+
+
             mCLKernelExecutor.setParameterMap(pParameterMap);
             result[0] = mCLKernelExecutor.enqueue(true);
         });
+
+        inputTypeFixer.unfix();
+
         return result[0];
     }
 

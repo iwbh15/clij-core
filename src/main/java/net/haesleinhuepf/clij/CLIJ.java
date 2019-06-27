@@ -16,13 +16,13 @@ import net.haesleinhuepf.clij.converters.CLIJConverterService;
 import net.haesleinhuepf.clij.utilities.CLIJOps;
 import net.haesleinhuepf.clij.utilities.CLInfo;
 import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
+import net.haesleinhuepf.clij.utilities.TypeFixer;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
 import org.scijava.Context;
-import org.scijava.NoSuchServiceException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class CLIJ {
 
     public static boolean debug = false;
 
-    private CLIJOps clijOps;
+    private final CLIJOps clijOps;
 
 
     @Deprecated
@@ -177,6 +177,10 @@ public class CLIJ {
     public String getGPUName() {
         return getClearCLContext().getDevice().getName();
     }
+    public double getOpenCLVersion() {
+        return getClearCLContext().getDevice().getVersion();
+    }
+    public long getGPUMemoryInBytes() { return getClearCLContext().getDevice().getGlobalMemorySizeInBytes(); }
 
     public static String clinfo() {
         return CLInfo.clinfo();
@@ -220,6 +224,10 @@ public class CLIJ {
                            String pKernelname,
                            long[] pGlobalsizes,
                            Map<String, Object> pParameterMap) {
+
+        TypeFixer inputTypeFixer = new TypeFixer(this, pParameterMap);
+        inputTypeFixer.fix();
+
         final boolean[] result = new boolean[1];
 
         if (debug) {
@@ -248,9 +256,14 @@ public class CLIJ {
                 mCLKernelExecutor.setParameterMap(pParameterMap);
                 mCLKernelExecutor.setGlobalSizes(pGlobalsizes);
             }
+
+
             mCLKernelExecutor.setParameterMap(pParameterMap);
             result[0] = mCLKernelExecutor.enqueue(true);
         });
+
+        inputTypeFixer.unfix();
+
         return result[0];
     }
 

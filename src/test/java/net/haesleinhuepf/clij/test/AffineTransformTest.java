@@ -8,6 +8,7 @@ import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.numeric.real.FloatType;
+
 import org.junit.Test;
 
 import java.lang.reflect.Array;
@@ -52,7 +53,7 @@ public class AffineTransformTest {
         AffineTransform3D at = new AffineTransform3D();
         at.translate(4, 0, 0);
 
-        Kernels.affineTransform(clij, input, output, at);
+        Kernels.affineTransform3D(clij, input, output, at);
 
         TestUtilities.printBuffer(clij, output);
 
@@ -94,7 +95,7 @@ public class AffineTransformTest {
         AffineTransform3D at = new AffineTransform3D();
         at.translate(4, 0, 0);
 
-        Kernels.affineTransform(clij, input, output, at);
+        Kernels.affineTransform3D(clij, input, output, at);
 
         ClearCLBuffer bufferOutput = clij.convert(output, ClearCLBuffer.class);
         ClearCLBuffer referenceOutput = clij.convert(reference, ClearCLBuffer.class);

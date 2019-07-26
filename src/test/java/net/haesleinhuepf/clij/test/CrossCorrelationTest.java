@@ -143,7 +143,7 @@ public class CrossCorrelationTest {
         AffineTransform3D at = new AffineTransform3D();
         at.translate(0, 2, 0);
 
-        Kernels.affineTransform(clij, input, shifted, at);
+        Kernels.affineTransform3D(clij, input, shifted, at);
 
         // prepare cross-correlation analysis
         int meanRange = 5;

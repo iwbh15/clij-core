@@ -1,14 +1,27 @@
 package net.haesleinhuepf.clij.utilities;
-
 import net.haesleinhuepf.clij.CLIJ;
 import net.haesleinhuepf.clij.kernels.Kernels;
+import ij.ImagePlus;
+import ij.process.AutoThresholder;
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
 import net.haesleinhuepf.clij.clearcl.ClearCLImage;
+import net.haesleinhuepf.clij.clearcl.enums.ImageChannelDataType;
+import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import net.haesleinhuepf.clij.CLIJ;
+import net.haesleinhuepf.clij.utilities.AffineTransform;
+import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
+import net.imglib2.Cursor;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
+import net.imglib2.type.numeric.RealType;
+import net.imglib2.view.Views;
+import java.nio.FloatBuffer;
+import java.util.HashMap;
+import static net.haesleinhuepf.clij.utilities.CLIJUtilities.*;
 // this is generated code. See src/test/java/net/haesleinhuepf/clij/codegenerator for details
 public class CLIJOps {
-   private final CLIJ clij;
+   private CLIJ clij;
    public CLIJOps(CLIJ clij) {
        this.clij = clij;
    }
@@ -44,20 +57,36 @@ public class CLIJOps {
         return Kernels.addImagesWeighted(clij, src, src1, dst, factor, factor1);
     }
 
-    public boolean affineTransform( ClearCLBuffer src,  ClearCLBuffer dst,  float[] matrix ) {
-        return Kernels.affineTransform(clij, src, dst, matrix);
+    public boolean affineTransform2D( ClearCLBuffer src,  ClearCLBuffer dst,  float[] matrix ) {
+        return Kernels.affineTransform2D(clij, src, dst, matrix);
     }
 
-    public boolean affineTransform( ClearCLBuffer src,  ClearCLBuffer dst,  AffineTransform3D at ) {
-        return Kernels.affineTransform(clij, src, dst, at);
+    public boolean affineTransform2D( ClearCLBuffer src,  ClearCLBuffer dst,  AffineTransform2D at ) {
+        return Kernels.affineTransform2D(clij, src, dst, at);
     }
 
-    public boolean affineTransform( ClearCLImage src,  ClearCLImage dst,  float[] matrix ) {
-        return Kernels.affineTransform(clij, src, dst, matrix);
+    public boolean affineTransform2D( ClearCLImage src,  ClearCLImage dst,  float[] matrix ) {
+        return Kernels.affineTransform2D(clij, src, dst, matrix);
     }
 
-    public boolean affineTransform( ClearCLImage src,  ClearCLImage dst,  AffineTransform3D at ) {
-        return Kernels.affineTransform(clij, src, dst, at);
+    public boolean affineTransform2D( ClearCLImage src,  ClearCLImage dst,  AffineTransform2D at ) {
+        return Kernels.affineTransform2D(clij, src, dst, at);
+    }
+
+    public boolean affineTransform3D( ClearCLBuffer src,  ClearCLBuffer dst,  float[] matrix ) {
+        return Kernels.affineTransform3D(clij, src, dst, matrix);
+    }
+
+    public boolean affineTransform3D( ClearCLBuffer src,  ClearCLBuffer dst,  AffineTransform3D at ) {
+        return Kernels.affineTransform3D(clij, src, dst, at);
+    }
+
+    public boolean affineTransform3D( ClearCLImage src,  ClearCLImage dst,  float[] matrix ) {
+        return Kernels.affineTransform3D(clij, src, dst, matrix);
+    }
+
+    public boolean affineTransform3D( ClearCLImage src,  ClearCLImage dst,  AffineTransform3D at ) {
+        return Kernels.affineTransform3D(clij, src, dst, at);
     }
 
     public boolean applyVectorfield( ClearCLImage src,  ClearCLImage vectorX,  ClearCLImage vectorY,  ClearCLImage dst ) {

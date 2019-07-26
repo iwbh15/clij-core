@@ -418,7 +418,6 @@ __kernel void minPixelwiseScalar_2d(DTYPE_IMAGE_IN_2D  src,
 }
 
 
-
 __kernel void power_2d(DTYPE_IMAGE_IN_2D  src,
                               DTYPE_IMAGE_OUT_2D  dst,
                               float exponent

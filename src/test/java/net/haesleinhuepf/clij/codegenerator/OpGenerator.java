@@ -46,7 +46,11 @@ public class OpGenerator {
 
         while ((line = br.readLine()) != null) {
             line = line.trim();
-            if (line.startsWith("public")) {
+            if (line.startsWith("@Deprecated")) {
+                builder.append("    ");
+                builder.append(line);
+                builder.append("\n");
+            } else if (line.startsWith("public")) {
                 String[] temp = line.split("\\(");
 
                 String methodDefinition = temp[0].trim();

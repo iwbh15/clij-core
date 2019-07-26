@@ -640,11 +640,14 @@ public class Kernels {
         int[] n = new int[]{kernelSizeX, kernelSizeY, kernelSizeZ};
         float[] blurSigma = new float[]{blurSigmaX, blurSigmaY, blurSigmaZ};
 
-        Object temp;
+        Object temp1;
+        Object temp2;
         if (src instanceof ClearCLBuffer) {
-            temp = clij.createCLBuffer((ClearCLBuffer) src);
+            temp1 = clij.create(((ClearCLBuffer) src).getDimensions(), NativeTypeEnum.Float);
+            temp2 = clij.create(((ClearCLBuffer) src).getDimensions(), NativeTypeEnum.Float);
         } else if (src instanceof ClearCLImage) {
-            temp = clij.createCLImage((ClearCLImage) src);
+            temp1 = clij.create(((ClearCLImage) src).getDimensions(), ImageChannelDataType.Float);
+            temp2 = clij.create(((ClearCLImage) src).getDimensions(), ImageChannelDataType.Float);
         } else {
             throw new IllegalArgumentException("Error: Wrong type of images in blurFast");
         }
@@ -658,16 +661,16 @@ public class Kernels {
             parameters.put("dim", 0);
             parameters.put("src", src);
             if (dimensions == 2) {
-                parameters.put("dst", temp);
+                parameters.put("dst", temp1);
             } else {
-                parameters.put("dst", dst);
+                parameters.put("dst", temp2);
             }
             clij.execute(Kernels.class, clFilename, kernelname, parameters);
         } else {
             if (dimensions == 2) {
-                Kernels.copyInternal(clij, src, temp, 2, 2);
+                Kernels.copyInternal(clij, src, temp1, 2, 2);
             } else {
-                Kernels.copyInternal(clij, src, dst, 3, 3);
+                Kernels.copyInternal(clij, src, temp2, 3, 3);
             }
         }
 
@@ -677,18 +680,18 @@ public class Kernels {
             parameters.put("s", blurSigma[1]);
             parameters.put("dim", 1);
             if (dimensions == 2) {
-                parameters.put("src", temp);
+                parameters.put("src", temp1);
                 parameters.put("dst", dst);
             } else {
-                parameters.put("src", dst);
-                parameters.put("dst", temp);
+                parameters.put("src", temp2);
+                parameters.put("dst", temp1);
             }
             clij.execute(Kernels.class, clFilename, kernelname, parameters);
         } else {
             if (dimensions == 2) {
-                Kernels.copyInternal(clij, temp, dst, 2, 2);
+                Kernels.copyInternal(clij, temp1, dst, 2, 2);
             } else {
-                Kernels.copyInternal(clij, dst, temp, 3, 3);
+                Kernels.copyInternal(clij, temp2, temp1, 3, 3);
             }
         }
 
@@ -698,21 +701,23 @@ public class Kernels {
                 parameters.put("N", n[2]);
                 parameters.put("s", blurSigma[2]);
                 parameters.put("dim", 2);
-                parameters.put("src", temp);
+                parameters.put("src", temp1);
                 parameters.put("dst", dst);
                 clij.execute(Kernels.class,
                         clFilename,
                         kernelname,
                         parameters);
             } else {
-                Kernels.copyInternal(clij, temp, dst,3, 3);
+                Kernels.copyInternal(clij, temp1, dst,3, 3);
             }
         }
 
-        if (temp instanceof ClearCLBuffer) {
-            ((ClearCLBuffer) temp).close();
-        } else if (temp instanceof ClearCLImage) {
-            ((ClearCLImage) temp).close();
+        if (temp1 instanceof ClearCLBuffer) {
+            ((ClearCLBuffer) temp1).close();
+            ((ClearCLBuffer) temp2).close();
+        } else if (temp1 instanceof ClearCLImage) {
+            ((ClearCLImage) temp1).close();
+            ((ClearCLImage) temp2).close();
         }
 
         return true;

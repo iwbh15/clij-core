@@ -210,6 +210,26 @@ public class Kernels {
         return affineTransform2D(clij, src, dst, matrix);
     }
 
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public static boolean affineTransform(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, float[] matrix) {
+        return affineTransform3D(clij, src, dst, matrix);
+    }
+
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public static boolean affineTransform(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, AffineTransform3D at) {
+        return affineTransform3D(clij, src, dst, at);
+    }
+
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, float[] matrix) {
+        return affineTransform3D(clij, src, dst, matrix);
+    }
+
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public static boolean affineTransform(CLIJ clij, ClearCLImage src, ClearCLImage dst, AffineTransform3D at) {
+        return affineTransform3D(clij, src, dst, at);
+    }
+
     public static boolean affineTransform3D(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, float[] matrix) {
         assertDifferent(src, dst);
 

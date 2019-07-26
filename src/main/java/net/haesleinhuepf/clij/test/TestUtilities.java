@@ -1,6 +1,7 @@
 package net.haesleinhuepf.clij.test;
 
 import net.haesleinhuepf.clij.clearcl.ClearCLBuffer;
+import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import ij.ImagePlus;
 import ij.gui.NewImage;
@@ -215,5 +216,39 @@ public class TestUtilities
         }
         System.out.print("\n");
       }
+    }
+
+    public static long countPixelsWithDifferenceAboveTolerance(CLIJ clij, ClearCLImage image1, ClearCLImage image2, Float tolerance) {
+      ClearCLImage difference = clij.create(image1);
+      ClearCLImage absolute = clij.create(image2);
+      ClearCLImage thresholded = clij.create(image1);
+      clij.op().subtractImages(image1, image2, difference);
+      clij.op().absolute(difference, absolute);
+      clij.op().threshold(absolute, thresholded, tolerance);
+
+      double countNonZeroPixels = clij.op().sumPixels(thresholded);
+
+      difference.close();
+      absolute.close();
+      thresholded.close();
+
+      return (long)countNonZeroPixels;
+    }
+
+    public static long countPixelsWithDifferenceAboveTolerance(CLIJ clij, ClearCLBuffer image1, ClearCLBuffer image2, Float tolerance) {
+      ClearCLBuffer difference = clij.create(image1);
+      ClearCLBuffer absolute = clij.create(image2);
+      ClearCLBuffer thresholded = clij.create(image1);
+      clij.op().subtractImages(image1, image2, difference);
+      clij.op().absolute(difference, absolute);
+      clij.op().threshold(absolute, thresholded, tolerance);
+
+      double countNonZeroPixels = clij.op().sumPixels(thresholded);
+
+      difference.close();
+      absolute.close();
+      thresholded.close();
+
+      return (long)countNonZeroPixels;
     }
 }

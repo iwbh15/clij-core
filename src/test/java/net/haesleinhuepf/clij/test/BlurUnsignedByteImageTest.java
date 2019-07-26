@@ -22,10 +22,10 @@ public class BlurUnsignedByteImageTest {
         clij.op().blur(input, output1, 10f, 10f);
         clij.op().blur(input, output2, 10f, 10f, 0f);
 
-        new ImageJ();
-        clij.show(output1, "out1");
-        clij.show(output2, "out2");
+        TestUtilities.clBuffersEqual(clij, output1, output2, 1);
 
-        new WaitForUserDialog("ddd").show();
+        input.close();
+        output1.close();
+        output2.close();
     }
 }

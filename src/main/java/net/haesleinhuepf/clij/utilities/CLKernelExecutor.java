@@ -55,7 +55,7 @@ public class CLKernelExecutor {
             defines.put("DTYPE_IMAGE_IN_2D", "__read_only image2d_t");
             if (imageChannelDataType.isInteger()) {
                 if (imageChannelDataType == ImageChannelDataType.UnsignedInt8 || imageChannelDataType == ImageChannelDataType.SignedInt8) {
-                    defines.put("DTYPE_IN", "char");
+                    defines.put("DTYPE_IN", "uchar");
                 } else {
                     defines.put("DTYPE_IN", "ushort");
                 }
@@ -69,7 +69,7 @@ public class CLKernelExecutor {
             defines.put("DTYPE_IMAGE_OUT_2D", "__write_only image2d_t");
             if (imageChannelDataType.isInteger()) {
                 if (imageChannelDataType == ImageChannelDataType.UnsignedInt8 || imageChannelDataType == ImageChannelDataType.SignedInt8) {
-                    defines.put("DTYPE_OUT", "char");
+                    defines.put("DTYPE_OUT", "uchar");
                 } else {
                     defines.put("DTYPE_OUT", "ushort");
                 }

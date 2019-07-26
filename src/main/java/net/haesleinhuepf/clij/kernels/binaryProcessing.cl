@@ -189,6 +189,9 @@ __kernel void erode_box_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -217,6 +220,9 @@ __kernel void erode_box_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -244,6 +250,9 @@ __kernel void erode_box_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
         break;
       }
     }
+  }
+  if (value != 0) {
+    value = 1;
   }
 
   WRITE_IMAGE_2D (dst, pos, value);
@@ -278,6 +287,9 @@ __kernel void erode_diamond_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -304,6 +316,9 @@ __kernel void erode_diamond_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
         }
       }
     }
+  }
+  if (value != 0) {
+    value = 1;
   }
 
   WRITE_IMAGE_3D (dst, pos, value);
@@ -332,6 +347,9 @@ __kernel void erode_diamond_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
         }
       }
     }
+  }
+  if (value != 0) {
+    value = 1;
   }
 
   WRITE_IMAGE_2D (dst, pos, value);
@@ -366,6 +384,9 @@ __kernel void dilate_box_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -394,6 +415,9 @@ __kernel void dilate_box_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -420,6 +444,9 @@ __kernel void dilate_box_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
         break;
       }
     }
+  }
+  if (value != 0) {
+    value = 1;
   }
 
   WRITE_IMAGE_2D (dst, pos, value);
@@ -455,6 +482,9 @@ __kernel void dilate_diamond_neighborhood_3d(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -489,6 +519,9 @@ __kernel void dilate_diamond_neighborhood_slice_by_slice(DTYPE_IMAGE_IN_3D  src,
       }
     }
   }
+  if (value != 0) {
+    value = 1;
+  }
 
   WRITE_IMAGE_3D (dst, pos, value);
 }
@@ -514,6 +547,9 @@ __kernel void dilate_diamond_neighborhood_2d(DTYPE_IMAGE_IN_2D  src,
         }
       }
     }
+  }
+  if (value != 0) {
+    value = 1;
   }
 
   WRITE_IMAGE_2D (dst, pos, value);

@@ -53,13 +53,26 @@ public class CLKernelExecutor {
         if (isInputImage) {
             defines.put("DTYPE_IMAGE_IN_3D", "__read_only image3d_t");
             defines.put("DTYPE_IMAGE_IN_2D", "__read_only image2d_t");
-            if (imageChannelDataType.isInteger()) {
-                if (imageChannelDataType == ImageChannelDataType.UnsignedInt8 || imageChannelDataType == ImageChannelDataType.SignedInt8) {
-                    defines.put("DTYPE_IN", "char");
-                } else {
-                    defines.put("DTYPE_IN", "ushort");
+            if (imageChannelDataType.isInteger())
+            {
+                switch (imageChannelDataType)
+                {
+                    case UnsignedInt8:
+                        defines.put("DTYPE_IN", "uchar");
+                        break;
+                    case SignedInt8:
+                        defines.put("DTYPE_IN", "char");
+                        break;
+                    case SignedInt32:
+                        defines.put("DTYPE_IN", "int");
+                        break;
+                    default: // UnsignedInt16, TODO: throw exception if different
+                        defines.put("DTYPE_IN", "ushort");
+                        break;
                 }
-            } else {
+            }
+            else
+            {
                 defines.put("DTYPE_IN", "float");
             }
             defines.put("READ_IMAGE_2D", imageChannelDataType.isInteger() ? "read_imageui" : "read_imagef");
@@ -67,13 +80,26 @@ public class CLKernelExecutor {
         } else {
             defines.put("DTYPE_IMAGE_OUT_3D", "__write_only image3d_t");
             defines.put("DTYPE_IMAGE_OUT_2D", "__write_only image2d_t");
-            if (imageChannelDataType.isInteger()) {
-                if (imageChannelDataType == ImageChannelDataType.UnsignedInt8 || imageChannelDataType == ImageChannelDataType.SignedInt8) {
-                    defines.put("DTYPE_OUT", "char");
-                } else {
-                    defines.put("DTYPE_OUT", "ushort");
+            if (imageChannelDataType.isInteger())
+            {
+                switch (imageChannelDataType)
+                {
+                    case UnsignedInt8:
+                        defines.put("DTYPE_OUT", "uchar");
+                        break;
+                    case SignedInt8:
+                        defines.put("DTYPE_OUT", "char");
+                        break;
+                    case SignedInt32:
+                        defines.put("DTYPE_OUT", "int");
+                        break;
+                    default: // UnsignedInt16, TODO: throw exception if different
+                        defines.put("DTYPE_OUT", "ushort");
+                        break;
                 }
-            } else {
+            }
+            else
+            {
                 defines.put("DTYPE_OUT", "float");
             }
             defines.put("WRITE_IMAGE_2D", imageChannelDataType.isInteger() ? "write_imageui" : "write_imagef");

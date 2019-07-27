@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>net.haesleinhuepf</groupId>
 		<artifactId>clij-parent-pom</artifactId>
-		<version>1.0.7</version>
+		<version>1.0.10-BETA</version>
 		<relativePath />
 	</parent>
 
 	<groupId>net.haesleinhuepf</groupId>
 	<artifactId>clij-core</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.10-BETA</version>
 
 	<name>clij-core</name>
 	<description>clij-core</description>
@@ -49,6 +49,10 @@
 		</developer>
 	</developers>
 	<contributors>
+		<contributor>
+			<name>Peter Haub</name>
+			<properties><id>iwbh15</id></properties>
+		</contributor>
 		<contributor>
 			<name>Curtis Rueden</name>
 			<url>https://imagej.net/User:Rueden</url>

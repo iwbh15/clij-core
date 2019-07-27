@@ -224,7 +224,7 @@ public class ImageConverterTest
 
     @Test
     public void testConversionUnsignedShortStackToFloatCLImage() {
-        CLIJ.debug = true;
+        //CLIJ.debug = true;
         clij = CLIJ.getInstance();
 
         RandomAccessibleInterval<UnsignedShortType> rai = ArrayImgs.unsignedShorts(new long[] { 3, 3 });

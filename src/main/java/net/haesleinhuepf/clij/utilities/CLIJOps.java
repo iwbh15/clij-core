@@ -73,6 +73,26 @@ public class CLIJOps {
         return Kernels.affineTransform2D(clij, src, dst, at);
     }
 
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public boolean affineTransform( ClearCLBuffer src,  ClearCLBuffer dst,  float[] matrix ) {
+        return Kernels.affineTransform(clij, src, dst, matrix);
+    }
+
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public boolean affineTransform( ClearCLBuffer src,  ClearCLBuffer dst,  AffineTransform3D at ) {
+        return Kernels.affineTransform(clij, src, dst, at);
+    }
+
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public boolean affineTransform( ClearCLImage src,  ClearCLImage dst,  float[] matrix ) {
+        return Kernels.affineTransform(clij, src, dst, matrix);
+    }
+
+    @Deprecated // use affineTransform2D or affineTransform3D instead
+    public boolean affineTransform( ClearCLImage src,  ClearCLImage dst,  AffineTransform3D at ) {
+        return Kernels.affineTransform(clij, src, dst, at);
+    }
+
     public boolean affineTransform3D( ClearCLBuffer src,  ClearCLBuffer dst,  float[] matrix ) {
         return Kernels.affineTransform3D(clij, src, dst, matrix);
     }
@@ -513,10 +533,12 @@ public class CLIJOps {
         return Kernels.maximumSphere(clij, src, dst, kernelSizeX, kernelSizeY, kernelSizeZ);
     }
 
+    @Deprecated
     public boolean maximumIJ( ClearCLImage src,  ClearCLImage dst,  Integer radius ) {
         return Kernels.maximumIJ(clij, src, dst, radius);
     }
 
+    @Deprecated
     public boolean maximumIJ( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radius ) {
         return Kernels.maximumIJ(clij, src, dst, radius);
     }
@@ -609,10 +631,12 @@ public class CLIJOps {
         return Kernels.meanSphere(clij, src, dst, kernelSizeX, kernelSizeY);
     }
 
+    @Deprecated
     public boolean meanIJ( ClearCLImage src,  ClearCLImage dst,  Integer radius ) {
         return Kernels.meanIJ(clij, src, dst, radius);
     }
 
+    @Deprecated
     public boolean meanIJ( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radius ) {
         return Kernels.meanIJ(clij, src, dst, radius);
     }
@@ -705,10 +729,12 @@ public class CLIJOps {
         return Kernels.minimumSphere(clij, src, dst, kernelSizeX, kernelSizeY, kernelSizeZ);
     }
 
+    @Deprecated
     public boolean minimumIJ( ClearCLImage src,  ClearCLImage dst,  Integer radius ) {
         return Kernels.minimumIJ(clij, src, dst, radius);
     }
 
+    @Deprecated
     public boolean minimumIJ( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radius ) {
         return Kernels.minimumIJ(clij, src, dst, radius);
     }
@@ -849,10 +875,12 @@ public class CLIJOps {
         return Kernels.splitStack(clij, clImageIn, clImagesOut);
     }
 
+    @Deprecated
     public boolean subtract( ClearCLImage source1,  ClearCLImage source2,  ClearCLImage destination ) {
         return Kernels.subtract(clij, source1, source2, destination);
     }
 
+    @Deprecated
     public boolean subtract( ClearCLBuffer source1,  ClearCLBuffer source2,  ClearCLBuffer destination ) {
         return Kernels.subtract(clij, source1, source2, destination);
     }

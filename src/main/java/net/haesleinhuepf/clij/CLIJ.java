@@ -8,6 +8,7 @@ import net.haesleinhuepf.clij.clearcl.backend.jocl.ClearCLBackendJOCL;
 import net.haesleinhuepf.clij.clearcl.enums.*;
 import net.haesleinhuepf.clij.clearcl.util.ElapsedTime;
 import net.haesleinhuepf.clij.converters.FallBackCLIJConverterService;
+import net.haesleinhuepf.clij.coremem.rgc.RessourceCleaner;
 import net.haesleinhuepf.clij.coremem.enums.NativeTypeEnum;
 import ij.IJ;
 import ij.ImagePlus;
@@ -264,6 +265,10 @@ public class CLIJ {
 
         inputTypeFixer.unfix();
 
+        // this is because of the disabled cleaner thread in clij-coremem 0.5.2:
+        RessourceCleaner.cleanNow();
+        //System.out.println("Cleaning");
+
         return result[0];
     }
 
@@ -417,7 +422,13 @@ public class CLIJ {
             converterService.setCLIJ(this);
             CLIJConverterPlugin<S, T> converter = (CLIJConverterPlugin<S, T>) converterService.getConverter(source.getClass(), targetClass);
             converter.setCLIJ(this);
-            return converter.convert(source);
+            T result = converter.convert(source);
+
+            // this is because of the disabled cleaner thread in clij-coremem 0.5.2:
+            RessourceCleaner.cleanNow();
+            //System.out.println("Cleaning2");
+
+            return  result;
         }
     }
 

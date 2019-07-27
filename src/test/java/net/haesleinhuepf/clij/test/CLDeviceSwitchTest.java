@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class CLDeviceSwitchTest {
     @Test
     public void testDeviceSwitching() {
-        CLIJ.debug = true;
+        //CLIJ.debug = true;
 
         ArrayList<String> availableDeviceNames = CLIJ.getAvailableDeviceNames();
         CLIJ fromBefore = null;

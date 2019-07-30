@@ -85,7 +85,7 @@ __kernel void affine(DTYPE_IMAGE_IN_3D input,
 
   int4 pos = (int4){i, j, k,0};
 
-  WRITE_IMAGE_3D(output, pos, (DTYPE_OUT) pix);
+  WRITE_IMAGE_3D(output, pos, (DTYPE_OUT) CONVERT_DTYPE_OUT(pix));
 
 
 }

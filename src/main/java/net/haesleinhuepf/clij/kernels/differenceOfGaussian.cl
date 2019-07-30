@@ -46,7 +46,7 @@ __kernel void subtract_convolved_images_3d_fast(
     }
 
     float pix = weighted_sum_minuend / sum_minuend  - weighted_sum_subtrahend / sum_subtrahend; //,0,0,0};
-	WRITE_IMAGE_3D(dst, pos, (DTYPE_OUT)pix);
+	WRITE_IMAGE_3D(dst, pos, CONVERT_DTYPE_OUT(pix));
 }
 
 
@@ -95,7 +95,7 @@ __kernel void subtract_convolved_images_3d_slice_by_slice(
     }
 
     float pix = weighted_sum_minuend / sum_minuend  - weighted_sum_subtrahend / sum_subtrahend;
-	WRITE_IMAGE_3D(dst, pos, (DTYPE_OUT)pix);
+	WRITE_IMAGE_3D(dst, pos, CONVERT_DTYPE_OUT(pix));
 }
 
 __kernel void subtract_convolved_images_2d_fast(
@@ -141,6 +141,6 @@ __kernel void subtract_convolved_images_2d_fast(
     }
 
     float pix = weighted_sum_minuend / sum_minuend  - weighted_sum_subtrahend / sum_subtrahend; //,0,0,0};
-	WRITE_IMAGE_2D(dst, pos, (DTYPE_OUT)pix);
+	WRITE_IMAGE_2D(dst, pos, CONVERT_DTYPE_OUT(pix));
 }
 

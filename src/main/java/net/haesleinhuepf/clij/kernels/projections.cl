@@ -11,7 +11,7 @@ __kernel void sum_project_3d_2d(
   {
     sum = sum + READ_IMAGE_3D(src,sampler,(int4)(x,y,z,0)).x;
   }
-  WRITE_IMAGE_2D(dst,(int2)(x,y),(DTYPE_OUT)sum);
+  WRITE_IMAGE_2D(dst,(int2)(x,y), CONVERT_DTYPE_OUT(sum));
 }
 
 __kernel void mean_project_3d_2d(
@@ -29,7 +29,7 @@ __kernel void mean_project_3d_2d(
     sum = sum + READ_IMAGE_3D(src,sampler,(int4)(x,y,z,0)).x;
     count++;
   }
-  WRITE_IMAGE_2D(dst,(int2)(x,y),(DTYPE_OUT)(sum / count));
+  WRITE_IMAGE_2D(dst,(int2)(x,y), CONVERT_DTYPE_OUT(sum / count));
 }
 
 __kernel void arg_max_project_3d_2d(
@@ -51,8 +51,8 @@ __kernel void arg_max_project_3d_2d(
       max_pos = z;
     }
   }
-  WRITE_IMAGE_2D(dst_max,(int2)(x,y),(DTYPE_OUT)max);
-  WRITE_IMAGE_2D(dst_arg,(int2)(x,y),(DTYPE_OUT)max_pos);
+  WRITE_IMAGE_2D(dst_max,(int2)(x,y), CONVERT_DTYPE_OUT(max));
+  WRITE_IMAGE_2D(dst_arg,(int2)(x,y), CONVERT_DTYPE_OUT(max_pos));
 }
 
 __kernel void max_project_3d_2d(
@@ -71,7 +71,7 @@ __kernel void max_project_3d_2d(
       max = value;
     }
   }
-  WRITE_IMAGE_2D(dst_max,(int2)(x,y),(DTYPE_OUT)max);
+  WRITE_IMAGE_2D(dst_max,(int2)(x,y), CONVERT_DTYPE_OUT(max));
 }
 
 __kernel void min_project_3d_2d(
@@ -90,7 +90,7 @@ __kernel void min_project_3d_2d(
       min = value;
     }
   }
-  WRITE_IMAGE_2D(dst_min,(int2)(x,y),(DTYPE_OUT)min);
+  WRITE_IMAGE_2D(dst_min,(int2)(x,y), CONVERT_DTYPE_OUT(min));
 }
 
 
@@ -146,7 +146,7 @@ __kernel void max_project_dim_select_3d_2d(
       max = value;
     }
   }
-  WRITE_IMAGE_2D(dst_max,targetPos,(DTYPE_OUT)max);
+  WRITE_IMAGE_2D(dst_max,targetPos, CONVERT_DTYPE_OUT(max));
 }
 
 
@@ -173,6 +173,6 @@ __kernel void radialProjection3d(
   const int sz = y;
 
   DTYPE_IN value = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(x,y,z,0),(DTYPE_OUT)value);
+  WRITE_IMAGE_3D(dst,(int4)(x,y,z,0), CONVERT_DTYPE_OUT(value));
 }
 

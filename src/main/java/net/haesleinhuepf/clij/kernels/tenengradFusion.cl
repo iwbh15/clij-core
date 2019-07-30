@@ -24,7 +24,7 @@ __kernel void tenengrad_weight_unnormalized(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_
   const int4 coord = (int4)(i,j,k,0);
   float w = sobel_magnitude_squared(src,i,j,k);
   // w = w*w;
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)w);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(w));
 }
 
 inline float sobel_magnitude_squared_slice_wise(DTYPE_IMAGE_IN_3D src, const int i0, const int j0, const int k0) {
@@ -45,7 +45,7 @@ __kernel void tenengrad_weight_unnormalized_slice_wise(DTYPE_IMAGE_OUT_3D dst, D
   const int4 coord = (int4)(i,j,k,0);
   float w = sobel_magnitude_squared_slice_wise(src,i,j,k);
   // w = w*w;
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)w);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(w));
 }
 
 
@@ -72,7 +72,7 @@ __kernel void tenengrad_fusion_with_provided_weights_2_images(
   const float  v1 = (float)READ_IMAGE_3D(src1,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -102,7 +102,7 @@ __kernel void tenengrad_fusion_with_provided_weights_3_images(
   const float  v2 = (float)READ_IMAGE_3D(src2,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -136,7 +136,7 @@ __kernel void tenengrad_fusion_with_provided_weights_4_images(
   const float  v3 = (float)READ_IMAGE_3D(src3,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -172,7 +172,7 @@ __kernel void tenengrad_fusion_with_provided_weights_5_images(
   const float  v4 = (float)READ_IMAGE_3D(src4,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -211,7 +211,7 @@ __kernel void tenengrad_fusion_with_provided_weights_6_images(
   const float  v5 = (float)READ_IMAGE_3D(src5,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -255,7 +255,7 @@ __kernel void tenengrad_fusion_with_provided_weights_7_images(
   const float  v6 = (float)READ_IMAGE_3D(src6,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5 + w6 * v6;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -302,7 +302,7 @@ __kernel void tenengrad_fusion_with_provided_weights_8_images(
   const float  v7 = (float)READ_IMAGE_3D(src7,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5 + w6 * v6 + w7 * v7;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void tenengrad_fusion_with_provided_weights_9_images(
@@ -351,7 +351,7 @@ __kernel void tenengrad_fusion_with_provided_weights_9_images(
   const float  v8 = (float)READ_IMAGE_3D(src8,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5 + w6 * v6 + w7 * v7 + w8 * v8;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void tenengrad_fusion_with_provided_weights_10_images(
@@ -403,7 +403,7 @@ __kernel void tenengrad_fusion_with_provided_weights_10_images(
   const float  v9 = (float)READ_IMAGE_3D(src9,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5 + w6 * v6 + w7 * v7 + w8 * v8 + w9 * v9;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void tenengrad_fusion_with_provided_weights_11_images(
@@ -458,7 +458,7 @@ __kernel void tenengrad_fusion_with_provided_weights_11_images(
   const float  v10 = (float)READ_IMAGE_3D(src10,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5 + w6 * v6 + w7 * v7 + w8 * v8 + w9 * v9 + w10 * v10;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void tenengrad_fusion_with_provided_weights_12_images(
@@ -516,5 +516,5 @@ __kernel void tenengrad_fusion_with_provided_weights_12_images(
   const float  v11 = (float)READ_IMAGE_3D(src11,sampler,coord).x;
   const float res = w0 * v0 + w1 * v1 + w2 * v2 + w3 * v3 + w4 * v4 + w5 * v5 + w6 * v6 + w7 * v7 + w8 * v8 + w9 * v9 + w10 * v10 + w11 * v11;
 
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }

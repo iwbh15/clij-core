@@ -34,5 +34,5 @@ __kernel void cross_correlation_3d(DTYPE_IMAGE_IN_3D src1,
 
     float result = sum1 / pow((float)(sum2 * sum3), (float)0.5);
 
-    WRITE_IMAGE_3D(dst, pos, (DTYPE_OUT) result);
+    WRITE_IMAGE_3D(dst, pos, CONVERT_DTYPE_OUT(result));
 }

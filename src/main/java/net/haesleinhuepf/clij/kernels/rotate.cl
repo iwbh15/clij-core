@@ -14,7 +14,7 @@ __kernel void rotate_left_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int dz = get_global_id(2);
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0), CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void rotate_right_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
@@ -29,7 +29,7 @@ __kernel void rotate_right_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int dz = get_global_id(2);
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0), CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void rotate_left_2d(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src) {
@@ -42,7 +42,7 @@ __kernel void rotate_left_2d(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src) {
   const int dy = get_global_id(1);
 
   const DTYPE_IN out = READ_IMAGE_2D(src,sampler,(int2)(sx,sy)).x;
-  WRITE_IMAGE_2D(dst,(int2)(dx,dy),(DTYPE_OUT)out);
+  WRITE_IMAGE_2D(dst,(int2)(dx,dy), CONVERT_DTYPE_OUT(out));
 }
 
 
@@ -56,5 +56,5 @@ __kernel void rotate_right_2d(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src) {
   const int dy = get_global_id(1);
 
   const DTYPE_IN out = READ_IMAGE_2D(src,sampler,(int2)(sx,sy)).x;
-  WRITE_IMAGE_2D(dst,(int2)(dx,dy),(DTYPE_OUT)out);
+  WRITE_IMAGE_2D(dst,(int2)(dx,dy), CONVERT_DTYPE_OUT(out));
 }

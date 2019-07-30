@@ -72,6 +72,6 @@ __kernel void affine_2D(DTYPE_IMAGE_IN_2D input,
 
   int2 pos = (int2){i, j};
 
-  WRITE_IMAGE_2D(output, pos, (DTYPE_OUT) pix);
+  WRITE_IMAGE_2D(output, pos, (DTYPE_OUT) CONVERT_DTYPE_OUT(pix));
   
 }

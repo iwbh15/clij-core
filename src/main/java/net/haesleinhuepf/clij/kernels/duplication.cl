@@ -8,7 +8,7 @@ __kernel void copy_3d (DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int4 pos = (int4){dx,dy,dz,0};
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,pos).x;
-  WRITE_IMAGE_3D(dst, pos,(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst, pos, CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void copy_2d(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src) {
@@ -21,7 +21,7 @@ __kernel void copy_2d(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src) {
   const int2 pos = (int2){dx,dy};
 
   const DTYPE_IN out = READ_IMAGE_2D(src,sampler,pos).x;
-  WRITE_IMAGE_2D(dst,pos,(DTYPE_OUT)out);
+  WRITE_IMAGE_2D(dst,pos, CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void copySlice(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_3D src, int slice) {
@@ -34,7 +34,7 @@ __kernel void copySlice(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_3D src, int slice
   const int2 pos2 = (int2){dx,dy};
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,pos4).x;
-  WRITE_IMAGE_2D(dst,pos2,(DTYPE_OUT)out);
+  WRITE_IMAGE_2D(dst,pos2, CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void putSliceInStack(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_2D src, int slice) {
@@ -47,7 +47,7 @@ __kernel void putSliceInStack(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_2D src, int
   const int4 pos4 = (int4){dx,dy,slice,0};
 
   const DTYPE_IN out = READ_IMAGE_2D(src,sampler,pos2).x;
-  WRITE_IMAGE_3D(dst,pos4,(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,pos4, CONVERT_DTYPE_OUT(out));
 }
 
 
@@ -67,7 +67,7 @@ __kernel void crop_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src, int start_x
   const int4 spos = (int4){sx,sy,sz,0};
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,spos).x;
-  WRITE_IMAGE_3D(dst,dpos,(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,dpos, CONVERT_DTYPE_OUT(out));
 }
 
 
@@ -84,6 +84,6 @@ __kernel void crop_2d(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src, int start_x
   const int2 spos = (int2){sx,sy};
 
   const DTYPE_IN out = READ_IMAGE_2D(src,sampler,spos).x;
-  WRITE_IMAGE_2D(dst,dpos,(DTYPE_OUT)out);
+  WRITE_IMAGE_2D(dst,dpos, CONVERT_DTYPE_OUT(out));
 }
 

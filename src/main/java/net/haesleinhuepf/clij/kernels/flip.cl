@@ -22,7 +22,7 @@ __kernel void flip_3d (    DTYPE_IMAGE_IN_3D  src,
 
   const DTYPE_IN value = READ_IMAGE_3D(src, intsampler, pos).x;
 
-  WRITE_IMAGE_3D (dst, (int4)(x,y,z,0), (DTYPE_OUT)value);
+  WRITE_IMAGE_3D (dst, (int4)(x,y,z,0), CONVERT_DTYPE_OUT(value));
 }
 
 
@@ -45,5 +45,5 @@ __kernel void flip_2d (    DTYPE_IMAGE_IN_2D  src,
 
   const DTYPE_IN value = READ_IMAGE_2D(src, intsampler, pos).x;
 
-  WRITE_IMAGE_2D (dst, (int2)(x,y), (DTYPE_OUT)value);
+  WRITE_IMAGE_2D (dst, (int2)(x,y), CONVERT_DTYPE_OUT(value));
 }

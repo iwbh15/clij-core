@@ -911,42 +911,6 @@ public class Kernels {
         return clij.execute(Kernels.class, "duplication.cl", "crop_2d", parameters);
     }
 
-    public static boolean crossCorrelation(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer meanSrc1, ClearCLBuffer src2, ClearCLBuffer meanSrc2, ClearCLBuffer dst, int radius, int deltaPos, int dimension) {
-        assertDifferent(src1, dst);
-        assertDifferent(src2, dst);
-        assertDifferent(meanSrc1, dst);
-        assertDifferent(meanSrc2, dst);
-
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("src1", src1);
-        parameters.put("mean_src1", meanSrc1);
-        parameters.put("src2", src2);
-        parameters.put("mean_src2", meanSrc2);
-        parameters.put("dst", dst);
-        parameters.put("radius", radius);
-        parameters.put("i", deltaPos);
-        parameters.put("dimension", dimension);
-        return clij.execute(Kernels.class, "cross_correlation.cl", "cross_correlation_3d", parameters);
-    }
-
-    public static boolean crossCorrelation(CLIJ clij, ClearCLImage src1, ClearCLImage meanSrc1, ClearCLImage src2, ClearCLImage meanSrc2, ClearCLImage dst, int radius, int deltaPos, int dimension) {
-        assertDifferent(src1, dst);
-        assertDifferent(src2, dst);
-        assertDifferent(meanSrc1, dst);
-        assertDifferent(meanSrc2, dst);
-
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("src1", src1);
-        parameters.put("mean_src1", meanSrc1);
-        parameters.put("src2", src2);
-        parameters.put("mean_src2", meanSrc2);
-        parameters.put("dst", dst);
-        parameters.put("radius", radius);
-        parameters.put("i", deltaPos);
-        parameters.put("dimension", dimension);
-        return clij.execute(Kernels.class, "cross_correlation.cl", "cross_correlation_3d", parameters);
-    }
-
     public static boolean detectMaximaBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
         return detectOptima(clij, src, dst, radius, true);
     }

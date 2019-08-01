@@ -277,14 +277,6 @@ public class CLIJOps {
         return Kernels.crop(clij, src, dst, startX, startY);
     }
 
-    public boolean crossCorrelation( ClearCLBuffer src1,  ClearCLBuffer meanSrc1,  ClearCLBuffer src2,  ClearCLBuffer meanSrc2,  ClearCLBuffer dst,  int radius,  int deltaPos,  int dimension ) {
-        return Kernels.crossCorrelation(clij, src1, meanSrc1, src2, meanSrc2, dst, radius, deltaPos, dimension);
-    }
-
-    public boolean crossCorrelation( ClearCLImage src1,  ClearCLImage meanSrc1,  ClearCLImage src2,  ClearCLImage meanSrc2,  ClearCLImage dst,  int radius,  int deltaPos,  int dimension ) {
-        return Kernels.crossCorrelation(clij, src1, meanSrc1, src2, meanSrc2, dst, radius, deltaPos, dimension);
-    }
-
     public boolean detectMaximaBox( ClearCLImage src,  ClearCLImage dst,  Integer radius ) {
         return Kernels.detectMaximaBox(clij, src, dst, radius);
     }

@@ -42,7 +42,7 @@ public class DoubleFlipTest
       CLIJ clij = CLIJ.getInstance(deviceName);
       System.out.println("Testing " + deviceName);
 
-      ImagePlus inputImagePlus = IJ.openImage("src/main/resources/flybrain.tif");
+      ImagePlus inputImagePlus = IJ.openImage("src/test/resources/flybrain.tif");
 
       ClearCLImage clImage = clij.convert(inputImagePlus, ClearCLImage.class);
 

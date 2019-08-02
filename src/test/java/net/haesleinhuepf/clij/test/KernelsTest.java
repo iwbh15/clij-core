@@ -42,7 +42,7 @@ public class KernelsTest {
 
     @Before
     public void initTest() {
-        testFlyBrain3D = IJ.openImage("src/main/resources/flybrain.tif");
+        testFlyBrain3D = IJ.openImage("src/test/resources/flybrain.tif");
         testFlyBrain2D = new Duplicator().run(testFlyBrain3D, 1, 1);
 
 

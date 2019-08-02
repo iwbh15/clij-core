@@ -197,6 +197,14 @@ public class CLIJOps {
         return Kernels.blur(clij, src, dst, blurSigmaX, blurSigmaY, blurSigmaZ);
     }
 
+    public boolean convertToImageJBinary( ClearCLBuffer src,  ClearCLBuffer dst ) {
+        return Kernels.convertToImageJBinary(clij, src, dst);
+    }
+
+    public boolean convertToImageJBinary( ClearCLImage src,  ClearCLImage dst ) {
+        return Kernels.convertToImageJBinary(clij, src, dst);
+    }
+
     public boolean countNonZeroPixelsLocally( ClearCLBuffer src,  ClearCLBuffer dst,  Integer radiusX,  Integer radiusY ) {
         return Kernels.countNonZeroPixelsLocally(clij, src, dst, radiusX, radiusY);
     }

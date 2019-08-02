@@ -14,6 +14,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import net.haesleinhuepf.clij.converters.CLIJConverterPlugin;
 import net.haesleinhuepf.clij.converters.CLIJConverterService;
+import net.haesleinhuepf.clij.kernels.Kernels;
 import net.haesleinhuepf.clij.utilities.CLIJOps;
 import net.haesleinhuepf.clij.utilities.CLInfo;
 import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
@@ -23,6 +24,7 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.integer.ByteType;
 import org.scijava.Context;
 
 import java.io.ByteArrayOutputStream;
@@ -387,6 +389,14 @@ public class CLIJ {
 
     public ImagePlus pull(ClearCLBuffer buffer) {
         return convert(buffer, ImagePlus.class);
+    }
+
+    public ImagePlus pullBinary(ClearCLBuffer buffer) {
+        ClearCLBuffer binaryIJ = createCLBuffer(buffer.getDimensions(), NativeTypeEnum.UnsignedByte);
+        Kernels.convertToImageJBinary(this, buffer, binaryIJ);
+        ImagePlus binaryImp = pull(binaryIJ);
+        binaryIJ.close();
+        return binaryImp;
     }
 
     public RandomAccessibleInterval<? extends RealType<?>> pullRAI(ClearCLBuffer buffer) {

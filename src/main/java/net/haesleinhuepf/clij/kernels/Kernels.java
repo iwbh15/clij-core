@@ -566,6 +566,22 @@ public class Kernels {
         return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(blurSigmaZ), blurSigmaX, blurSigmaY, blurSigmaZ, src.getDimension());
     }
 
+    public static boolean convertToImageJBinary(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryIJ.cl", "convert_to_imagej_binary_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean convertToImageJBinary(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryIJ.cl", "convert_to_imagej_binary_" + src.getDimension() + "d", parameters);
+    }
+
     public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY) {
         assertDifferent(src, dst);
 

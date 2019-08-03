@@ -1851,7 +1851,7 @@ public class Kernels {
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
 
-        clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+        clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
 
         return true;
     }
@@ -1863,7 +1863,7 @@ public class Kernels {
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
 
-        clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+        clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
 
         return true;
     }
@@ -2533,7 +2533,7 @@ public class Kernels {
         parameters.put("dst", dst);
         parameters.put("deltaAngle", deltaAngle);
 
-        return clij.execute(Kernels.class, "projections.cl", "radialProjection3d", parameters);
+        return clij.execute(Kernels.class, "radialProjection.cl", "radialProjection3d", parameters);
     }
 
     public static boolean radialProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float deltaAngle) {
@@ -2772,7 +2772,7 @@ public class Kernels {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst_max", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2799,7 +2799,7 @@ public class Kernels {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst_max", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);

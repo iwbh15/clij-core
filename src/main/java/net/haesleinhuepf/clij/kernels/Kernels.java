@@ -41,7 +41,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class,"math.cl", "absolute_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class,"absolute_" + src.getDimension() + "d.cl", "absolute_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean absolute(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -55,7 +55,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "absolute_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "absolute_" + src.getDimension() + "d.cl", "absolute_" + src.getDimension() + "d", parameters);
     }
 
 
@@ -435,7 +435,7 @@ public class Kernels {
         parameters.put("dst_max", dst_max);
         parameters.put("dst_arg", dst_arg);
 
-        return clij.execute(Kernels.class, "projections.cl", "arg_max_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "arg_max_project_3d_2d.cl", "arg_max_project_3d_2d", parameters);
     }
 
     public static boolean argMaximumZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst_max, ClearCLBuffer dst_arg) {
@@ -447,7 +447,7 @@ public class Kernels {
         parameters.put("dst_max", dst_max);
         parameters.put("dst_arg", dst_arg);
 
-        return clij.execute(Kernels.class, "projections.cl", "arg_max_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "arg_max_project_3d_2d.cl", "arg_max_project_3d_2d", parameters);
     }
 
     public static boolean binaryAnd(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
@@ -2880,7 +2880,7 @@ public class Kernels {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2904,7 +2904,7 @@ public class Kernels {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2960,7 +2960,7 @@ public class Kernels {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImage);
         parameters.put("dst", clReducedImage);
-        return clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
     }
 
     public static boolean sumZProjection(CLIJ clij, ClearCLBuffer clImage, ClearCLBuffer clReducedImage) {
@@ -2969,7 +2969,7 @@ public class Kernels {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImage);
         parameters.put("dst", clReducedImage);
-        return clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
     }
 
     public static boolean tenengradWeightsSliceBySlice(CLIJ clij, ClearCLImage clImageOut, ClearCLImage clImageIn) {

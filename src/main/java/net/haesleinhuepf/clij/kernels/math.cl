@@ -231,41 +231,8 @@ __kernel void multiplyScalar_2d(DTYPE_IMAGE_IN_2D  src,
 
 
 
-__kernel void absolute_3d(DTYPE_IMAGE_IN_3D  src,
-                          DTYPE_IMAGE_OUT_3D  dst
-                     )
-{
-  const int x = get_global_id(0);
-  const int y = get_global_id(1);
-  const int z = get_global_id(2);
-
-  const int4 pos = (int4){x,y,z,0};
-
-  float value = READ_IMAGE_3D(src, sampler, pos).x;
-  if ( value < 0 ) {
-    value = -1 * value;
-  }
-
-  WRITE_IMAGE_3D (dst, pos, CONVERT_DTYPE_OUT(value));
-}
 
 
-__kernel void absolute_2d(DTYPE_IMAGE_IN_2D  src,
-                          DTYPE_IMAGE_OUT_2D  dst
-                     )
-{
-  const int x = get_global_id(0);
-  const int y = get_global_id(1);
-
-  const int2 pos = (int2){x,y};
-
-  float value = READ_IMAGE_2D(src, sampler, pos).x;
-  if ( value < 0 ) {
-    value = -1 * value;
-  }
-
-  WRITE_IMAGE_2D (dst, pos, CONVERT_DTYPE_OUT(value));
-}
 
 __kernel void maxPixelwise_3d(DTYPE_IMAGE_IN_3D src,
                               DTYPE_IMAGE_IN_3D src1,

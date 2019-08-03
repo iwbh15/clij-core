@@ -59,26 +59,26 @@ public class CLKernelExecutor {
                 {
                     case UnsignedInt8:
                         defines.put("DTYPE_IN", "uchar");
-                        defines.put("CONVERT_DTYPE_IN(parameter)", "convert_uchar_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_IN(parameter)", "clij_convert_uchar_sat(parameter)");
                         break;
                     case SignedInt8:
                         defines.put("DTYPE_IN", "char");
-                        defines.put("CONVERT_DTYPE_IN(parameter)", "convert_char_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_IN(parameter)", "clij_convert_char_sat(parameter)");
                         break;
                     case SignedInt32:
                         defines.put("DTYPE_IN", "int");
-                        defines.put("CONVERT_DTYPE_IN(parameter)", "convert_int_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_IN(parameter)", "clij_convert_int_sat(parameter)");
                         break;
                     default: // UnsignedInt16, TODO: throw exception if different
                         defines.put("DTYPE_IN", "ushort");
-                        defines.put("CONVERT_DTYPE_IN(parameter)", "convert_ushort_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_IN(parameter)", "clij_convert_ushort_sat(parameter)");
                         break;
                 }
             }
             else
             {
                 defines.put("DTYPE_IN", "float");
-                defines.put("CONVERT_DTYPE_IN", "convert_float");
+                defines.put("CONVERT_DTYPE_IN", "clij_convert_float_sat");
             }
             defines.put("READ_IMAGE_2D", imageChannelDataType.isInteger() ? "read_imageui" : "read_imagef");
             defines.put("READ_IMAGE_3D", imageChannelDataType.isInteger() ? "read_imageui" : "read_imagef");
@@ -91,26 +91,26 @@ public class CLKernelExecutor {
                 {
                     case UnsignedInt8:
                         defines.put("DTYPE_OUT", "uchar");
-                        defines.put("CONVERT_DTYPE_OUT(parameter)", "convert_uchar_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_OUT(parameter)", "clij_convert_uchar_sat(parameter)");
                         break;
                     case SignedInt8:
                         defines.put("DTYPE_OUT", "char");
-                        defines.put("CONVERT_DTYPE_OUT(parameter)", "convert_char_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_OUT(parameter)", "clij_convert_char_sat(parameter)");
                         break;
                     case SignedInt32:
                         defines.put("DTYPE_OUT", "int");
-                        defines.put("CONVERT_DTYPE_OUT(parameter)", "convert_int_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_OUT(parameter)", "clij_convert_int_sat(parameter)");
                         break;
                     default: // UnsignedInt16, TODO: throw exception if different
                         defines.put("DTYPE_OUT", "ushort");
-                        defines.put("CONVERT_DTYPE_OUT(parameter)", "convert_ushort_sat(parameter)");
+                        defines.put("CONVERT_DTYPE_OUT(parameter)", "clij_convert_ushort_sat(parameter)");
                         break;
                 }
             }
             else
             {
                 defines.put("DTYPE_OUT", "float");
-                defines.put("CONVERT_DTYPE_OUT", "convert_float");
+                defines.put("CONVERT_DTYPE_OUT", "clij_convert_float_sat");
             }
             defines.put("WRITE_IMAGE_2D", imageChannelDataType.isInteger() ? "write_imageui" : "write_imagef");
             defines.put("WRITE_IMAGE_3D", imageChannelDataType.isInteger() ? "write_imageui" : "write_imagef");
@@ -121,18 +121,18 @@ public class CLKernelExecutor {
         String typeName = nativeTypeToOpenCLTypeName(nativeTypeEnum);
         String typeId = nativeTypeToOpenCLTypeShortName(nativeTypeEnum);
 
-        String sat = typeName.compareTo("float")==0?"":"_sat";
+        String sat = "_sat"; //typeName.compareTo("float")==0?"":"_sat";
 
         if (isInputImage) {
             defines.put("DTYPE_IN", typeName);
-            defines.put("CONVERT_DTYPE_OUT", "convert_" + typeName + sat);
+            defines.put("CONVERT_DTYPE_OUT", "clij_convert_" + typeName + sat);
             defines.put("DTYPE_IMAGE_IN_3D", "__global " + typeName + "*");
             defines.put("DTYPE_IMAGE_IN_2D", "__global " + typeName + "*");
             defines.put("READ_IMAGE_2D(a,b,c)", "read_buffer2d" + typeId + "(GET_IMAGE_WIDTH(a),GET_IMAGE_HEIGHT(a),GET_IMAGE_DEPTH(a),a,b,c)");
             defines.put("READ_IMAGE_3D(a,b,c)", "read_buffer3d" + typeId + "(GET_IMAGE_WIDTH(a),GET_IMAGE_HEIGHT(a),GET_IMAGE_DEPTH(a),a,b,c)");
         } else {
             defines.put("DTYPE_OUT", typeName);
-            defines.put("CONVERT_DTYPE_OUT", "convert_" + typeName + sat);
+            defines.put("CONVERT_DTYPE_OUT", "clij_convert_" + typeName + sat);
             defines.put("DTYPE_IMAGE_OUT_3D", "__global " + typeName + "*");
             defines.put("DTYPE_IMAGE_OUT_2D", "__global " + typeName + "*");
             defines.put("WRITE_IMAGE_2D(a,b,c)", "write_buffer2d" + typeId + "(GET_IMAGE_WIDTH(a),GET_IMAGE_HEIGHT(a),GET_IMAGE_DEPTH(a),a,b,c)");

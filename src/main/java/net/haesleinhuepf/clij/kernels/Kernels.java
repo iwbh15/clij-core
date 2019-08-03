@@ -2387,7 +2387,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (multiplyImageAndCoordinate)");
         }
-        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiply_pixelwise_with_coordinate_3d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiply_pixelwise_with_coordinate_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer dimension) {
@@ -2400,7 +2400,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (multiplyImageAndCoordinate)");
         }
-        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiply_pixelwise_with_coordinate_3d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiply_pixelwise_with_coordinate_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float scalar) {

@@ -478,7 +478,11 @@ public class CLKernelExecutor {
     public void close() {
         for (String key : programCacheMap.keySet()) {
             ClearCLProgram program = programCacheMap.get(key);
-            program.close();
+            try {
+                program.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         programCacheMap.clear();
     }

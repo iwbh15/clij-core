@@ -6,6 +6,7 @@ import net.haesleinhuepf.clij.clearcl.ClearCLImage;
 import net.haesleinhuepf.clij.kernels.Kernels;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgs;
+import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.type.numeric.real.FloatType;
 
@@ -92,10 +93,10 @@ public class AffineTransformTest {
 
         ClearCLImage output = clij.create(reference);
 
-        AffineTransform3D at = new AffineTransform3D();
-        at.translate(4, 0, 0);
+        AffineTransform2D at = new AffineTransform2D();
+        at.translate(4, 0);
 
-        Kernels.affineTransform3D(clij, input, output, at);
+        Kernels.affineTransform2D(clij, input, output, at);
 
         ClearCLBuffer bufferOutput = clij.convert(output, ClearCLBuffer.class);
         ClearCLBuffer referenceOutput = clij.convert(reference, ClearCLBuffer.class);

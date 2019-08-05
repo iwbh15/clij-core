@@ -268,18 +268,21 @@ public class CLIJ {
         inputTypeFixer.unfix();
 
         // this is because of the disabled cleaner thread in clij-coremem 0.5.2:
-        RessourceCleaner.cleanNow();
+        //RessourceCleaner.cleanNow();
         //System.out.println("Cleaning");
 
         return result[0];
     }
 
+    @Deprecated // use close() instead
     public void dispose() {
-        mClearCLContext.close();
+        close();
+        /*mClearCLContext.close();
         converterService = null;
         if (sInstance == this) {
             sInstance = null;
         }
+         */
     }
 
     public ClearCLContext getClearCLContext() {
@@ -355,13 +358,24 @@ public class CLIJ {
     }
 
     public boolean close() {
+
         if (mCLKernelExecutor != null) {
             mCLKernelExecutor.close();
+            mCLKernelExecutor = null;
         }
-        mCLKernelExecutor = null;
-        mClearCLContext.close();
-        mClearCLContext = null;
-        mClearCLDevice = null;
+        if (mClearCLDevice != null) {
+            mClearCLDevice.close();
+            mClearCLDevice = null;
+        }
+        if (mClearCLContext != null) {
+            mClearCLContext.close();
+            mClearCLContext = null;
+        }
+
+        if (converterService != null) {
+            converterService.setCLIJ(null);
+            converterService = null;
+        }
 
         if (sInstance == this) {
             sInstance = null;
@@ -435,7 +449,7 @@ public class CLIJ {
             T result = converter.convert(source);
 
             // this is because of the disabled cleaner thread in clij-coremem 0.5.2:
-            RessourceCleaner.cleanNow();
+            //RessourceCleaner.cleanNow();
             //System.out.println("Cleaning2");
 
             return  result;

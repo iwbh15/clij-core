@@ -484,6 +484,14 @@ public class CLKernelExecutor {
                 e.printStackTrace();
             }
         }
+        if (currentProgram != null) {
+            try {
+                currentProgram.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         programCacheMap.clear();
     }
 }

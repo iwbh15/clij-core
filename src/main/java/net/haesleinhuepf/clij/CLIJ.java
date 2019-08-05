@@ -364,11 +364,11 @@ public class CLIJ {
             mCLKernelExecutor = null;
         }
         if (mClearCLDevice != null) {
-            mClearCLDevice.close();
+            //mClearCLDevice.close(); // the devices close themselfes somehow...
             mClearCLDevice = null;
         }
         if (mClearCLContext != null) {
-            mClearCLContext.close();
+            mClearCLContext.close(); // potential issue here: Contexts are also cleaned by coremems RessourceCleaner
             mClearCLContext = null;
         }
 

@@ -490,6 +490,7 @@ public class CLKernelExecutor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            currentProgram = null;
         }
 
         programCacheMap.clear();

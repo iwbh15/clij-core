@@ -2546,7 +2546,7 @@ public class Kernels {
         parameters.put("dst", dst);
         parameters.put("deltaAngle", deltaAngle);
 
-        return clij.execute(Kernels.class, "projections.cl", "radialProjection3d", parameters);
+        return clij.execute(Kernels.class, "radialProjection.cl", "radialProjection3d", parameters);
     }
 
     public static boolean resliceBottom(CLIJ clij, ClearCLImage src, ClearCLImage dst) {

@@ -163,6 +163,16 @@ public class TestUtilities
     return clBuffersEqual(clij, buffer1, buffer2, tolerance, false);
   }
 
+  /**
+   * Deprecated: use clij2.op.matrixEqual instead
+   * @param clij
+   * @param buffer1
+   * @param buffer2
+   * @param tolerance
+   * @param ignoreSum
+   * @return
+   */
+  @Deprecated
     public static boolean clBuffersEqual(CLIJ clij, ClearCLBuffer buffer1, ClearCLBuffer buffer2, double tolerance, boolean ignoreSum) {
         if (buffer1.getWidth() != buffer2.getWidth() ||
                 buffer1.getHeight() != buffer2.getHeight() ||

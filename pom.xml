@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>net.haesleinhuepf</groupId>
 		<artifactId>clij-parent-pom</artifactId>
-		<version>1.1.5-BETA</version>
+		<version>1.1.6-BETA</version>
 		<relativePath />
 	</parent>
 
 	<groupId>net.haesleinhuepf</groupId>
 	<artifactId>clij-core</artifactId>
-	<version>1.1.5-BETA</version>
+	<version>1.1.6-BETA</version>
 
 	<name>clij-core</name>
 	<description>clij-core</description>
@@ -96,10 +96,6 @@
 		<dependency>
 			<groupId>net.clearcontrol</groupId>
 			<artifactId>clij-clearcl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>net.clearcontrol</groupId>
-			<artifactId>clij-coremem</artifactId>
 		</dependency>
 
 		<!-- ImageJ dependencies -->

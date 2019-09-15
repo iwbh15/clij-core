@@ -178,9 +178,9 @@ public class CLIJ {
                     sInstance = null;
                     sInstance = new CLIJ(pDeviceNameMustContain);
                 }
+                lastDeviceNameAskedFor = pDeviceNameMustContain;
             }
         }
-        lastDeviceNameAskedFor = pDeviceNameMustContain;
         return sInstance;
     }
 

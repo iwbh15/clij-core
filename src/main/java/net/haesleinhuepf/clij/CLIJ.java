@@ -160,10 +160,14 @@ public class CLIJ {
         return getInstance(null);
     }
 
+    private static String lastDeviceNameAskedFor = "";
     public static CLIJ getInstance(String pDeviceNameMustContain) {
         if (sInstance == null) {
             sInstance = new CLIJ(pDeviceNameMustContain);
         } else {
+            if (lastDeviceNameAskedFor.compareTo(pDeviceNameMustContain) == 0 && sInstance != null) {
+                return sInstance;
+            }
             if (pDeviceNameMustContain != null && !sInstance.getGPUName().contains(pDeviceNameMustContain)) {
                 // switch device requested
                 if (debug) {
@@ -174,6 +178,7 @@ public class CLIJ {
                 sInstance = new CLIJ(pDeviceNameMustContain);
             }
         }
+        lastDeviceNameAskedFor = pDeviceNameMustContain;
         return sInstance;
     }
 

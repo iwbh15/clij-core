@@ -165,17 +165,19 @@ public class CLIJ {
         if (sInstance == null) {
             sInstance = new CLIJ(pDeviceNameMustContain);
         } else {
-            if (lastDeviceNameAskedFor.compareTo(pDeviceNameMustContain) == 0 && sInstance != null) {
-                return sInstance;
-            }
-            if (pDeviceNameMustContain != null && !sInstance.getGPUName().contains(pDeviceNameMustContain)) {
-                // switch device requested
-                if (debug) {
-                    System.out.println("Switching CL device! New: " +  pDeviceNameMustContain);
+            if (pDeviceNameMustContain != null) {
+                if (lastDeviceNameAskedFor.compareTo(pDeviceNameMustContain) == 0 && sInstance != null) {
+                    return sInstance;
                 }
-                sInstance.close();
-                sInstance = null;
-                sInstance = new CLIJ(pDeviceNameMustContain);
+                if (!sInstance.getGPUName().contains(pDeviceNameMustContain)) {
+                    // switch device requested
+                    if (debug) {
+                        System.out.println("Switching CL device! New: " + pDeviceNameMustContain);
+                    }
+                    sInstance.close();
+                    sInstance = null;
+                    sInstance = new CLIJ(pDeviceNameMustContain);
+                }
             }
         }
         lastDeviceNameAskedFor = pDeviceNameMustContain;

@@ -2875,7 +2875,7 @@ public class Kernels {
     public static double sumPixels(CLIJ clij, ClearCLImage clImage) {
         ClearCLImage clReducedImage = clImage;
         if (clImage.getDimension() == 3) {
-            clReducedImage = clij.createCLImage(new long[]{clImage.getWidth(), clImage.getHeight()}, clImage.getChannelDataType());
+            clReducedImage = clij.createCLImage(new long[]{clImage.getWidth(), clImage.getHeight()}, ImageChannelDataType.Float);
 
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
@@ -2899,7 +2899,7 @@ public class Kernels {
     public static double sumPixels(CLIJ clij, ClearCLBuffer clImage) {
         ClearCLBuffer clReducedImage = clImage;
         if (clImage.getDimension() == 3) {
-            clReducedImage = clij.createCLBuffer(new long[]{clImage.getWidth(), clImage.getHeight()}, clImage.getNativeType());
+            clReducedImage = clij.createCLBuffer(new long[]{clImage.getWidth(), clImage.getHeight()}, NativeTypeEnum.Float);
 
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);

@@ -48,8 +48,8 @@ void histogram_image_2d(DTYPE_IMAGE_IN_2D src, DTYPE_IMAGE_OUT_3D dst_histogram,
 
     for (int x = 0; x < image_width; x+= step_size_x) {
         float clr = READ_IMAGE_2D(src, sampler, (int2)(x, y)).x;
-        uchar   indx_x;
-        indx_x = convert_uchar_sat( (clr - minimum) * (float)(GET_IMAGE_WIDTH(dst_histogram)) / range );
+        uint   indx_x;
+        indx_x = convert_uint_sat( (clr - minimum) * (float)(GET_IMAGE_WIDTH(dst_histogram)) / range );
         tmp_histogram[indx_x]++;
     }
 
@@ -76,8 +76,8 @@ void histogram_image_3d(DTYPE_IMAGE_IN_3D src, DTYPE_IMAGE_OUT_3D dst_histogram,
     for (int z = 0; z < image_depth; z+= step_size_z) {
         for (int x = 0; x < image_width; x+= step_size_x) {
             float clr = READ_IMAGE_3D(src, sampler, (int4)(x, y, z, 0)).x;
-            uchar   indx_x;
-            indx_x = convert_uchar_sat( (clr - minimum) * (float)(GET_IMAGE_WIDTH(dst_histogram)) / range );
+            uint   indx_x;
+            indx_x = convert_uint_sat( (clr - minimum) * (float)(GET_IMAGE_WIDTH(dst_histogram)) / range );
             tmp_histogram[indx_x]++;
         }
     }

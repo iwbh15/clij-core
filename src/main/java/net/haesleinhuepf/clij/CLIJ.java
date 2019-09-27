@@ -479,4 +479,9 @@ public class CLIJ {
     private static void resetStdErrForwarding() {
         System.setErr(stdErrStreamBackup);
     }
+
+    public ClearCLBuffer pushCurrentZStack(ImagePlus imp) {
+        ImagePlus copy = new Duplicator().run(imp, imp.getC(), imp.getC(), 1, imp.getNSlices(), imp.getT(), imp.getT());
+        return push(copy);
+    }
 }

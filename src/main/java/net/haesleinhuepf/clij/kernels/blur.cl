@@ -35,7 +35,7 @@ __kernel void gaussian_blur_image3d
   }
 
   res /= hsum;
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -67,7 +67,7 @@ __kernel void gaussian_blur_slicewise_image3d
   }
 
   res /= hsum;
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void gaussian_blur_image2d
@@ -98,7 +98,7 @@ __kernel void gaussian_blur_image2d
   }
 
   res /= hsum;
-  WRITE_IMAGE_2D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_2D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void gaussian_blur_image2d_ij
@@ -129,7 +129,7 @@ __kernel void gaussian_blur_image2d_ij
   }
 
   res /= hsum;
-  WRITE_IMAGE_2D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_2D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void gaussian_blur_sep_image3d
@@ -154,7 +154,7 @@ __kernel void gaussian_blur_sep_image3d
     hsum += h;
   }
   res /= hsum;
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -180,7 +180,7 @@ __kernel void gaussian_blur_sep_image2d
     hsum += h;
   }
   res /= hsum;
-  WRITE_IMAGE_2D(dst,coord,(DTYPE_OUT)(res));
+  WRITE_IMAGE_2D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 

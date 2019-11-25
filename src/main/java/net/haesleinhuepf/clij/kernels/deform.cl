@@ -47,7 +47,7 @@ __kernel void deform_3d(DTYPE_IMAGE_IN_3D src,
     pix = (float)(READ_IMAGE_3D(src, sampler, coord_norm).x);
   }
 
-  WRITE_IMAGE_3D(dst, pos, (DTYPE_OUT) pix);
+  WRITE_IMAGE_3D(dst, pos, CONVERT_DTYPE_OUT(pix));
 }
 
 
@@ -85,5 +85,5 @@ __kernel void deform_2d(DTYPE_IMAGE_IN_2D src,
   }
 
 
-  WRITE_IMAGE_2D(dst, pos, (DTYPE_OUT) pix);
+  WRITE_IMAGE_2D(dst, pos, CONVERT_DTYPE_OUT(pix));
 }

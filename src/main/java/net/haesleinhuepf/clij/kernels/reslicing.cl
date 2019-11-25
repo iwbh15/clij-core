@@ -14,7 +14,7 @@ __kernel void reslice_bottom_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int dz = get_global_size(2) - get_global_id(2) - 1;
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0), CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void reslice_left_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
@@ -29,7 +29,7 @@ __kernel void reslice_left_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int dz = get_global_id(2);
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0), CONVERT_DTYPE_OUT(out));
 }
 
 
@@ -45,7 +45,7 @@ __kernel void reslice_right_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int dz = get_global_size(2) - get_global_id(2) - 1;
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0), CONVERT_DTYPE_OUT(out));
 }
 
 
@@ -61,5 +61,5 @@ __kernel void reslice_top_3d(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D src) {
   const int dz = get_global_id(2);
 
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,(int4)(sx,sy,sz,0)).x;
-  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,(int4)(dx,dy,dz,0), CONVERT_DTYPE_OUT(out));
 }

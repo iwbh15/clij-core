@@ -9,7 +9,7 @@ __kernel void downsample_3d_nearest(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_IN_3D sr
   const int sy = factor_y * dy;
   const int sz = factor_z * dz;
   const DTYPE_IN out = READ_IMAGE_3D(src,sampler,((int4){sx,sy,sz,0})).x;
-  WRITE_IMAGE_3D(dst,((int4){dx,dy,dz,0}),(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,((int4){dx,dy,dz,0}), CONVERT_DTYPE_OUT(out));
 }
 
 __kernel void downsample_2d_nearest(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D src, float factor_x, float factor_y) {
@@ -21,7 +21,7 @@ __kernel void downsample_2d_nearest(DTYPE_IMAGE_OUT_2D dst, DTYPE_IMAGE_IN_2D sr
   const int sx = factor_x * dx;
   const int sy = factor_y * dy;
   const DTYPE_IN out = READ_IMAGE_2D(src,sampler,((int2){sx,sy})).x;
-  WRITE_IMAGE_2D(dst,((int2){dx,dy}),(DTYPE_OUT)out);
+  WRITE_IMAGE_2D(dst,((int2){dx,dy}), CONVERT_DTYPE_OUT(out));
 }
 
 #define SIZEX 4
@@ -46,7 +46,7 @@ __kernel void DownSample ( DTYPE_IMAGE_IN_2D src,
    if ( is >= dim[0] - SIZEX && js >= dim[1] - SIZEY )
        return;
 
-   DTYPE_OUT total = 0;
+   float total = 0;
 
    // we can unroll the loop to reduce overhead (e.g., condition check)
    // if you know the size (e.g., 4 * 4 ), then you can write 16 separate
@@ -63,8 +63,8 @@ __kernel void DownSample ( DTYPE_IMAGE_IN_2D src,
         }
     }
 
-    total = (DTYPE_OUT) ( total / SIZETotal );
-    WRITE_IMAGE_2D ( des, ((int2) { i, j }), total );
+    total = ( total / SIZETotal );
+    WRITE_IMAGE_2D ( des, ((int2) { i, j }), CONVERT_DTYPE_OUT(total) );
 }
 
 
@@ -122,7 +122,7 @@ __kernel void downsample_xy_by_half_median(DTYPE_IMAGE_OUT_3D dst, DTYPE_IMAGE_I
   // output is mean of medians
   const float out = (pixel[1] + pixel[2]) / 2.0f;
 
-  WRITE_IMAGE_3D(dst,coord_out,(DTYPE_OUT)out);
+  WRITE_IMAGE_3D(dst,coord_out, CONVERT_DTYPE_OUT(out));
 }
 
 

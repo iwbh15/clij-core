@@ -1,1 +1,1 @@
-mvn -Denforcer.skip clean deploy
+mvn -Dmaven.test.skip=true clean deploy

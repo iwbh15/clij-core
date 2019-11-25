@@ -70,7 +70,7 @@ public class MaximumFilterTest {
         ClearCLBuffer input = clij.push(imp);
         ClearCLBuffer output = clij.create(input);
 
-        for (int radius = 1; radius <= maxRadius; radius++) {
+        for (int radius = 1; radius <= maxRadius; radius+=5) {
 
             int kernelSize = radiusToKernelSize(radius);
 

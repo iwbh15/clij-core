@@ -66,6 +66,6 @@ __kernel void affine_interpolate2D(DTYPE_IMAGE_IN_2D input,
   float pix = (float)(READ_IMAGE_2D(input, sampler, coord_norm).x);
   int2 pos = (int2){i, j};
 
-  WRITE_IMAGE_2D(output, pos, (DTYPE_OUT) pix);
+  WRITE_IMAGE_2D(output, pos, (DTYPE_OUT) CONVERT_DTYPE_OUT(pix));
   
 }

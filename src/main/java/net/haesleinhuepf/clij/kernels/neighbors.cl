@@ -11,9 +11,9 @@ __kernel void gradientX_2d
   const int2 coordA = (int2){i-1,j};
   const int2 coordB = (int2){i+1,j};
 
-  DTYPE_OUT valueA = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordA).x;
-  DTYPE_OUT valueB = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordB).x;
-  DTYPE_OUT res = valueB - valueA;
+  DTYPE_IN valueA = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordA).x;
+  DTYPE_IN valueB = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordB).x;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(valueB - valueA);
 
   WRITE_IMAGE_2D(dst, coord, res);
 }
@@ -29,9 +29,9 @@ __kernel void gradientY_2d
   const int2 coordA = (int2){i,j-1};
   const int2 coordB = (int2){i,j+1};
 
-  DTYPE_OUT valueA = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordA).x;
-  DTYPE_OUT valueB = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordB).x;
-  DTYPE_OUT res = valueB - valueA;
+  DTYPE_IN valueA = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordA).x;
+  DTYPE_IN valueB = (DTYPE_OUT)READ_IMAGE_2D(src, sampler, coordB).x;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(valueB - valueA);
 
   WRITE_IMAGE_2D(dst, coord, res);
 }
@@ -48,9 +48,9 @@ __kernel void gradientX_3d
   const int4 coordA = (int4){i-1, j, k, 0};
   const int4 coordB = (int4){i+1, j, k, 0};
 
-  DTYPE_OUT valueA = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordA).x;
-  DTYPE_OUT valueB = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordB).x;
-  DTYPE_OUT res = valueB - valueA;
+  DTYPE_IN valueA = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordA).x;
+  DTYPE_IN valueB = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordB).x;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(valueB - valueA);
 
   WRITE_IMAGE_3D(dst, coord, res);
 }
@@ -67,9 +67,9 @@ __kernel void gradientY_3d
   const int4 coordA = (int4){i, j-1, k, 0};
   const int4 coordB = (int4){i, j+1, k, 0};
 
-  DTYPE_OUT valueA = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordA).x;
-  DTYPE_OUT valueB = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordB).x;
-  DTYPE_OUT res = valueB - valueA;
+  DTYPE_IN valueA = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordA).x;
+  DTYPE_IN valueB = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordB).x;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(valueB - valueA);
 
   WRITE_IMAGE_3D(dst, coord, res);
 }
@@ -86,9 +86,9 @@ __kernel void gradientZ_3d
   const int4 coordA = (int4){i, j, k-1, 0};
   const int4 coordB = (int4){i, j, k+1, 0};
 
-  DTYPE_OUT valueA = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordA).x;
-  DTYPE_OUT valueB = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordB).x;
-  DTYPE_OUT res = valueB - valueA;
+  DTYPE_IN valueA = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordA).x;
+  DTYPE_IN valueB = (DTYPE_OUT)READ_IMAGE_3D(src, sampler, coordB).x;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(valueB - valueA);
 
   WRITE_IMAGE_3D(dst, coord, res);
 }

@@ -30,7 +30,7 @@ public class MultipleGPUsTest {
         CLIJ clijIntel = new CLIJ(0);
         CLIJ clijNvidia = new CLIJ(2);
 
-        ImagePlus imp = IJ.openImage("src/main/resources/t1-head.tif");
+        ImagePlus imp = IJ.openImage("src/test/resources/t1-head.tif");
 
         // create multiple processors using different GPUs
         Processor processorIntel = new Processor(clijIntel, imp);

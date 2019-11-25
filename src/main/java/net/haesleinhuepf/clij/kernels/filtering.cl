@@ -211,7 +211,7 @@ __kernel void mean_slicewise_image3d
         }
     }
 
-  DTYPE_OUT res = sum / count;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(sum / count);
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
@@ -244,7 +244,7 @@ __kernel void mean_image2d_ij
     }
 
 
-    DTYPE_OUT res = (sum / count + 0.5);
+    DTYPE_OUT res = CONVERT_DTYPE_OUT(sum / count + 0.5);
     WRITE_IMAGE_2D(dst, coord, res);
 }
 
@@ -276,7 +276,7 @@ __kernel void mean_image2d
       }
   }
 
-  DTYPE_OUT res = sum / count;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(sum / count);
   WRITE_IMAGE_2D(dst, coord, res);
 }
 
@@ -318,7 +318,7 @@ __kernel void mean_image3d
     }
 
 
-  DTYPE_OUT res = sum / count;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(sum / count);
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
@@ -441,7 +441,7 @@ __kernel void minimum_slicewise_image3d
 
     const int4   e = (int4)  {(Nx-1)/2, (Ny-1)/2, 0, 0 };
 
-    DTYPE_OUT minimumValue = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord).x;
+    DTYPE_OUT minimumValue = CONVERT_DTYPE_OUT(READ_IMAGE_3D(src,sampler,coord).x);
     float aSquared = e.x * e.x;
     float bSquared = e.y * e.y;
 
@@ -450,7 +450,7 @@ __kernel void minimum_slicewise_image3d
         for (int y = -e.y; y <= e.y; y++) {
             float ySquared = y * y;
             if (xSquared / aSquared + ySquared / bSquared <= 1.0) {
-                DTYPE_OUT value = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x;
+                DTYPE_OUT value = CONVERT_DTYPE_OUT(READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x);
                 if (value < minimumValue) {
                     minimumValue = value;
                 }
@@ -474,7 +474,7 @@ __kernel void minimum_image2d
 
     const int4   e = (int4)  { (Nx-1)/2, (Ny-1)/2, 0, 0 };
 
-    DTYPE_OUT minimumValue = (DTYPE_OUT)READ_IMAGE_2D(src,sampler,coord).x;
+    DTYPE_OUT minimumValue = CONVERT_DTYPE_OUT(READ_IMAGE_2D(src,sampler,coord).x);
     float aSquared = e.x * e.x;
     float bSquared = e.y * e.y;
 
@@ -525,7 +525,7 @@ __kernel void minimum_image2d_ij
         }
     }
 
-    DTYPE_OUT res = minimumValue;
+    DTYPE_OUT res = CONVERT_DTYPE_OUT(minimumValue);
     WRITE_IMAGE_2D(dst, coord, res);
 }
 
@@ -567,7 +567,7 @@ __kernel void minimum_image3d
     }
 
 
-  DTYPE_OUT res = minimumValue;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(minimumValue);
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
@@ -581,7 +581,7 @@ __kernel void maximum_slicewise_image3d
   const int4 coord = (int4){i,j,k,0};
 
     const int4   e = (int4)  {(Nx-1)/2, (Ny-1)/2, 0, 0 };
-    DTYPE_OUT maximumValue = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord).x;
+    DTYPE_OUT maximumValue = CONVERT_DTYPE_OUT(READ_IMAGE_3D(src,sampler,coord).x);
     float aSquared = e.x * e.x;
     float bSquared = e.y * e.y;
 
@@ -590,7 +590,7 @@ __kernel void maximum_slicewise_image3d
         for (int y = -e.y; y <= e.y; y++) {
             float ySquared = y * y;
             if (xSquared / aSquared + ySquared / bSquared <= 1.0) {
-                DTYPE_OUT value = (DTYPE_OUT)READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x;
+                DTYPE_OUT value = CONVERT_DTYPE_OUT(READ_IMAGE_3D(src,sampler,coord+((int4){x,y,0,0})).x);
                 if (value > maximumValue) {
                     maximumValue = value;
                 }
@@ -613,7 +613,7 @@ __kernel void maximum_image2d
   const int2 coord = (int2){i,j};
     const int4   e = (int4)  { (Nx-1)/2, (Ny-1)/2, 0, 0 };
 
-    DTYPE_OUT maximumValue = (DTYPE_OUT)READ_IMAGE_2D(src,sampler,coord).x;
+    DTYPE_OUT maximumValue = CONVERT_DTYPE_OUT(READ_IMAGE_2D(src,sampler,coord).x);
     float aSquared = e.x * e.x;
     float bSquared = e.y * e.y;
 
@@ -624,7 +624,7 @@ __kernel void maximum_image2d
         for (int y = -e.y; y <= e.y; y++) {
             float ySquared = y * y;
             if (xSquared / aSquared + ySquared / bSquared <= 1.0) {
-                DTYPE_OUT value = (DTYPE_OUT)READ_IMAGE_2D(src,sampler,coord+((int2){x,y})).x;
+                DTYPE_OUT value = CONVERT_DTYPE_OUT(READ_IMAGE_2D(src,sampler,coord+((int2){x,y})).x);
                 if (value > maximumValue) {
                     maximumValue = value;
                 }
@@ -665,7 +665,7 @@ __kernel void maximum_image2d_ij
         }
     }
 
-    DTYPE_OUT res = maximumValue;
+    DTYPE_OUT res = CONVERT_DTYPE_OUT(maximumValue);
     WRITE_IMAGE_2D(dst, coord, res);
 }
 
@@ -707,7 +707,7 @@ __kernel void maximum_image3d
         }
     }
 
-  DTYPE_OUT res = maximumValue;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(maximumValue);
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
@@ -730,7 +730,7 @@ __kernel void mean_sep_image3d
     count += 1;
   }
   res /= count;
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -751,7 +751,7 @@ __kernel void min_sep_image3d
   for (int v = -c; v <= c; v++) {
     res = min(res, (float)READ_IMAGE_3D(src,sampler,coord+v*dir).x);
   }
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void max_sep_image3d
@@ -771,7 +771,7 @@ __kernel void max_sep_image3d
   for (int v = -c; v <= c; v++) {
     res = max(res, (float)READ_IMAGE_3D(src,sampler,coord+v*dir).x);
   }
-  WRITE_IMAGE_3D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_3D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -794,7 +794,7 @@ __kernel void mean_sep_image2d
     count += 1;
   }
   res /= count;
-  WRITE_IMAGE_2D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_2D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 __kernel void min_sep_image2d
@@ -816,7 +816,7 @@ __kernel void min_sep_image2d
       res = min(res, (float)(READ_IMAGE_2D(src,sampler,coord+v*dir).x));
     }
   }
-  WRITE_IMAGE_2D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_2D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 
 
@@ -839,6 +839,6 @@ __kernel void max_sep_image2d
       res = max(res, (float)(READ_IMAGE_2D(src,sampler,coord+v*dir).x));
     }
   }
-  WRITE_IMAGE_2D(dst,coord,(DTYPE_OUT)res);
+  WRITE_IMAGE_2D(dst,coord, CONVERT_DTYPE_OUT(res));
 }
 

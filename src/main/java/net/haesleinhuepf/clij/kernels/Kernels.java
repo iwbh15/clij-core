@@ -41,7 +41,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class,"math.cl", "absolute_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class,"absolute_" + src.getDimension() + "d.cl", "absolute_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean absolute(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -55,7 +55,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "absolute_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "absolute_" + src.getDimension() + "d.cl", "absolute_" + src.getDimension() + "d", parameters);
     }
 
 
@@ -71,7 +71,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "addPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src1.getDimension() + "D.cl", "addPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean addImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
@@ -86,7 +86,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "addPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src1.getDimension() + "D.cl", "addPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean addImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float scalar) {
@@ -101,7 +101,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "addScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "addScalar_" + src.getDimension() + "d", parameters);
     }
 
 
@@ -117,7 +117,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "addScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "addScalar_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean addImagesWeighted(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst, Float factor, Float factor1) {
@@ -134,7 +134,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "addWeightedPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "addWeightedPixelwise_" + src.getDimension() + "d.cl", "addWeightedPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean addImagesWeighted(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst, Float factor, Float factor1) {
@@ -151,7 +151,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "addWeightedPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "addWeightedPixelwise_"  + src.getDimension() +  "d.cl", "addWeightedPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean affineTransform2D(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, float[] matrix) {
@@ -435,7 +435,7 @@ public class Kernels {
         parameters.put("dst_max", dst_max);
         parameters.put("dst_arg", dst_arg);
 
-        return clij.execute(Kernels.class, "projections.cl", "arg_max_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "arg_max_project_3d_2d.cl", "arg_max_project_3d_2d", parameters);
     }
 
     public static boolean argMaximumZProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst_max, ClearCLBuffer dst_arg) {
@@ -447,7 +447,7 @@ public class Kernels {
         parameters.put("dst_max", dst_max);
         parameters.put("dst_arg", dst_arg);
 
-        return clij.execute(Kernels.class, "projections.cl", "arg_max_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "arg_max_project_3d_2d.cl", "arg_max_project_3d_2d", parameters);
     }
 
     public static boolean binaryAnd(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
@@ -459,7 +459,7 @@ public class Kernels {
         parameters.put("src2", src2);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_and_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_and_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryAnd(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst) {
@@ -471,7 +471,7 @@ public class Kernels {
         parameters.put("src2", src2);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_and_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_and_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryXOr(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
@@ -483,7 +483,7 @@ public class Kernels {
         parameters.put("src2", src2);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_xor_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_xor_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryXOr(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst) {
@@ -495,7 +495,7 @@ public class Kernels {
         parameters.put("src2", src2);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_xor_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_xor_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryNot(CLIJ clij, ClearCLImage src1, ClearCLImage dst) {
@@ -505,7 +505,7 @@ public class Kernels {
         parameters.put("src1", src1);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_not_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_not_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryNot(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer dst) {
@@ -515,7 +515,7 @@ public class Kernels {
         parameters.put("src1", src1);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_not_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_not_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryOr(CLIJ clij, ClearCLImage src1, ClearCLImage src2, ClearCLImage dst) {
@@ -527,7 +527,7 @@ public class Kernels {
         parameters.put("src2", src2);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_or_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_or_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean binaryOr(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer src2, ClearCLBuffer dst) {
@@ -539,7 +539,7 @@ public class Kernels {
         parameters.put("src2", src2);
         parameters.put("dst", dst);
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "binary_or_" + src1.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src1.getDimension() + "D.cl", "binary_or_" + src1.getDimension() + "d", parameters);
     }
 
     public static boolean blur(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float blurSigmaX, Float blurSigmaY) {
@@ -564,6 +564,22 @@ public class Kernels {
 
     public static boolean blur(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float blurSigmaX, Float blurSigmaY, Float blurSigmaZ) {
         return executeSeparableKernel(clij, src, dst, "blur.cl", "gaussian_blur_sep_image" + src.getDimension() + "d", sigmaToKernelSize(blurSigmaX), sigmaToKernelSize(blurSigmaY), sigmaToKernelSize(blurSigmaZ), blurSigmaX, blurSigmaY, blurSigmaZ, src.getDimension());
+    }
+
+    public static boolean convertToImageJBinary(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
+        assertDifferent(src, dst);
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryIJ.cl", "convert_to_imagej_binary_" + src.getDimension() + "d", parameters);
+    }
+
+    public static boolean convertToImageJBinary(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
+        assertDifferent(src, dst);
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("src", src);
+        parameters.put("dst", dst);
+        return clij.execute(Kernels.class, "binaryIJ.cl", "convert_to_imagej_binary_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean countNonZeroPixelsLocally(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer radiusX, Integer radiusY) {
@@ -911,42 +927,6 @@ public class Kernels {
         return clij.execute(Kernels.class, "duplication.cl", "crop_2d", parameters);
     }
 
-    public static boolean crossCorrelation(CLIJ clij, ClearCLBuffer src1, ClearCLBuffer meanSrc1, ClearCLBuffer src2, ClearCLBuffer meanSrc2, ClearCLBuffer dst, int radius, int deltaPos, int dimension) {
-        assertDifferent(src1, dst);
-        assertDifferent(src2, dst);
-        assertDifferent(meanSrc1, dst);
-        assertDifferent(meanSrc2, dst);
-
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("src1", src1);
-        parameters.put("mean_src1", meanSrc1);
-        parameters.put("src2", src2);
-        parameters.put("mean_src2", meanSrc2);
-        parameters.put("dst", dst);
-        parameters.put("radius", radius);
-        parameters.put("i", deltaPos);
-        parameters.put("dimension", dimension);
-        return clij.execute(Kernels.class, "cross_correlation.cl", "cross_correlation_3d", parameters);
-    }
-
-    public static boolean crossCorrelation(CLIJ clij, ClearCLImage src1, ClearCLImage meanSrc1, ClearCLImage src2, ClearCLImage meanSrc2, ClearCLImage dst, int radius, int deltaPos, int dimension) {
-        assertDifferent(src1, dst);
-        assertDifferent(src2, dst);
-        assertDifferent(meanSrc1, dst);
-        assertDifferent(meanSrc2, dst);
-
-        HashMap<String, Object> parameters = new HashMap<>();
-        parameters.put("src1", src1);
-        parameters.put("mean_src1", meanSrc1);
-        parameters.put("src2", src2);
-        parameters.put("mean_src2", meanSrc2);
-        parameters.put("dst", dst);
-        parameters.put("radius", radius);
-        parameters.put("i", deltaPos);
-        parameters.put("dimension", dimension);
-        return clij.execute(Kernels.class, "cross_correlation.cl", "cross_correlation_3d", parameters);
-    }
-
     public static boolean detectMaximaBox(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer radius) {
         return detectOptima(clij, src, dst, radius, true);
     }
@@ -1074,7 +1054,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean dilateBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1086,7 +1066,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -1098,7 +1078,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean dilateBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1110,7 +1090,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_box_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean dilateSphere(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -1122,7 +1102,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean dilateSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1134,7 +1114,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -1146,7 +1126,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean dilateSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1158,7 +1138,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "dilate_diamond_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean divideImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
@@ -1174,7 +1154,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "dividePixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "dividePixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean divideImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
@@ -1190,7 +1170,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "dividePixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "dividePixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean downsample(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float factorX, Float factorY, Float factorZ) {
@@ -1267,7 +1247,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean erodeSphere(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1280,7 +1260,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_diamond_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -1293,7 +1273,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean erodeSphereSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1306,7 +1286,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_diamond_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean erodeBox(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -1319,7 +1299,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean erodeBox(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1332,7 +1312,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_box_neighborhood_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -1345,7 +1325,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_box_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean erodeBoxSliceBySlice(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst) {
@@ -1358,7 +1338,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (copy)");
         }
 
-        return clij.execute(Kernels.class, "binaryProcessing.cl", "erode_box_neighborhood_slice_by_slice", parameters);
+        return clij.execute(Kernels.class, "binaryProcessing" + src.getDimension() + "D.cl", "erode_box_neighborhood_slice_by_slice", parameters);
     }
 
     public static boolean fillHistogram(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dstHistogram, Float minimumGreyValue, Float maximumGreyValue) {
@@ -1759,7 +1739,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (maximumImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "maxPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "maxPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean maximumImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
@@ -1774,7 +1754,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (maximumImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "maxPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "maxPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean maximumImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float valueB) {
@@ -1788,7 +1768,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (maximumImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "maxPixelwiseScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "maxPixelwiseScalar_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean maximumImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float valueB) {
@@ -1802,7 +1782,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (maximumImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "maxPixelwiseScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "maxPixelwiseScalar_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean minimumImages(CLIJ clij, ClearCLImage src, ClearCLImage src1, ClearCLImage dst) {
@@ -1817,7 +1797,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (minimumImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "minPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "minPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean minimumImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
@@ -1832,7 +1812,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (minimumImages)");
         }
-        return clij.execute(Kernels.class, "math.cl", "minPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "minPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean minimumImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float valueB) {
@@ -1846,7 +1826,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (minimumImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "minPixelwiseScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "minPixelwiseScalar_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean minimumImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float valueB) {
@@ -1860,7 +1840,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (minimumImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "minPixelwiseScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "minPixelwiseScalar_" + src.getDimension() + "d", parameters);
     }
 
 
@@ -1871,7 +1851,7 @@ public class Kernels {
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
 
-        clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+        clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
 
         return true;
     }
@@ -1883,7 +1863,7 @@ public class Kernels {
         parameters.put("src", src);
         parameters.put("dst_max", dst_max);
 
-        clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+        clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
 
         return true;
     }
@@ -2379,7 +2359,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "math.cl", "multiplyPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiplyPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImages(CLIJ clij, ClearCLBuffer src, ClearCLBuffer src1, ClearCLBuffer dst) {
@@ -2394,7 +2374,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), src1.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "multiplyPixelwise_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiplyPixelwise_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLImage src, ClearCLImage dst, Integer dimension) {
@@ -2407,7 +2387,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (multiplyImageAndCoordinate)");
         }
-        return clij.execute(Kernels.class, "math.cl", "multiply_pixelwise_with_coordinate_3d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiply_pixelwise_with_coordinate_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImageAndCoordinate(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Integer dimension) {
@@ -2420,7 +2400,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (multiplyImageAndCoordinate)");
         }
-        return clij.execute(Kernels.class, "math.cl", "multiply_pixelwise_with_coordinate_3d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiply_pixelwise_with_coordinate_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImageAndScalar(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float scalar) {
@@ -2434,7 +2414,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "multiplyScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiplyScalar_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplyImageAndScalar(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float scalar) {
@@ -2448,7 +2428,7 @@ public class Kernels {
         if (!checkDimensions(src.getDimension(), dst.getDimension())) {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
-        return clij.execute(Kernels.class, "math.cl", "multiplyScalar_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiplyScalar_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean multiplySliceBySliceWithScalars(CLIJ clij, ClearCLImage src, ClearCLImage dst, float[] scalars) {
@@ -2469,7 +2449,7 @@ public class Kernels {
         map.put("src", src);
         map.put("scalars", clBuffer);
         map.put("dst", dst);
-        boolean result = clij.execute(Kernels.class, "math.cl", "multiplySliceBySliceWithScalars", map);
+        boolean result = clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiplySliceBySliceWithScalars", map);
 
         clBuffer.close();
 
@@ -2494,7 +2474,7 @@ public class Kernels {
         map.put("src", src);
         map.put("scalars", clBuffer);
         map.put("dst", dst);
-        boolean result = clij.execute(Kernels.class, "math.cl", "multiplySliceBySliceWithScalars", map);
+        boolean result = clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "multiplySliceBySliceWithScalars", map);
 
         clBuffer.close();
 
@@ -2529,7 +2509,7 @@ public class Kernels {
         parameters.put("src", src);
         parameters.put("dst", dst);
         parameters.put("exponent", exponent);
-        return clij.execute(Kernels.class, "math.cl", "power_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "power_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean power(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float exponent) {
@@ -2540,7 +2520,7 @@ public class Kernels {
         parameters.put("dst", dst);
         parameters.put("exponent", exponent);
 
-        return clij.execute(Kernels.class, "math.cl", "power_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "math" + src.getDimension() + "D.cl", "power_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean radialProjection(CLIJ clij, ClearCLImage src, ClearCLImage dst, Float deltaAngle) {
@@ -2553,7 +2533,7 @@ public class Kernels {
         parameters.put("dst", dst);
         parameters.put("deltaAngle", deltaAngle);
 
-        return clij.execute(Kernels.class, "projections.cl", "radialProjection3d", parameters);
+        return clij.execute(Kernels.class, "radialProjection.cl", "radialProjection3d", parameters);
     }
 
     public static boolean radialProjection(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float deltaAngle) {
@@ -2566,7 +2546,7 @@ public class Kernels {
         parameters.put("dst", dst);
         parameters.put("deltaAngle", deltaAngle);
 
-        return clij.execute(Kernels.class, "projections.cl", "radialProjection3d", parameters);
+        return clij.execute(Kernels.class, "radialProjection.cl", "radialProjection3d", parameters);
     }
 
     public static boolean resliceBottom(CLIJ clij, ClearCLImage src, ClearCLImage dst) {
@@ -2792,7 +2772,7 @@ public class Kernels {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst_max", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2819,7 +2799,7 @@ public class Kernels {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst_max", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "max_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "maxProjection.cl", "max_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2895,12 +2875,12 @@ public class Kernels {
     public static double sumPixels(CLIJ clij, ClearCLImage clImage) {
         ClearCLImage clReducedImage = clImage;
         if (clImage.getDimension() == 3) {
-            clReducedImage = clij.createCLImage(new long[]{clImage.getWidth(), clImage.getHeight()}, clImage.getChannelDataType());
+            clReducedImage = clij.createCLImage(new long[]{clImage.getWidth(), clImage.getHeight()}, ImageChannelDataType.Float);
 
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2919,12 +2899,12 @@ public class Kernels {
     public static double sumPixels(CLIJ clij, ClearCLBuffer clImage) {
         ClearCLBuffer clReducedImage = clImage;
         if (clImage.getDimension() == 3) {
-            clReducedImage = clij.createCLBuffer(new long[]{clImage.getWidth(), clImage.getHeight()}, clImage.getNativeType());
+            clReducedImage = clij.createCLBuffer(new long[]{clImage.getWidth(), clImage.getHeight()}, NativeTypeEnum.Float);
 
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("src", clImage);
             parameters.put("dst", clReducedImage);
-            clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+            clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
         }
 
         RandomAccessibleInterval rai = clij.convert(clReducedImage, RandomAccessibleInterval.class);
@@ -2980,7 +2960,7 @@ public class Kernels {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImage);
         parameters.put("dst", clReducedImage);
-        return clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
     }
 
     public static boolean sumZProjection(CLIJ clij, ClearCLBuffer clImage, ClearCLBuffer clReducedImage) {
@@ -2989,7 +2969,7 @@ public class Kernels {
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("src", clImage);
         parameters.put("dst", clReducedImage);
-        return clij.execute(Kernels.class, "projections.cl", "sum_project_3d_2d", parameters);
+        return clij.execute(Kernels.class, "sumProject.cl", "sum_project_3d_2d", parameters);
     }
 
     public static boolean tenengradWeightsSliceBySlice(CLIJ clij, ClearCLImage clImageOut, ClearCLImage clImageIn) {
@@ -3080,7 +3060,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "thresholding.cl", "apply_threshold_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "apply_threshold_" + src.getDimension() + "d.cl", "apply_threshold_" + src.getDimension() + "d", parameters);
     }
 
     public static boolean threshold(CLIJ clij, ClearCLBuffer src, ClearCLBuffer dst, Float threshold) {
@@ -3097,7 +3077,7 @@ public class Kernels {
             throw new IllegalArgumentException("Error: number of dimensions don't match! (addImageAndScalar)");
         }
 
-        return clij.execute(Kernels.class, "thresholding.cl", "apply_threshold_" + src.getDimension() + "d", parameters);
+        return clij.execute(Kernels.class, "apply_threshold_" + src.getDimension() + "d.cl", "apply_threshold_" + src.getDimension() + "d", parameters);
     }
 
     private static boolean checkDimensions(long... numberOfDimensions) {

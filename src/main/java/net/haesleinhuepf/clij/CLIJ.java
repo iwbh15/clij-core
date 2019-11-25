@@ -14,6 +14,7 @@ import ij.IJ;
 import ij.ImagePlus;
 import net.haesleinhuepf.clij.converters.CLIJConverterPlugin;
 import net.haesleinhuepf.clij.converters.CLIJConverterService;
+import net.haesleinhuepf.clij.kernels.Kernels;
 import net.haesleinhuepf.clij.utilities.CLIJOps;
 import net.haesleinhuepf.clij.utilities.CLInfo;
 import net.haesleinhuepf.clij.utilities.CLKernelExecutor;
@@ -23,6 +24,7 @@ import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.loops.LoopBuilder;
 import net.imglib2.type.logic.BitType;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.numeric.integer.ByteType;
 import org.scijava.Context;
 
 import java.io.ByteArrayOutputStream;
@@ -158,18 +160,25 @@ public class CLIJ {
         return getInstance(null);
     }
 
+    private static String lastDeviceNameAskedFor = "";
     public static CLIJ getInstance(String pDeviceNameMustContain) {
         if (sInstance == null) {
             sInstance = new CLIJ(pDeviceNameMustContain);
         } else {
-            if (pDeviceNameMustContain != null && !sInstance.getGPUName().contains(pDeviceNameMustContain)) {
-                // switch device requested
-                if (debug) {
-                    System.out.println("Switching CL device! New: " +  pDeviceNameMustContain);
+            if (pDeviceNameMustContain != null) {
+                if (lastDeviceNameAskedFor.compareTo(pDeviceNameMustContain) == 0 && sInstance != null) {
+                    return sInstance;
                 }
-                sInstance.close();
-                sInstance = null;
-                sInstance = new CLIJ(pDeviceNameMustContain);
+                if (!sInstance.getGPUName().contains(pDeviceNameMustContain)) {
+                    // switch device requested
+                    if (debug) {
+                        System.out.println("Switching CL device! New: " + pDeviceNameMustContain);
+                    }
+                    sInstance.close();
+                    sInstance = null;
+                    sInstance = new CLIJ(pDeviceNameMustContain);
+                }
+                lastDeviceNameAskedFor = pDeviceNameMustContain;
             }
         }
         return sInstance;
@@ -266,18 +275,21 @@ public class CLIJ {
         inputTypeFixer.unfix();
 
         // this is because of the disabled cleaner thread in clij-coremem 0.5.2:
-        RessourceCleaner.cleanNow();
+        //RessourceCleaner.cleanNow();
         //System.out.println("Cleaning");
 
         return result[0];
     }
 
+    @Deprecated // use close() instead
     public void dispose() {
-        mClearCLContext.close();
+        close();
+        /*mClearCLContext.close();
         converterService = null;
         if (sInstance == this) {
             sInstance = null;
         }
+         */
     }
 
     public ClearCLContext getClearCLContext() {
@@ -353,13 +365,24 @@ public class CLIJ {
     }
 
     public boolean close() {
+
         if (mCLKernelExecutor != null) {
             mCLKernelExecutor.close();
+            mCLKernelExecutor = null;
         }
-        mCLKernelExecutor = null;
-        mClearCLContext.close();
-        mClearCLContext = null;
-        mClearCLDevice = null;
+        if (mClearCLDevice != null) {
+            //mClearCLDevice.close(); // the devices close themselfes somehow...
+            mClearCLDevice = null;
+        }
+        if (mClearCLContext != null) {
+            mClearCLContext.close(); // potential issue here: Contexts are also cleaned by coremems RessourceCleaner
+            mClearCLContext = null;
+        }
+
+        if (converterService != null) {
+            converterService.setCLIJ(null);
+            converterService = null;
+        }
 
         if (sInstance == this) {
             sInstance = null;
@@ -387,6 +410,14 @@ public class CLIJ {
 
     public ImagePlus pull(ClearCLBuffer buffer) {
         return convert(buffer, ImagePlus.class);
+    }
+
+    public ImagePlus pullBinary(ClearCLBuffer buffer) {
+        ClearCLBuffer binaryIJ = createCLBuffer(buffer.getDimensions(), NativeTypeEnum.UnsignedByte);
+        Kernels.convertToImageJBinary(this, buffer, binaryIJ);
+        ImagePlus binaryImp = pull(binaryIJ);
+        binaryIJ.close();
+        return binaryImp;
     }
 
     public RandomAccessibleInterval<? extends RealType<?>> pullRAI(ClearCLBuffer buffer) {
@@ -425,7 +456,7 @@ public class CLIJ {
             T result = converter.convert(source);
 
             // this is because of the disabled cleaner thread in clij-coremem 0.5.2:
-            RessourceCleaner.cleanNow();
+            //RessourceCleaner.cleanNow();
             //System.out.println("Cleaning2");
 
             return  result;
@@ -447,5 +478,10 @@ public class CLIJ {
     }
     private static void resetStdErrForwarding() {
         System.setErr(stdErrStreamBackup);
+    }
+
+    public ClearCLBuffer pushCurrentZStack(ImagePlus imp) {
+        ImagePlus copy = new Duplicator().run(imp, imp.getC(), imp.getC(), 1, imp.getNSlices(), imp.getT(), imp.getT());
+        return push(copy);
     }
 }

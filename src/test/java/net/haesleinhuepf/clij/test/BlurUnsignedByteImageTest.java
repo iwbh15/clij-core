@@ -12,7 +12,7 @@ import org.junit.Test;
 public class BlurUnsignedByteImageTest {
     @Test
     public void testBlur(){
-        ImagePlus imp = IJ.openImage("src/main/resources/blobs.tif");
+        ImagePlus imp = IJ.openImage("src/test/resources/blobs.tif");
 
         CLIJ clij = CLIJ.getInstance();
         ClearCLImage input = clij.convert(imp, ClearCLImage.class);

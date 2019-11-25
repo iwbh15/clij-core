@@ -30,7 +30,7 @@ __kernel void count_nonzero_slicewise_image3d
         }
     }
 
-  DTYPE_OUT res = count;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(count);
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
@@ -64,7 +64,7 @@ __kernel void count_nonzero_image2d
       }
   }
 
-  DTYPE_OUT res = count;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(count);
   WRITE_IMAGE_2D(dst, coord, res);
 }
 
@@ -107,7 +107,7 @@ __kernel void count_nonzero_image3d
     }
 
 
-  DTYPE_OUT res = count;
+  DTYPE_OUT res = CONVERT_DTYPE_OUT(count);
   WRITE_IMAGE_3D(dst, coord, res);
 }
 
